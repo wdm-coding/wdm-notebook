@@ -1,9 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
-import {
-  NButton,
-  NAlert,
-  create
-} from 'naive-ui'
+import pkg from 'naive-ui';
+const { create, NButton, NAlert } = pkg;
 
 const naive = create({
   components: [NButton,NAlert]
