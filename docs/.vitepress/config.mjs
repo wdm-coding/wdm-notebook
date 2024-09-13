@@ -8,25 +8,30 @@ export default defineConfig({
     logo: '/logo.jpeg',
     nav: [
       { text: '首页', link: '/' },
-      { text: '站点', link: '/' }
+      { text: '其他', link: '/others/outPage/' }
     ],
-
-    sidebar: [
-      {
-        text: 'Vue3',
-        items: [
-          { text: '响应式 API', link: '/pages/Vue3/api' },
-          { text: '其他', link: '/pages/Vue3/other' }
-        ]
-      },
-      {
-        text: 'MarkDown 语法',
-        items: [
-          { text: 'markdown 示例', link: '/pages/Markdown/markdown-examples' },
-          { text: 'API 示例', link: '/pages/Markdown/api' }
-        ]
-      }
-    ],
+    sidebar: {
+      '/pages/':[
+        {
+          text: 'Vue3',
+          items: [
+            { text: '响应式 API', link: '/pages/Vue3/api' },
+            { text: '其他', link: '/pages/Vue3/other' }
+          ]
+        },
+        {
+          text: 'MarkDown 语法',
+          items: [
+            { text: 'markdown 示例', link: '/pages/Markdown/markdown-examples' },
+            { text: 'API 示例', link: '/pages/Markdown/api' }
+          ]
+        }
+      ],
+      '/others/':[
+        { text: '其他', link: '/others/outPage/' },
+        { text: '站点', link: '/others/site/' }
+      ]
+    },
 
     socialLinks: [
       { 
@@ -41,5 +46,8 @@ export default defineConfig({
   },
   srcDir: './src',
   base: '/wdm-notebook/',
-  assetsDir: 'assets'
+  assetsDir: 'assets',
+  rewrites: {
+    'src/pages/(.*)': '(.*)',
+  },
 })
