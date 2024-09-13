@@ -1,25 +1,56 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
-layout: home
-
-hero:
-  name: "Wdm Coding Notes"
-  text: "A VitePress Site"
-  tagline: 
-  actions:
-    - theme: brand
-      text: 笔记
-      link: /pages/Vue3/api
-    - theme: brand
-      text: 站点
-      link: /pages/Vue3/api
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+layout: false
 ---
-<img src="/assets/vite.svg">
+
+
+<div class="login_wrap">
+  <div class="login_box">
+    <n-form ref="formRef" :model="model" label-placement="left">
+      <n-form-item path="username" label="账号">
+        <n-input v-model:value="model.username" @keydown.enter.prevent placeholder="请输入"/>
+      </n-form-item>
+      <n-form-item path="password" label="密码">
+        <n-input
+          v-model:value="model.password"
+          type="password"
+          @keydown.enter.prevent
+          placeholder="请输入"
+        />
+      </n-form-item>
+      <n-button type="primary" @click="jump">跳转</n-button> 
+    </n-form>
+  </div>
+</div>
+
+<script setup>
+  import { useRouter  } from 'vitepress'
+  import { ref } from 'vue'
+  const router = useRouter()
+  console.log(router)
+  const formRef = ref(null)
+  const model = {
+    username: null,
+    password: ''
+  }
+  const jump = () => {
+    router.go('/home')
+  }
+</script>
+<style lang="scss">
+  .login_wrap{
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .login_box{
+      width: 300px;
+    }
+  }
+</style>
