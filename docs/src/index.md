@@ -1,24 +1,11 @@
 ---
 layout: false
-hero:
-  name: "Wdm Coding Notes"
-  text: "A VitePress Site"
-  tagline: 
-  actions:
-    - theme: brand
-      text: 笔记
-      link: /pages/Vue3/api
-    - theme: brand
-      text: 站点
-      link: /pages/Vue3/api
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-<Login/>
-<img src="/assets/vite.svg">
+<Login @loginCallback="loginCallback"/>
+<script setup>
+  import { useRouter,withBase  } from 'vitepress'
+  const router = useRouter()
+  function loginCallback(user) {
+    router.go(withBase('/pages/Vue3/api'))
+  }
+</script>

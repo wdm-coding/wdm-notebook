@@ -1,31 +1,37 @@
 {
-  "hash": "3a257655",
+  "hash": "9c5aec43",
   "configHash": "3ad7a2d9",
-  "lockfileHash": "5115aebd",
-  "browserHash": "885f7954",
+  "lockfileHash": "8c62367d",
+  "browserHash": "08ae8b79",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "86e3ba53",
+      "fileHash": "fb6b07d3",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "16ca5603",
+      "fileHash": "c3ec0fa9",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "20651caf",
+      "fileHash": "e6c930a5",
       "needsInterop": false
     },
     "naive-ui": {
       "src": "../../../../node_modules/naive-ui/es/index.mjs",
       "file": "naive-ui.js",
-      "fileHash": "5dc178e8",
+      "fileHash": "ac088999",
+      "needsInterop": false
+    },
+    "vue-router": {
+      "src": "../../../../node_modules/vue-router/dist/vue-router.mjs",
+      "file": "vue-router.js",
+      "fileHash": "d4ad2452",
       "needsInterop": false
     }
   },
