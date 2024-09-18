@@ -24,7 +24,6 @@
   import { ref,reactive } from 'vue'
   import { createDiscreteApi } from "naive-ui";
   import { setItem,getItem } from '../../utils/storage.js'
-  console.log('useLogin');
   const router = useRouter()
   const isLogin = ref(!!getItem('token'))
   if(isLogin.value){
@@ -37,8 +36,8 @@
   const emit = defineEmits(['loginCallback'])
   const formRef = ref(null)
   const model = reactive({
-    username: 'wdmcoding',
-    password: '17693198620@0620'
+    username: '',
+    password: ''
   })
   const rules = {
     username: [
