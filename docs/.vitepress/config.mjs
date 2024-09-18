@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'en-ZH',
-  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/wdm-notebook/favicon.ico' }]],
   title: "Wdm Coding Notes",
   description: "A Coding Notes Site",
   themeConfig: {
