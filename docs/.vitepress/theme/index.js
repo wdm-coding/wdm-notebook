@@ -1,18 +1,34 @@
 import naive from 'naive-ui'
-import Login from './login.vue'
+import Login from './modules//login.vue'
 import DefaultTheme from 'vitepress/theme'
+import CustomLayout from './CustomLayout.vue'
 import './style.scss'
-import {h} from 'vue'
-import permission from '../router/permission.js'
+const allowPage = [
+  '/wdm-notebook/'
+]
+import { getItem } from '../utils/storage.js'
 export default{
-  Layout: () => {
-    return h(DefaultTheme.Layout, null, {})
-  },
   extends: DefaultTheme, // 继承默认主题的样式
+  Layout:CustomLayout,
   enhanceApp({ app, router }) {
-    console.log("路由变化", router);
+    router.onBeforeRouteChange = (to) => {
+      const isToken = !!getItem('token')
+      console.log('router change', isToken,to)
+      if(isToken){
+        console.log("有权限");
+        return true
+      }else{
+        if(allowPage.includes(to)) {
+          console.log("白名单页面");
+          return true
+        }else{
+          console.log("登录验证失败，请重新登录");
+          router.go('/wdm-notebook/')
+          return false
+        }
+      }
+    }
     app.use(naive)
-    // app.use(permission, { router })
     app.component('Login', Login)
   }
 }

@@ -1,7 +1,7 @@
 ---
 outline: deep
 ---
-
+<Auth></Auth>
 # 响应式 API
 
 
