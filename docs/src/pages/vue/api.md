@@ -1,7 +1,6 @@
 ---
 outline: deep
 ---
-<Auth></Auth>
 # 响应式 API
 
 
@@ -133,10 +132,30 @@ function changeToRef() {
   toRefStateUnit.value = '属性-unit变化'
 }
 ```
+## computed 计算属性
+
+computed 函数接受一个 getter 函数作为参数，并返回一个具有响应式的计算属性 ref 或一个具有响应式计算的普通对象。
+
+```js
+const count = ref(1)
+const plusOne = computed(() => count.value + 1)
+```
+## watch 与 watchEffect
+watch 函数用于观察特定的数据源，并在回调函数中执行副作用。
+
+watch 接受两个参数：要观察的数据源和回调函数。
+
+watchEffect 函数也用于观察特定的数据源，但与 watch 不同，它会自动在回调函数中执行副作用。
+
+watchEffect 接受一个回调函数作为参数，该回调函数将在其依赖项发生变化时自动执行。
+
+
+
+
 
 
 <script setup>
-  import { ref,reactive,readonly,toRefs,toRef } from 'vue'
+  import { ref,reactive,readonly,toRefs,toRef,watch,watchEffect } from 'vue'
   const  a = ref(0)
   let state = reactive({ name: 'wdm',age:'100',sex:'男' })
   let c = ref({ name: 'wdm',age:'100',sex:'男' })
