@@ -132,7 +132,7 @@ function changeToRef() {
   toRefStateUnit.value = '属性-unit变化'
 }
 ```
-## computed 计算属性
+## 5.computed 计算属性
 
 computed 函数接受一个 getter 函数作为参数，并返回一个具有响应式的计算属性 ref 或一个具有响应式计算的普通对象。
 
@@ -140,7 +140,7 @@ computed 函数接受一个 getter 函数作为参数，并返回一个具有响
 const count = ref(1)
 const plusOne = computed(() => count.value + 1)
 ```
-## watch 与 watchEffect
+## 6. watch 与 watchEffect
 watch 函数用于观察特定的数据源，并在回调函数中执行副作用。
 
 watch 接受两个参数：要观察的数据源和回调函数。
@@ -149,13 +149,57 @@ watchEffect 函数也用于观察特定的数据源，但与 watch 不同，它�
 
 watchEffect 接受一个回调函数作为参数，该回调函数将在其依赖项发生变化时自动执行。
 
+<div>
+  <n-button type="primary" @click="changeWatch">点击</n-button> 
+  <p style="font-size:18px">监听count变化:{{watchState.count}}</p>
+  <p style="font-size:18px">watchValue:{{watchValue}}</p>
+  <p style="font-size:18px">watchEffectValue:{{watchEffectValue}}</p>
+</div>
 
+```js
+  const watchState = reactive({ count: 0 })
+  function changeWatch() {
+    watchState.count++
+  }
+  const watchValue = ref(0)
+  const watchEffectValue = ref(0)
+  watch(()=>watchState.count,(newVal,oldVal)=>{
+    watchValue.value = newVal + 1
+  })
+  watchEffect(()=>{
+    watchEffectValue.value = watchState.count + 2
+  })
+  // 停止侦听
+  const stopWatch = watch(()=>watchState.count,(newVal,oldVal)=>{
+    watchValue.value = newVal + 1
+    if (watchState.count === 6) {
+			// 停止侦听
+			stopWatch()
+		}
+  })
+  const stopWatchEffect = watchEffect(()=>{
+    watchEffectValue.value = watchState.count + 2
+    if (watchState.count === 8) {
+			// 停止侦听
+			stopWatchEffect()
+		}
+  })
+```
+## 7. toRaw 与 markRaw
 
+toRaw 函数用于获取响应式对象的原始对象。
+markRaw 函数用于标记一个对象，使其被 Vue 视为一个普通对象，而不是响应式的。
 
-
+<div>
+  <n-button type="primary" @click="changeReactive">修改原始对象</n-button>
+  <p style="font-size:18px">state:{{state}}</p>
+  <p style="font-size:18px">rawValue:{{rawValue}}</p>
+  <n-button type="primary" @click="changeMarkRaw">修改markRaw</n-button> 
+  <p style="font-size:18px">markRawValue:{{markRawValue}}</p>
+</div>
 
 <script setup>
-  import { ref,reactive,readonly,toRefs,toRef,watch,watchEffect } from 'vue'
+  import { ref,reactive,readonly,toRefs,toRef,watch,watchEffect,markRaw,toRaw } from 'vue'
   const  a = ref(0)
   let state = reactive({ name: 'wdm',age:'100',sex:'男' })
   let c = ref({ name: 'wdm',age:'100',sex:'男' })
@@ -186,5 +230,36 @@ watchEffect 接受一个回调函数作为参数，该回调函数将在其依�
   const toRefStateUnit = toRef(state,'unit')
   function changeToRef() {
     toRefStateUnit.value = '属性-unit变化'
+  }
+
+  const watchState = reactive({ count: 0 })
+  function changeWatch() {
+    watchState.count++
+  }
+  const watchValue = ref(0)
+  const watchEffectValue = ref(0)
+  const stopWatch = watch(()=>watchState.count,(newVal,oldVal)=>{
+    watchValue.value = newVal + 1
+    if (watchState.count === 6) {
+			// 停止侦听
+			stopWatch()
+		}
+  })
+  const stopWatchEffect = watchEffect(()=>{
+    watchEffectValue.value = watchState.count + 2
+    if (watchState.count === 8) {
+			// 停止侦听
+			stopWatchEffect()
+		}
+  })
+  
+	const rawValue = toRaw(state)
+	const originObj = { str: '666' }
+	const markRawValue = markRaw(originObj)
+  
+  function changeMarkRaw() {
+    markRawValue.str = '667'
+    console.log('rawValue', rawValue)
+    console.log('markRawValue', markRawValue)
   }
 </script>
