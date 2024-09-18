@@ -6,6 +6,9 @@ export default defineConfig({
   description: "A Coding Notes Site",
   themeConfig: {
     logo: '/logo.jpeg',
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: '首页', link: '/home/' }
     ],

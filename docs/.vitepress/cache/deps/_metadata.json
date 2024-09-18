@@ -1,41 +1,56 @@
 {
-  "hash": "9c5aec43",
-  "configHash": "3ad7a2d9",
+  "hash": "a58602af",
+  "configHash": "a31a85a6",
   "lockfileHash": "8c62367d",
-  "browserHash": "08ae8b79",
+  "browserHash": "aa350b90",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "fb6b07d3",
+      "fileHash": "68def482",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "c3ec0fa9",
+      "fileHash": "e6708345",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "e6c930a5",
+      "fileHash": "a41c3a4c",
+      "needsInterop": false
+    },
+    "vitepress > @vueuse/integrations/useFocusTrap": {
+      "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
+      "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
+      "fileHash": "e3e31938",
+      "needsInterop": false
+    },
+    "vitepress > mark.js/src/vanilla.js": {
+      "src": "../../../../node_modules/mark.js/src/vanilla.js",
+      "file": "vitepress___mark__js_src_vanilla__js.js",
+      "fileHash": "4589f418",
+      "needsInterop": false
+    },
+    "vitepress > minisearch": {
+      "src": "../../../../node_modules/minisearch/dist/es/index.js",
+      "file": "vitepress___minisearch.js",
+      "fileHash": "01ebc9bc",
       "needsInterop": false
     },
     "naive-ui": {
       "src": "../../../../node_modules/naive-ui/es/index.mjs",
       "file": "naive-ui.js",
-      "fileHash": "ac088999",
-      "needsInterop": false
-    },
-    "vue-router": {
-      "src": "../../../../node_modules/vue-router/dist/vue-router.mjs",
-      "file": "vue-router.js",
-      "fileHash": "d4ad2452",
+      "fileHash": "4e3e1ff2",
       "needsInterop": false
     }
   },
   "chunks": {
+    "chunk-FIAGTAQN": {
+      "file": "chunk-FIAGTAQN.js"
+    },
     "chunk-6Y6K6KIR": {
       "file": "chunk-6Y6K6KIR.js"
     },

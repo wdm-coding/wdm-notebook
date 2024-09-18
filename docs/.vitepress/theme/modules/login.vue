@@ -21,7 +21,7 @@
 </template>
 <script setup>
   import { useRouter,withBase  } from 'vitepress'
-  import { ref,reactive,onBeforeMount } from 'vue'
+  import { ref,reactive } from 'vue'
   import { createDiscreteApi } from "naive-ui";
   import { setItem,getItem } from '../../utils/storage.js'
   console.log('useLogin');
