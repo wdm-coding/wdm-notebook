@@ -23,7 +23,7 @@
 <style lang='scss' scoped>
 .custom_layout_wrap{
   .logout_btn{
-    position: absolute;
+    position: fixed;
     right: 20px;
   }
 }
