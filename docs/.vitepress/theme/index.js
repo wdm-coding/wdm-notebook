@@ -2,6 +2,7 @@ import naive from 'naive-ui'
 import Login from './modules//login.vue'
 import DefaultTheme from 'vitepress/theme'
 import CustomLayout from './CustomLayout.vue'
+import NavLogo from './modules/nav-logo.vue'
 import './style.scss'
 const allowPage = [
   '/wdm-notebook/'
@@ -30,6 +31,7 @@ export default{
       }
       app.use(naive)
       app.component('Login', Login)
+      app.component('NavLogo', NavLogo)
     }
   }
 }

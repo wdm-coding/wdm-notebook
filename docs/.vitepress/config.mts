@@ -11,7 +11,21 @@ export default defineConfig({
       provider: 'local'
     },
     nav: [
-      { text: '首页', link: '/home/' }
+      { text: '首页', link: '/home/' },
+      { 
+        component:'NavLogo',
+        props:{ 
+          link: 'https://nest.nodejs.cn/',
+          logo:'https://nest.nodejs.cn/assets/logo-small-gradient.svg' 
+        } 
+      },
+      { 
+        component:'NavLogo',
+        props:{ 
+          link: 'https://tailwind.nodejs.cn/docs/installation',
+          logo:'https://tailwind.nodejs.cn/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg' 
+        } 
+      }
     ],
     sidebar: {
       '/pages/vue/':[
@@ -48,7 +62,15 @@ export default defineConfig({
             { text: 'project', link: '/pages/project/index.md' },
           ]
         }
-      ]
+      ],
+      '/pages/nestJs/':[
+        {
+          text: 'NestJs',
+          items: [
+            { text: '简介', link: '/pages/nestJs/index.md' },
+          ]
+        }
+      ],
     },
     socialLinks: [
       {

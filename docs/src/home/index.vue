@@ -43,6 +43,11 @@ function  jumpHandle(path) {
           <n-button type="error">项目</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/nestJs/')">
+          <n-button type="primary">NestJs</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>
