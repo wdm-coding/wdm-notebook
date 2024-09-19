@@ -43,7 +43,8 @@ export default defineConfig({
           items: [
             { text: '备忘录', link: '/pages/note/index.md' },
             { text: 'git', link: '/pages/note/git.md' },
-            { text: 'jumpServer', link: '/pages/note/jumpServer.md' }
+            { text: 'jumpServer', link: '/pages/note/jumpServer.md' },
+            { text: 'npm', link: '/pages/note/npm.md' }
           ]
         }
       ],
