@@ -50,9 +50,11 @@ export default defineConfig({
       ],
       '/pages/ts/':[
         {
-          text: 'TS',
+          text: 'Typescripe',
           items: [
-            { text: 'ts', link: '/pages/ts/index.md' },
+            { text: 'ts基础', link: '/pages/ts/' },
+            {text: '函数相关', link: '/pages/ts/function.md'},
+            {text: 'Interface接口', link: '/pages/ts/interface.md'}
           ]
         }
       ],
