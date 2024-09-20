@@ -42,3 +42,14 @@ nrm use taobao
 ```shell
 cnpm install -g yarn pnpm
 ```
+
+## 安装degit
+
+degit 是一个用于快速从 GitHub、GitLab、Bitbucket 等 Git 仓库中克隆并设置项目模板的工具。它特别适用于前端项目、开发环境配置、示例项目等场景，可以极大地简化项目初始化的过程。degit 不是一个编程语言中的功能或库，而是一个独立的命令行工具。
+
+```shell
+cnpm install -g degit
+
+degit username/repo my-project
+```
+
