@@ -54,7 +54,8 @@ export default defineConfig({
           items: [
             { text: 'ts基础', link: '/pages/ts/' },
             {text: '函数相关', link: '/pages/ts/function.md'},
-            {text: 'Interface接口', link: '/pages/ts/interface.md'}
+            {text: 'Interface接口', link: '/pages/ts/interface.md'},
+            {text: 'Class类', link: '/pages/ts/class.md'}
           ]
         }
       ],
