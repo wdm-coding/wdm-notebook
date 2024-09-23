@@ -55,7 +55,10 @@ export default defineConfig({
             { text: 'ts基础', link: '/pages/ts/' },
             {text: '函数相关', link: '/pages/ts/function.md'},
             {text: 'Interface接口', link: '/pages/ts/interface.md'},
-            {text: 'Class类', link: '/pages/ts/class.md'}
+            {text: 'Class类', link: '/pages/ts/class.md'},
+            {text: '泛型', link: '/pages/ts/genericity.md'},
+            {text: '声明文件', link: '/pages/ts/declare.md'},
+            {text: 'tsconfig文件', link: '/pages/ts/tsconfig.md'}
           ]
         }
       ],
@@ -63,7 +66,8 @@ export default defineConfig({
         {
           text: '项目',
           items: [
-            { text: 'project', link: '/pages/project/index.md' },
+            { text: 'project', link: '/pages/project/' },
+            { text: '陇明公', link: '/pages/project/lmg.md' },
           ]
         }
       ],

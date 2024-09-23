@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node src/class.ts"
+    "start": "nodemon --exec ts-node src/genericity.ts"
   },
   "keywords": [],
   "author": "",
