@@ -1,0 +1,14 @@
+{
+  "user_name":"default",
+  "db":{
+    "host":"127.0.0.1",
+    "port":3306,
+    "user":"root",
+    "password":"<PASSWORD>",
+    "dbname":"wdm_test"
+  },
+  "redis":{
+    "host":"127.0.0.1",
+    "port":6379
+  }
+}

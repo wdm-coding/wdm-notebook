@@ -45,5 +45,39 @@ Data Access Object 数据访问对象
 
 <img src="/assets/nest/3.png">
 
+## 接口服务
 
+<img src="/assets/nest/4.png">
 
+<img src="/assets/nest/5.png">
+
+## 多环境配置(环境变量)
+
+dotenv 库
+
+```typescript
+npm install dotenv
+
+require('dotenv').config();
+
+console.log(process.env.DB_HOST);  // 输出 .env 文件中定义的 DB_HOST 变量值
+```
+config 库
+
+```typescript
+npm install config
+
+const config = require('config')
+const db = config.get('db')
+console.log('db',db); // 输出 config/default.json 中定义的 db 对象
+```
+
+cross-env 库
+
+```typescript
+npm install cross-env
+// package.json 配置
+"def": "cross-env NODE_ENV=default nodemon src/env.js",
+"dev": "cross-env NODE_ENV=development nodemon src/env.js",
+"prod": "cross-env NODE_ENV=production nodemon src/env.js"
+```

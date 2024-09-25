@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node src/genericity.ts"
+    "start": "nodemon --exec ts-node src/genericity.ts",
+    "def": "cross-env NODE_ENV=default nodemon src/env.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/env.js",
+    "prod": "cross-env NODE_ENV=production nodemon src/env.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +16,11 @@
     "nodemon": "^3.1.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "config": "^3.3.12",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0"
   }
 }
