@@ -77,6 +77,8 @@ export default defineConfig({
           items: [
             { text: '简介', link: '/pages/nestJs/' },
             { text: '核心', link: '/pages/nestJs/base.md' },
+            { text: '配置', link: '/pages/nestJs/config.md' },
+            { text: 'Docker', link: '/pages/nestJs/docker.md' }
           ]
         }
       ],
