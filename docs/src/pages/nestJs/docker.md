@@ -1,7 +1,20 @@
 # Docker
 
-## docker-compose
+## docker-compose.yml
  
-```
-  docker-compose up -d
+```js
+  services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 ```
