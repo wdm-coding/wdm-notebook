@@ -6,9 +6,10 @@
 
 [数据库参考](https://open.yesapi.cn/list.html)
 
-## Typeorm
+## TypeOrm
+<img src="https://typeorm.bootcss.com/logo/logo.png" style="margin:0 auto">
 
-[文档](https://typeorm.bootcss.com/)
+# [TypeOrm中文文档](https://typeorm.bootcss.com/)
 
 ```js
 npm install --save @nestjs/typeorm typeorm mysql2
