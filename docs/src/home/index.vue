@@ -48,6 +48,11 @@ function  jumpHandle(path) {
           <n-button type="primary">NestJs</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/naiveUi/form')">
+          <n-button type="primary">NaiveUi</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>

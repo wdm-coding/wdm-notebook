@@ -1,49 +1,61 @@
 {
-  "hash": "bee34be8",
+  "hash": "82c65130",
   "configHash": "a31a85a6",
-  "lockfileHash": "8de70759",
-  "browserHash": "429270e4",
+  "lockfileHash": "db63948d",
+  "browserHash": "aa9c518a",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "c89ababa",
+      "fileHash": "22bdba3e",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "8326d6fe",
+      "fileHash": "0da67341",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "43d36302",
+      "fileHash": "a0d2d41c",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "7c476e08",
+      "fileHash": "e643639d",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "f8d8ed5e",
+      "fileHash": "ff5a4622",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "0881bd5b",
+      "fileHash": "7aec25ae",
       "needsInterop": false
     },
     "naive-ui": {
       "src": "../../../../node_modules/naive-ui/es/index.mjs",
       "file": "naive-ui.js",
-      "fileHash": "6e9c00bb",
+      "fileHash": "a27228db",
+      "needsInterop": false
+    },
+    "@vicons/ionicons5": {
+      "src": "../../../../node_modules/@vicons/ionicons5/es/index.js",
+      "file": "@vicons_ionicons5.js",
+      "fileHash": "5062af29",
+      "needsInterop": false
+    },
+    "@vicons/antd": {
+      "src": "../../../../node_modules/@vicons/antd/es/index.js",
+      "file": "@vicons_antd.js",
+      "fileHash": "ebbee5eb",
       "needsInterop": false
     }
   },

@@ -84,6 +84,14 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/naiveUi/':[
+        {
+          text: 'NaiveUi',
+          items: [
+            { text: '表单', link: '/pages/naiveUi/form.md' },
+          ]
+        }
+      ],
     },
     socialLinks: [
       {
