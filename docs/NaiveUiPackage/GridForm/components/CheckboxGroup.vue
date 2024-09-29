@@ -1,6 +1,8 @@
 <script setup name='CheckboxGroup'>
-import { computed } from 'vue'
+import { computed,useAttrs } from 'vue'
 	const attrs = useAttrs()
+  const valueKey = computed(() => attrs.valueKey || 'value')
+  const labelKey = computed(() => attrs.labelKey || 'label')
 	const props = defineProps({
 		value: {
 			type: Array,
@@ -17,9 +19,9 @@ import { computed } from 'vue'
       <n-checkbox
         v-for="item in attrs.options"
         v-bind="item"
-        :key="item[attrs.valueKey]"
-        :value="item[attrs.valueKey || 'value']"
-        :label="item[attrs.labelKey || 'label']"
+        :key="item[valueKey]"
+        :value="item[valueKey]"
+        :label="item[labelKey]"
       />
     </n-space>
   </n-checkbox-group>

@@ -1,4 +1,4 @@
-import naive from 'naive-ui'
+import naive,{ NConfigProvider,zhCN, dateZhCN } from 'naive-ui'
 import Login from './modules//login.vue'
 import DefaultTheme from 'vitepress/theme'
 import CustomLayout from './CustomLayout.vue'
@@ -8,10 +8,21 @@ import './style.scss'
 const allowPage = [
   '/wdm-notebook/'
 ]
+import { h } from 'vue'
 import { getItem } from '../utils/storage.js'
 export default{
   extends: DefaultTheme, // 继承默认主题的样式
-  Layout:CustomLayout,
+  Layout(){
+    return h(
+      NConfigProvider,
+      {locale:zhCN, 'date-locale':dateZhCN},
+      {
+        default: () => [
+          h(CustomLayout, null, { })
+        ]
+      }
+    )
+  },
   enhanceApp({ app, router }) {
     if (!import.meta.env.SSR){
       router.onBeforeRouteChange = (to) => {

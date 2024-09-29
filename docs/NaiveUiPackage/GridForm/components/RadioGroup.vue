@@ -1,5 +1,8 @@
 <script setup name='RadioGroup'>
+  import { useAttrs, computed } from 'vue'
 	const attrs = useAttrs()
+  const valueKey = computed(() => attrs.valueKey || 'value')
+  const labelKey = computed(() => attrs.labelKey || 'label')
 	const props = defineProps({
 		value: {
 			type: [String, Number, Boolean],
@@ -16,10 +19,10 @@
       <n-radio
         v-for="item in attrs.options"
         v-bind="item"
-        :key="item[attrs.valueKey || 'value']"
-        :value="item[attrs.valueKey || 'value']"
+        :key="item[valueKey]"
+        :value="item[valueKey]"
       >
-        {{ item[attrs.labelKey || 'label']  }}
+        {{ item[labelKey]  }}
       </n-radio>
     </n-space>
   </n-radio-group>

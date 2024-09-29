@@ -1,4 +1,5 @@
 <script setup name='PasswordInput'>
+	import { ref, computed } from 'vue'
 	const props = defineProps({
 		value: {
 			type: [String, Number],
