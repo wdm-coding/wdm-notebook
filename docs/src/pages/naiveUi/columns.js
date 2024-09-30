@@ -57,6 +57,7 @@ export default [
     typeName: 'n-select',
     label: '下拉选择器:',
     prop: 'select-down',
+    showRequireMark: true,
     attrs: {
       placeholder: '下拉选择器',
       multiple: true,
@@ -68,13 +69,22 @@ export default [
         {name: '选项3', value: 3},
         {name: '选项4', value: 4},
         {name: '选项5', value: 5}
-      ]
+      ],
+      onUpdateValue:(val)=>{
+        console.log('下拉选择器attrs值变化回调',val)
+      }
+    },
+    methods:{
+      updateValue:(val)=>{
+        console.log('下拉选择器methods值变化回调',val)
+      }
     }
   },
   {
     typeName: 'n-cascader',
     label: '级联选择器:',
     prop: 'select-cascader',
+    showRequireMark: true,
     attrs: {
       placeholder: '级联选择器',
       'label-field': 'name',
@@ -101,6 +111,7 @@ export default [
     typeName: 'n-date-picker',
     label: '日期选择器:',
     prop: 'date-picker',
+    showRequireMark: true,
     attrs: {
       placeholder: '日期选择器',
       type: 'date',
@@ -112,6 +123,7 @@ export default [
     typeName: 'n-date-picker',
     label: '日期范围选择器:',
     prop: 'date-pickerRange',
+    showRequireMark: true,
     attrs: {
       'start-placeholder': '开始',
       'end-placeholder': '结束',
@@ -124,6 +136,7 @@ export default [
     typeName: 'n-time-picker',
     label: '时间选择器:',
     prop: 'time-picker',
+    showRequireMark: true,
     attrs: {
       placeholder: '时间选择器'
     }
@@ -132,6 +145,7 @@ export default [
     typeName: 'n-radio-group',
     label: '单选框组:',
     prop: 'radio-group',
+    showRequireMark: true,
     attrs: {
       labelKey:'name',
       valueKey:'value',
@@ -146,6 +160,7 @@ export default [
     typeName: 'n-checkbox-group',
     label: '多选框组:',
     prop: 'checkbox-group',
+    showRequireMark: true,
     attrs: {
       labelKey:'name',
       valueKey:'value',

@@ -22,6 +22,8 @@
 
 <style lang='scss' scoped>
 .custom_layout_wrap{
+  width: 100%;
+  height: 100%;
   .logout_btn{
     position: fixed;
     right: 20px;

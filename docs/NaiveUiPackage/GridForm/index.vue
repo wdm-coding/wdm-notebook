@@ -1,5 +1,5 @@
 <script setup name='GridForm'>
-	import { ref,watch,computed } from 'vue'
+	import { ref,watch,computed,nextTick } from 'vue'
 	import FormItem from './components/FormItem.vue'
 	import { baseConfig } from './index'
 	import _props from './props'

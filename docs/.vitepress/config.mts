@@ -88,7 +88,8 @@ export default defineConfig({
         {
           text: 'NaiveUi',
           items: [
-            { text: '表单', link: '/pages/naiveUi/form.md' },
+            { text: '表单配置', link: '/pages/naiveUi/form.md' },
+            { text: '表单相关操作', link: '/pages/naiveUi/formAction.md' },
           ]
         }
       ],
