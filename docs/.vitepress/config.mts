@@ -68,6 +68,7 @@ export default defineConfig({
           items: [
             { text: 'project', link: '/pages/project/' },
             { text: '陇明公', link: '/pages/project/lmg.md' },
+            { text: '智领集控运枢平台', link: '/pages/project/edmp.md' }
           ]
         }
       ],
