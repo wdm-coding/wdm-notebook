@@ -1,4 +1,7 @@
 import {
+  useSsrAdapter
+} from "./chunk-6SC7YHUP.js";
+import {
   Comment,
   Fragment,
   Teleport,
@@ -3530,14 +3533,14 @@ function unmount(instance, node, id, parent2) {
 function addElementToList(els, target) {
   els.push(target);
 }
-function mount(instance, node, id, props, head2, force, anchorMetaName, parent2, ssrAdapter2) {
+function mount(instance, node, id, props, head2, force, anchorMetaName, parent2, ssrAdapter) {
   let style3;
   if (id === void 0) {
     style3 = node.render(props);
     id = hash_browser_esm_default(style3);
   }
-  if (ssrAdapter2) {
-    ssrAdapter2.adapter(id, style3 !== null && style3 !== void 0 ? style3 : node.render(props));
+  if (ssrAdapter) {
+    ssrAdapter.adapter(id, style3 !== null && style3 !== void 0 ? style3 : node.render(props));
     return;
   }
   if (parent2 === void 0) {
@@ -5224,35 +5227,6 @@ var zindexable = {
 };
 var zindexable_default = zindexable;
 
-// node_modules/@css-render/vue3-ssr/esm/index.js
-var ssrContextKey = "@css-render/vue3-ssr";
-function createStyleString(id, style3) {
-  return `<style cssr-id="${id}">
-${style3}
-</style>`;
-}
-function ssrAdapter(id, style3, ssrContext) {
-  const { styles: styles3, ids } = ssrContext;
-  if (ids.has(id))
-    return;
-  if (styles3 !== null) {
-    ids.add(id);
-    styles3.push(createStyleString(id, style3));
-  }
-}
-var isBrowser3 = typeof document !== "undefined";
-function useSsrAdapter() {
-  if (isBrowser3)
-    return void 0;
-  const context = inject(ssrContextKey, null);
-  if (context === null)
-    return void 0;
-  return {
-    adapter: (id, style3) => ssrAdapter(id, style3, context),
-    context
-  };
-}
-
 // node_modules/vueuc/es/shared/warn.js
 function warn3(location, message) {
   console.error(`[vueuc/${location}]: ${message}`);
@@ -5794,12 +5768,12 @@ var Follower_default = defineComponent({
         ensureListeners();
       }
     });
-    const ssrAdapter2 = useSsrAdapter();
+    const ssrAdapter = useSsrAdapter();
     style.mount({
       id: "vueuc/binder",
       head: true,
       anchorMetaName: cssrAnchorMetaName,
-      ssr: ssrAdapter2
+      ssr: ssrAdapter
     });
     onBeforeUnmount(() => {
       removeListeners();
@@ -6662,12 +6636,12 @@ var VirtualList_default = defineComponent({
     }
   },
   setup(props) {
-    const ssrAdapter2 = useSsrAdapter();
+    const ssrAdapter = useSsrAdapter();
     styles.mount({
       id: "vueuc/virtual-list",
       head: true,
       anchorMetaName: cssrAnchorMetaName,
-      ssr: ssrAdapter2
+      ssr: ssrAdapter
     });
     onMounted(() => {
       const { defaultScrollIndex, defaultScrollKey } = props;
@@ -7021,12 +6995,12 @@ var src_default2 = defineComponent({
       e2.currentTarget.scrollLeft += e2.deltaY + e2.deltaX;
       e2.preventDefault();
     }
-    const ssrAdapter2 = useSsrAdapter();
+    const ssrAdapter = useSsrAdapter();
     styles2.mount({
       id: "vueuc/x-scroll",
       head: true,
       anchorMetaName: cssrAnchorMetaName,
-      ssr: ssrAdapter2
+      ssr: ssrAdapter
     });
     const exposedMethods = {
       scrollTo(...args) {
@@ -7151,12 +7125,12 @@ var src_default3 = defineComponent({
         }
       }
     }
-    const ssrAdapter2 = useSsrAdapter();
+    const ssrAdapter = useSsrAdapter();
     style2.mount({
       id: "vueuc/overflow",
       head: true,
       anchorMetaName: cssrAnchorMetaName,
-      ssr: ssrAdapter2
+      ssr: ssrAdapter
     });
     onMounted(() => deriveCounter({
       showAllItemsBeforeCalculate: false
@@ -15828,7 +15802,7 @@ function createTheme(theme) {
   return theme;
 }
 function useTheme(resolveId, mountId, style3, defaultTheme, props, clsPrefixRef) {
-  const ssrAdapter2 = useSsrAdapter();
+  const ssrAdapter = useSsrAdapter();
   const NConfigProvider = inject(configProviderInjectionKey, null);
   if (style3) {
     const mountStyle = () => {
@@ -15840,18 +15814,18 @@ function useTheme(resolveId, mountId, style3, defaultTheme, props, clsPrefixRef)
           bPrefix: clsPrefix ? `.${clsPrefix}-` : void 0
         },
         anchorMetaName: cssrAnchorMetaName2,
-        ssr: ssrAdapter2
+        ssr: ssrAdapter
       });
       if (!(NConfigProvider === null || NConfigProvider === void 0 ? void 0 : NConfigProvider.preflightStyleDisabled)) {
         index_cssr_default.mount({
           id: "n-global",
           head: true,
           anchorMetaName: cssrAnchorMetaName2,
-          ssr: ssrAdapter2
+          ssr: ssrAdapter
         });
       }
     };
-    if (ssrAdapter2) {
+    if (ssrAdapter) {
       mountStyle();
     } else {
       onBeforeMount(mountStyle);
@@ -35227,7 +35201,7 @@ function useStyle(mountId, style3, clsPrefixRef) {
     if (true) throwError("use-style", "No style is specified.");
     return;
   }
-  const ssrAdapter2 = useSsrAdapter();
+  const ssrAdapter = useSsrAdapter();
   const NConfigProvider = inject(configProviderInjectionKey, null);
   const mountStyle = () => {
     const clsPrefix = clsPrefixRef.value;
@@ -35238,18 +35212,18 @@ function useStyle(mountId, style3, clsPrefixRef) {
       props: {
         bPrefix: clsPrefix ? `.${clsPrefix}-` : void 0
       },
-      ssr: ssrAdapter2
+      ssr: ssrAdapter
     });
     if (!(NConfigProvider === null || NConfigProvider === void 0 ? void 0 : NConfigProvider.preflightStyleDisabled)) {
       index_cssr_default.mount({
         id: "n-global",
         head: true,
         anchorMetaName: cssrAnchorMetaName2,
-        ssr: ssrAdapter2
+        ssr: ssrAdapter
       });
     }
   };
-  if (ssrAdapter2) {
+  if (ssrAdapter) {
     mountStyle();
   } else {
     onBeforeMount(mountStyle);
@@ -35286,7 +35260,7 @@ function useThemeClass(componentName, hashRef, cssVarsRef, props) {
   if (!cssVarsRef) throwError("useThemeClass", "cssVarsRef is not passed");
   const mergedThemeHashRef = (_a = inject(configProviderInjectionKey, null)) === null || _a === void 0 ? void 0 : _a.mergedThemeHashRef;
   const themeClassRef = ref("");
-  const ssrAdapter2 = useSsrAdapter();
+  const ssrAdapter = useSsrAdapter();
   let renderCallback;
   const hashClassPrefix = `__${componentName}`;
   const mountStyle = () => {
@@ -35314,7 +35288,7 @@ function useThemeClass(componentName, hashRef, cssVarsRef, props) {
       }
       c2(`.${finalThemeHash}`, style3).mount({
         id: finalThemeHash,
-        ssr: ssrAdapter2
+        ssr: ssrAdapter
       });
       renderCallback = void 0;
     };
@@ -35333,7 +35307,7 @@ function useThemeClass(componentName, hashRef, cssVarsRef, props) {
 // node_modules/naive-ui/es/_mixins/use-rtl.mjs
 function useRtl(mountId, rtlStateRef, clsPrefixRef) {
   if (!rtlStateRef) return void 0;
-  const ssrAdapter2 = useSsrAdapter();
+  const ssrAdapter = useSsrAdapter();
   const componentRtlStateRef = computed(() => {
     const {
       value: rtlState
@@ -35353,7 +35327,7 @@ function useRtl(mountId, rtlStateRef, clsPrefixRef) {
         value: clsPrefix
       } = clsPrefixRef;
       const id = `${clsPrefix}${mountId}Rtl`;
-      if (exists(id, ssrAdapter2)) return;
+      if (exists(id, ssrAdapter)) return;
       const {
         value: componentRtlState
       } = componentRtlStateRef;
@@ -35365,11 +35339,11 @@ function useRtl(mountId, rtlStateRef, clsPrefixRef) {
         props: {
           bPrefix: clsPrefix ? `.${clsPrefix}-` : void 0
         },
-        ssr: ssrAdapter2
+        ssr: ssrAdapter
       });
     });
   };
-  if (ssrAdapter2) {
+  if (ssrAdapter) {
     mountStyle();
   } else {
     onBeforeMount(mountStyle);

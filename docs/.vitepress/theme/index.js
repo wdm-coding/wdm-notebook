@@ -4,25 +4,52 @@ import DefaultTheme from 'vitepress/theme'
 import CustomLayout from './CustomLayout.vue'
 import NavLogo from './modules/nav-logo.vue'
 import NaiveUiPackage from '../../NaiveUiPackage/index.js'
+import { setup } from '@css-render/vue3-ssr'
 import './style.scss'
-const allowPage = [
-  '/wdm-notebook/'
-]
-import { h } from 'vue'
+const allowPage = ['/wdm-notebook/']
+import { defineComponent, h, inject } from 'vue'
 import { getItem } from '../utils/storage.js'
-export default{
-  extends: DefaultTheme, // 继承默认主题的样式
-  Layout(){
+
+const CssRenderStyle = defineComponent({
+  setup() {
+    const collect = inject('css-render-collect')
+    return {
+      style: collect()
+    }
+  },
+  render() {
+    return h('css-render-style', {
+      innerHTML: this.style
+    })
+  }
+})
+
+const VitepressPath = defineComponent({
+  setup() {
+    const route = useRoute()
+    return () => {
+      return h('vitepress-path', null, [route.path])
+    }
+  }
+})
+
+const NaiveUIProvider = defineComponent({
+  render() {
     return h(
       NConfigProvider,
-      {locale:zhCN, 'date-locale':dateZhCN},
+      { abstract: true, inlineThemeDisabled: true,locale:zhCN, 'date-locale':dateZhCN },
       {
         default: () => [
-          h(CustomLayout, null, { })
+          h(CustomLayout, null, { default: this.$slots.default?.() }),
+          import.meta.env.SSR ? [h(CssRenderStyle), h(VitepressPath)] : null
         ]
       }
     )
-  },
+  }
+})
+export default{
+  extends: DefaultTheme, // 继承默认主题的样式
+  Layout: NaiveUIProvider,
   enhanceApp({ app, router }) {
     if (!import.meta.env.SSR){
       router.onBeforeRouteChange = (to) => {
@@ -47,6 +74,9 @@ export default{
       for (const name in NaiveUiPackage) {
         app.component(name, NaiveUiPackage[name])
       }
+    }else{
+      const { collect } = setup(app)
+      app.provide('css-render-collect', collect)
     }
   }
 }
