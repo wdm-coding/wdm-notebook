@@ -38,6 +38,13 @@ $ nest new project-name
       │ sub-app       │ app         │ Generate a new application within a monorepo │
       └───────────────┴─────────────┴──────────────────────────────────────────────┘
  ```
+ ### 快速创建modules文件
+
+```shell
+$ nest g mo users
+```
+
+
  ## 3.资源合集
 
  官方示例 : https://github.com/nestjs/nest/tree/master/sample

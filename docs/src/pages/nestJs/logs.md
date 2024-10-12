@@ -136,3 +136,102 @@ npm install --save nest-winston winston
 ```typescript
 pnpm install --save winston-daily-rotate-file
 ```
+
+### 全局的异常过滤器
+
+```typescript
+// filter文件夹 http-exception.filter.ts
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  LoggerService
+} from '@nestjs/common'
+
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(private readonly logger: LoggerService) {}
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp()
+    // 响应对象
+    const response = ctx.getResponse()
+    // 请求对象
+    const request = ctx.getRequest()
+    // http 状态码
+    const status = exception.getStatus()
+    this.logger.error(exception.message, exception.stack)
+    // 响应体
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      method: request.method,
+      message: exception.message || exception.name
+    })
+    // throw new Error('Custom error')
+  }
+}
+```
+
+```typescript
+// main.ts
+const loggerInt = WinstonModule.createLogger({ instance: instanceWinston })
+  const app = await NestFactory.create(AppModule, {
+    // logger: ['error', 'warn', 'debug'] // 日志 'log'、'fatal'、'error'、'warn'、'debug' 和 'verbose'
+    logger: loggerInt
+  })
+app.useGlobalFilters(new HttpExceptionFilter(loggerInt))
+```
+
+### 全局所有异常捕获过滤器
+
+```typescript
+// filter文件夹 all-exception.filter.ts
+import {
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  LoggerService
+} from '@nestjs/common'
+import { HttpAdapterHost } from '@nestjs/core'
+import { ArgumentsHost, Catch } from '@nestjs/common'
+
+import * as requestIp from 'request-ip'
+
+@Catch()
+export class AllExceptionFilter implements ExceptionFilter {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly httpAdapterHost: HttpAdapterHost
+  ) {}
+  catch(exception: unknown, host: ArgumentsHost) {
+    const { httpAdapter } = this.httpAdapterHost
+    const ctx = host.switchToHttp()
+    const request = ctx.getRequest()
+    const response = ctx.getResponse()
+
+    const httpStatus =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR
+
+    const responseBody = {
+      headers: request.headers,
+      query: request.query,
+      body: request.body,
+      params: request.params,
+      timestamp: new Date().toISOString(),
+      // 还可以加入一些用户信息
+      // IP信息
+      ip: requestIp.getClientIp(request),
+      exceptioin: exception['name'],
+      error: exception['response'] || 'Internal Server Error'
+    }
+
+    this.logger.error('[toimc]', responseBody)
+    httpAdapter.reply(response, responseBody, httpStatus)
+  }
+}
+
+```
