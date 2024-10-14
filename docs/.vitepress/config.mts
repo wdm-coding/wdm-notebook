@@ -83,7 +83,8 @@ export default defineConfig({
             { text: '核心', link: '/pages/nestJs/base.md' },
             { text: '配置', link: '/pages/nestJs/config.md' },
             { text: 'ORM', link: '/pages/nestJs/orm.md' },
-            { text: '日志', link: '/pages/nestJs/logs.md' }
+            { text: '日志', link: '/pages/nestJs/logs.md' },
+            { text: 'API开发', link: '/pages/nestJs/api.md' }
           ]
         }
       ],

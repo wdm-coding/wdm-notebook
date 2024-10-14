@@ -2,7 +2,7 @@
 
 ## ormconfig.ts
 
-```tyepscript
+```js
 
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { Logs } from 'src/logs/logs.entity'
@@ -26,7 +26,7 @@ export default {
 
 ## ts-node
 
-```tyepscript
+```js
 npm install ts-node --save-dev
 
 在 package.json 中的 scripts 下添加 typeorm 命令
