@@ -137,7 +137,7 @@ npm install --save nest-winston winston
 pnpm install --save winston-daily-rotate-file
 ```
 
-### 全局的异常过滤器
+## 全局的异常过滤器
 
 ```typescript
 // filter文件夹 http-exception.filter.ts
@@ -184,7 +184,7 @@ const loggerInt = WinstonModule.createLogger({ instance: instanceWinston })
 app.useGlobalFilters(new HttpExceptionFilter(loggerInt))
 ```
 
-### 全局所有异常捕获过滤器
+## 全局所有异常捕获过滤器
 
 ```typescript
 // filter文件夹 all-exception.filter.ts
@@ -234,4 +234,88 @@ export class AllExceptionFilter implements ExceptionFilter {
   }
 }
 
+```
+
+## 重构日志系统（logs模块）
+
+### 1.logs.module.ts
+
+```typescript
+import { Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import * as winston from 'winston'
+import { WinstonModule, WinstonModuleOptions, utilities } from 'nest-winston'
+import { Console } from 'winston/lib/winston/transports'
+import * as DailyRotateFile from 'winston-daily-rotate-file'
+import { LoggerEnum } from 'src/enum/config.enum'
+
+@Module({
+  imports: [
+    WinstonModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const consoleTransPorts = new Console({
+          level: 'info',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            utilities.format.nestLike()
+          )
+        })
+        const dailyTransPorts = new DailyRotateFile({
+          level: configService.get(LoggerEnum.LOG_LEVEL),
+          dirname: 'logs',
+          filename: 'app-%DATE%.log', // 文件名
+          datePattern: 'YYYY-MM-DD-HH', // 文件名格式
+          zippedArchive: true, // 压缩文件
+          maxSize: '20m', // 文件大小
+          maxFiles: '14d', // 保存文件天数 14 天
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json()
+          )
+        })
+        const dailyInfoTransPorts = new DailyRotateFile({
+          level: configService.get(LoggerEnum.LOG_LEVEL),
+          dirname: 'logs',
+          filename: 'info-%DATE%.log', // 文件名
+          datePattern: 'YYYY-MM-DD', // 文件名格式
+          zippedArchive: true, // 压缩文件
+          maxSize: '20m', // 文件大小
+          maxFiles: '14d', // 保存文件天数 14 天
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json()
+          )
+        })
+        return {
+          transports: [
+            consoleTransPorts,
+            ...(configService.get(LoggerEnum.LOG_ON)
+              ? [dailyInfoTransPorts, dailyTransPorts]
+              : [])
+          ]
+        } as WinstonModuleOptions
+      }
+    })
+  ]
+})
+export class LogsModule {}
+
+```
+### 2.main.ts
+
+```typescript
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
+app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
+```
+
+### 3.controller使用
+
+```typescript
+constructor(
+  @Inject(WINSTON_MODULE_NEST_PROVIDER)
+  private readonly logger: LoggerService
+) {
+  this.logger.log('用户模块初始化')
+}
 ```

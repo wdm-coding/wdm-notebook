@@ -1,9 +1,6 @@
 <script setup>
 import { useRouter,withBase,useData   } from 'vitepress'
 const router = useRouter()
-const data = useData()
-console.log(data);
-
 function  jumpHandle(path) {
   router.go(withBase(path)) 
 }
@@ -55,7 +52,12 @@ function  jumpHandle(path) {
       </n-grid-item>
       <n-grid-item>
         <div class="grid_item" @click="jumpHandle('/pages/naiveUi/form')">
-          <n-button type="primary">NaiveUi</n-button>
+          <n-button type="info">NaiveUi</n-button>
+        </div>
+      </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/note/dataVisual')">
+          <n-button type="primary">数据大屏可视化</n-button>
         </div>
       </n-grid-item>
     </n-grid>
