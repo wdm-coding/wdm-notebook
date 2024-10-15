@@ -44,6 +44,11 @@ $ nest new project-name
 $ nest g mo users
 ```
 
+### 快速创建filter文件
+
+```shell
+$ nest g f filters/typeorm --flat --no-spec
+```
 
  ## 3.资源合集
 

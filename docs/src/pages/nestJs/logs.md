@@ -319,3 +319,51 @@ constructor(
   this.logger.log('用户模块初始化')
 }
 ```
+
+## 模块私有异常捕获
+
+```typescript
+// controller.ts
+@Controller('user')
+@UseFilters(new TypeormFilter())
+
+// typeorm.filter.ts
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
+import { TypeORMError } from 'typeorm'
+const errorTemplate = (message: string) => ({
+  code: 1,
+  msg: message,
+  data: null
+})
+@Catch(TypeORMError)
+export class TypeormFilter implements ExceptionFilter {
+  catch(exception: TypeORMError, host: ArgumentsHost) {
+    const ctx = host.switchToHttp()
+    const request = ctx.getRequest()
+    const response = ctx.getResponse()
+    switch (exception.name) {
+      case 'QueryFailedError':
+        const errno = (exception as any)?.driverError?.errno
+        if (errno === 1062) {
+          console.log('[request]', request)
+          if (request.url === '/wdm/v1/user/add') {
+            response.status(200).json(errorTemplate('用户名已存在'))
+          } else {
+            response.status(200).json(errorTemplate('唯一键重复'))
+          }
+        } else {
+          response.status(500).json(errorTemplate('Bad Request'))
+        }
+        return
+      case 'EntityNotFound':
+        response.status(404).json(errorTemplate('Not Found'))
+        return
+      default:
+        response.status(200).json(errorTemplate(exception.message))
+        break
+    }
+  }
+}
+
+```
+
