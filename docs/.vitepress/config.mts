@@ -33,7 +33,7 @@ export default defineConfig({
           text: 'Vue',
           items: [
             { text: '响应式 API', link: '/pages/vue/api' },
-            { text: '其他', link: '/pages/vue/other' }
+            { text: '面试', link: '/pages/vue/base' }
           ]
         }
       ],
