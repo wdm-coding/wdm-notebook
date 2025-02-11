@@ -28,12 +28,12 @@ export default defineConfig({
       }
     ],
     sidebar: {
-      '/pages/vue/':[
+      '/pages/web/':[
         {
-          text: 'Vue',
+          text: 'WEB',
           items: [
-            { text: '响应式 API', link: '/pages/vue/api' },
-            { text: '面试', link: '/pages/vue/base' }
+            { text: 'vue3-Api', link: '/pages/web/vue3-api' },
+            { text: 'js异步', link: '/pages/web/js-async' }
           ]
         }
       ],
