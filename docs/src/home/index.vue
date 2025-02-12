@@ -11,7 +11,7 @@ function  jumpHandle(path) {
   <div class='home_wrap'>
     <n-grid cols="2 s:3 m:4 l:5 xl:6 2xl:7" x-gap="40" responsive="screen">
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/web/vue3-api')">
+        <div class="grid_item" @click="jumpHandle('/pages/web/js-base')">
           <n-button type="primary">WEB</n-button>
         </div>
       </n-grid-item>
