@@ -34,6 +34,7 @@ export default defineConfig({
           items: [
             { text: 'js基础', link: '/pages/web/js-base' },
             { text: 'js异步', link: '/pages/web/js-async' },
+            { text: 'dom-bom', link: '/pages/web/dom-bom' },
             { text: 'vue3-Api', link: '/pages/web/vue3-api' }
           ]
         }

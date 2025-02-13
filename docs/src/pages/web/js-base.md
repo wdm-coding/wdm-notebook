@@ -1,4 +1,5 @@
 # JS 基础
+<p style="font-weight:600;color:red">JS 语法，执行ECMA 262标准</p>
 
 ## 1.变量类型
 
