@@ -186,7 +186,7 @@ obj.a === null || obj.a === undefined
   console.log('子类的显示原型的隐式原型===父类的显示原型', sonProto === fatherProto)
 ```
 ::: warning
-xialuo1.__proto__.say() 中的this为什么是undefined？
+xialuo1.__proto__.say() 中的this指向？
 因为say方法是在Student类的原型对象上定义的，而xialuo1是Student类的一个实例。当你在一个实例上调用了原型上的方法时，这个方法的this指向的是调用它的实例对象，而不是在原型上直接调用。因此，当你在xialuo1.__proto__.say()中调用时，this指向的是xialuo1.__proto__，而不是xialuo1本身。
 :::
 

@@ -60,6 +60,53 @@ console.log(3)
   <img id="base" src="" alt=""/>
 </div>
 
+```js
+  <p>{{status}}</p>
+  <img id="base" src="" alt=""/>  
+
+  const status = ref('')
+  // 加载图片
+  function loadImageAsync(url) {
+    return new Promise((resolve, reject) => {
+      // padding状态，等待图片加载完成
+      status.value = 'padding'
+      const image = new Image()
+      image.onload = () => {
+        status.value = 'resolve'
+        resolve(image)
+      } // resolve状态，图片加载成功
+      image.onerror = () => {
+        status.value = 'reject'
+        reject(new Error('图片加载失败'))
+      } // reject状态，图片加载失败
+      image.src = url
+    })
+  }
+  
+  const startHandle = () => {
+    const url = 'https://www.baidu.com/img/flexible/logo/pc/result@2.png'
+    const result = loadImageAsync(url)
+    result.then(res => {
+      console.log('图片加载成功1', res)
+      const img = document.getElementById('base')
+      img.src = res.src
+      return res.src
+    }).then(res => {
+      console.log('图片加载成功2', res)
+    }).catch(err => {
+      console.error('图片加载失败', err)
+    })
+  }
+
+  async function async () {
+    const url = 'https://www.baidu.com/img/flexible/logo/pc/result@2.png'
+    const img1 = await loadImageAsync(url)
+    console.log('图片加载成功3', img1)
+    const img2 = await loadImageAsync(url)
+    console.log('图片加载成功4', img2.width, img2.height)
+  }
+```
+
 ## 3.async/await 如何实现
     1.异步回调
     2.Promise then catch 链式调用
@@ -279,6 +326,7 @@ event loop,宏任务和微任务,promise,async/await执行顺序 场景题
     }).then(res => {
       console.log('图片加载成功2', res)
     }).catch(err => {
+      console.log('图片加载失败', err)
       console.error('图片加载失败', err)
     })
   }
