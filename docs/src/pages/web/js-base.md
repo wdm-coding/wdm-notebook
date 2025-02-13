@@ -185,6 +185,17 @@ obj.a === null || obj.a === undefined
   const fatherProto = Peoson.prototype
   console.log('子类的显示原型的隐式原型===父类的显示原型', sonProto === fatherProto)
 ```
+::: warning
+xialuo1.__proto__.say() 中的this为什么是undefined？
+因为say方法是在Student类的原型对象上定义的，而xialuo1是Student类的一个实例。当你在一个实例上调用了原型上的方法时，这个方法的this指向的是调用它的实例对象，而不是在原型上直接调用。因此，当你在xialuo1.__proto__.say()中调用时，this指向的是xialuo1.__proto__，而不是xialuo1本身。
+:::
+
+```js
+console.log('xialuo1.__proto__.say()',xialuo1.__proto__.say())
+console.log('xialuo1.say()',xialuo1.say())
+```
+<img src="/assets/jsBase/10.png" style="margin-top:15px">
+
 ## 7.作用域和闭包
 
 <h4>作用域</h4>
@@ -238,8 +249,154 @@ obj.a === null || obj.a === undefined
 
   // 自由变量寻找时在函数定义的上级作用域中寻找，不是在函数调用的上级作用域中查找
 ```
+<h4>this的用法</h4>
+
+1. 普通函数：this指向window。
+2. 箭头函数：this指向定义它的那个作用域,即上级作用域。
+3. 构造函数：this指向新创建的对象。
+4. 事件处理函数：this指向触发事件的元素。
+5. 定时器函数：this指向全局对象。
+6. call、apply、bind：this指向指定的对象。
+7. 在对象的方法中：this指向调用它的那个对象。
+<div style="color:red;font-weight:600;margin-top:15px">
+  this指向的定义是在函数被执行时确定的，不是在定义的时候。
+</div>
+
+```js
+  // this
+  // 普通函数调用时，this指向全局对象window
+  function thisFn(){
+    console.log('thisFn', this)
+  }
+  thisFn() // window
+
+  thisFn.call({call:'this call'}) // this指向call对象
+  thisFn.apply({apply:'this apply'}) // this指向apply对象
+  const bindFun = thisFn.bind({bind:'this bind'}) // this指向bind对象
+  bindFun()
+  // 对象方法调用时，this指向对象本身
+  const obj = {
+    name:'xxx',
+    getThis(){
+      console.log('obj', this) // obj对象
+      const fun = () =>{
+        console.log('箭头函数--',this) // obj对象
+      }
+      fun()
+      function inner(){
+        console.log('inner',this) // window对象
+      }
+      inner()
+      setTimeout(()=>{
+        console.log('setTimeout-箭头函数',this) // obj对象
+      })
+      setTimeout(function(){
+        console.log('setTimeout-function函数',this) // window对象
+      })
+    }
+  }
+  obj.getThis()
+  // class this指向实例对象
+  class Person{
+    constructor(name){
+      this.name = name;
+    }
+    getThis(){
+      console.log('class-this', this) // Person实例对象
+    }
+  }
+  const xialuo = new Person('xialuo')
+  xialuo.getThis()
+```
+## 8.手写bind函数
+
+```js
+// 手写bind()函数
+  Function.prototype.myBind = function(context,...args){
+    // 1.判断context是否传入，如果未传入则指向全局对象window
+    context = context || window
+    // 2.判断调用者是否为函数，如果不是则报错 这里的this为Function类的实例对象，即调用bind的函数
+    if(typeof this !== 'function'){
+      throw new Error('Type error')
+    }
+    // 3.保存原始函数，将调用者赋值给变量fn，方便后续使用
+    const fn = this
+    // 4.返回一个新的函数，这个新函数的this指向context
+    return function newFn(){
+      // 5.判断新函数是否作为构造函数调用，如果是则不绑定this,直接执行原始函数
+      return fn.apply(context, args.concat(...arguments))
+    }
+  }
+  function fn(a,b,c,d){
+    console.log('fn', this,a,b,c,d)
+  }
+  const newBind = fn.myBind({a:100},10,20,30)
+  newBind(100)
+```
+## 9.实际开发中闭包的应用场景
+1. 隐藏数据，封装私有变量与方法，只暴露操作数据的API
+2. 通过使用闭包，我们可以轻松地解决循环中DOM事件处理函数的 this 绑定和变量共享问题。闭包使得每个事件处理函数都能独立地访问和记住它自己的变量值，从而确保事件处理逻辑的正确性。
+
+<button class="btnClcik">0</button>
+<br>
+<button class="btnClcik">1</button>
+<br>
+<button class="btnClcik">2</button>
+<br>
+<button class="btnClcik">3</button>
+<br>
+<button class="btnClcik">4</button>
+
+```js
+  // 获取所有按钮元素
+  const buttons = document.querySelectorAll('.btnClcik');
+  // 循环遍历按钮，并为每个按钮添加点击事件监听器
+  // let i = 0
+  // for (i = 0; i < buttons.length; i++) {
+  //   buttons[i].addEventListener('click', function() {
+  //     // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+  //     console.log(`this`,this,i);
+  //     alert(i)
+  //   });
+  // }
+  // 使用let声明变量i，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+  // 让i变量成为每次for循环的块级作用域变量，这样就不会出现i共享的问题了
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function() {
+      // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+      console.log(`this`,this,i);
+      alert(i)
+    });
+  }
+```
+
+
+
 
 <script setup>
+  import { onMounted } from 'vue';
+  onMounted(() => {
+    // 获取所有按钮元素
+    const buttons = document.querySelectorAll('.btnClcik');
+    // 循环遍历按钮，并为每个按钮添加点击事件监听器
+    // let i = 0
+    // for (i = 0; i < buttons.length; i++) {
+    //   buttons[i].addEventListener('click', function() {
+    //     // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+    //     console.log(`this`,this,i);
+    //     alert(i)
+    //   });
+    // }
+    // 使用let声明变量i，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+    // 让i变量成为每次for循环的块级作用域变量，这样就不会出现i共享的问题了
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function() {
+        // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
+        console.log(`this`,this,i);
+        alert(i)
+      });
+    }
+  })
   const initObj = {
     name:'xxx',
     age: 18,
@@ -273,54 +430,56 @@ obj.a === null || obj.a === undefined
   // console.log('oldObj', initObj);
   // console.log('newObj', newObj);
   // 父类
-  // class Peoson {
-  //   constructor(name) {
-  //     this.name = name;
-  //   }
-  //   introduce() {
-  //     return `I'm ${this.name}`;
-  //   }
-  // }
-  // // 子类1
-  // class Student extends Peoson {
-  //   constructor(name, number) {
-  //     super(name); // 调用父类的构造函数
-  //     this.number = number;
-  //   }
-  //   say(){
-  //     return `${this.name} is ${this.number} say`
-  //   }
-  // }
+  class Peoson {
+    constructor(name) {
+      this.name = name;
+    }
+    introduce() {
+      return `I'm ${this.name}`;
+    }
+  }
+  // 子类1
+  class Student extends Peoson {
+    constructor(name, number) {
+      super(name); // 调用父类的构造函数
+      this.number = number;
+    }
+    say(){
+      console.log('this',this)
+      return `${this.name} is ${this.number} say`
+    }
+  }
 
-  // const xialuo1 = new Student('xialuo', 18);
-  // // console.log(xialuo1.introduce());
-  // // console.log(xialuo1.say());
+  const xialuo1 = new Student('xialuo', 18);
+  // console.log(xialuo1.introduce());
+  // console.log(xialuo1.say());
 
-  // // 子类2
-  // class Teacher extends Peoson {
-  //   constructor(name, subject) {
-  //     super(name); // 调用父类的构造函数
-  //     this.subject = subject;
-  //   }
-  //   teach(){
-  //     return `${this.name} is ${this.subject} teacher`
-  //   }
-  // }
+  // 子类2
+  class Teacher extends Peoson {
+    constructor(name, subject) {
+      super(name); // 调用父类的构造函数
+      this.subject = subject;
+    }
+    teach(){
+      return `${this.name} is ${this.subject} teacher`
+    }
+  }
 
-  // const xialuo2 = new Teacher('xialuo', 'math');
-  // // console.log(xialuo2.introduce());
-  // // console.log(xialuo2.teach());
-  // // console.log('xialuo1',xialuo1)
-  // const proto = xialuo1.__proto__
-  // const prototype = Student.prototype
+  const xialuo2 = new Teacher('xialuo', 'math');
+  // console.log(xialuo2.introduce());
+  // console.log(xialuo2.teach());
+  // console.log('xialuo1',xialuo1)
+  const proto = xialuo1.__proto__
+  const prototype = Student.prototype
   // console.log('实例对象的隐式原型', xialuo1.__proto__)
   // console.log('类对象的显式原型', Student.prototype)
   // console.log('显式原型 === 隐式原型', proto === prototype)
-  // // 子类的显示原型也是一个对象，它的隐式原型指向父类的显示原型
-  // const sonProto = Student.prototype.__proto__
-  // const fatherProto = Peoson.prototype
+  // 子类的显示原型也是一个对象，它的隐式原型指向父类的显示原型
+  const sonProto = Student.prototype.__proto__
+  const fatherProto = Peoson.prototype
   // console.log('子类的显示原型的隐式原型===父类的显示原型', sonProto === fatherProto)
-
+  console.log('xialuo1.__proto__.say()',xialuo1.__proto__.say())
+  console.log('xialuo1.say()',xialuo1.say())
   // 作用域
   // let a = 10;
   // function fn1(){
@@ -339,28 +498,118 @@ obj.a === null || obj.a === undefined
 
   // 闭包
   // 1. 函数作为参数传递
-  function outer1(fn){
-    let a = 200
-    fn()
-  }
+  // function outer1(fn){
+  //   let a = 200
+  //   fn()
+  // }
 
-  let a = 100;
-  function inner(){
-    console.log('函数作为参数传递',a)
-  }
-  outer1(inner) // 100
+  // let a = 100;
+  // function inner(){
+  //   console.log('函数作为参数传递',a)
+  // }
+  // outer1(inner) // 100
   
-  // 2.函数作为返回值
-  function outer2(){
-    let b = 100
-    return function inner() {
-      console.log('函数作为返回值',b)
-    }
-  }
-  const fn = outer2();
-  const b = 200;
-  fn() // 100
+  // // 2.函数作为返回值
+  // function outer2(){
+  //   let b = 100
+  //   return function inner() {
+  //     console.log('函数作为返回值',b)
+  //   }
+  // }
+  // const fn = outer2();
+  // const b = 200;
+  // fn() // 100
 
-  // 自由变量寻找时在函数定义的上级作用域中寻找，不是在函数调用的上级作用域中查找
+  // // 自由变量寻找时在函数定义的上级作用域中寻找，不是在函数调用的上级作用域中查找
+</script>
 
+<script>
+  // this
+  // 普通函数调用时，this指向全局对象window
+  // function thisFn(){
+  //   console.log('thisFn', this)
+  // }
+  // thisFn() // window
+
+  // thisFn.call({call:'this call'}) // this指向call对象
+  // thisFn.apply({apply:'this apply'}) // this指向apply对象
+  // const bindFun = thisFn.bind({bind:'this bind'}) // this指向bind对象
+  // bindFun()
+  // // 对象方法调用时，this指向对象本身
+  // const obj = {
+  //   name:'xxx',
+  //   getThis(){
+  //     console.log('obj', this) // obj对象
+  //     const fun = () =>{
+  //       console.log('箭头函数--',this) // obj对象
+  //     }
+  //     fun()
+  //     function inner(){
+  //       console.log('inner',this) // window对象
+  //     }
+  //     inner()
+  //     setTimeout(()=>{
+  //       console.log('setTimeout-箭头函数',this) // obj对象
+  //     })
+  //     setTimeout(function(){
+  //       console.log('setTimeout-function函数',this) // window对象
+  //     })
+  //   }
+  // }
+  // obj.getThis()
+  // // class this指向实例对象
+  // class Person{
+  //   constructor(name){
+  //     this.name = name;
+  //   }
+  //   getThis(){
+  //     console.log('class-this', this) // Person实例对象
+  //   }
+  // }
+  // const xialuo = new Person('xialuo')
+  // xialuo.getThis()
+
+  // 手写bind()函数
+  // Function.prototype.myBind = function(context,...args){
+  //   // 1.判断context是否传入，如果未传入则指向全局对象window
+  //   context = context || window
+  //   // 2.判断调用者是否为函数，如果不是则报错 这里的this为Function类的实例对象，即调用bind的函数
+  //   if(typeof this !== 'function'){
+  //     throw new Error('Type error')
+  //   }
+  //   // 3.保存原始函数，将调用者赋值给变量fn，方便后续使用
+  //   const fn = this
+  //   // 4.返回一个新的函数，这个新函数的this指向context
+  //   return function newFn(){
+  //     console.log('arguments',arguments) // 这里的arguments是新函数执行时传入的参数
+  //     console.log('args',args) // 这里是原始函数执行时传入的参数，即bind的第二个及之后的参数
+  //     // 5.判断新函数是否作为构造函数调用，如果是则不绑定this,直接执行原始函数
+  //     return fn.apply(context, args.concat(...arguments))
+  //   }
+  // }
+  // function fn(a,b,c,d){
+  //   console.log('fn', this,a,b,c,d)
+  // }
+  // const newBind = fn.myBind({a:100},10,20,30)
+  // newBind(100)
+  // 闭包应用场景1：封装私有变量
+  // function createCache(){
+  //   let cache = {}; // 需要被隐藏的数据，不能被外部访问
+  //   return {
+  //     set: function(key, value){ // 暴露一个公共方法，用于设置缓存数据
+  //       cache[key] = value;
+  //     },
+  //     get: function(key){ // 暴露一个公共方法，用于获取缓存数据
+  //       return cache[key]
+  //     }
+  //   }
+  // }
+  // const myCache = createCache();
+  // // 除了暴漏的方法，没有其他方式可以访问到cache变量，达到了封装私有变量的目的
+  //  myCache.set('a',10)
+  // const cache = myCache.get('a')
+  // console.log('cache',cache)
+  // 闭包应用场景2：循环中的dom事件，多个元素添加事件监听器时，为了保证每个事件监听器都能访问到对应的元素，可以使用闭包
+
+  
 </script>
