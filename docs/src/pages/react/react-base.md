@@ -1,0 +1,191 @@
+# React 基础
+
+## 创建一个react应用
+  npx create-react-app my-app(项目名)
+  1. 使用 npx（Node Package Executor）临时安装并执行 create-react-app 包。
+  npx 会首先检查本地是否已经安装了 create-react-app。如果没有安装，npx 会从 npm（Node Package Manager）上下载并安装它，然后执行。
+  2. create-react-app 是一个官方提供的脚手架工具，用于初始化一个新的 React 项目。
+  3. my-app 是您想要创建的 React 项目的目录名。
+
+  react中文文档：https://zh-hans.react.dev/learn/creating-a-react-app
+
+## JSX
+  JSX 是 JavaScript XML 的缩写，它是 React 特有的语法扩展。
+  在 JSX 中，你可以使用大括号 {} 来嵌入表达式（例如变量、函数调用等），但不能直接写语句（如 if-else）。
+  1. HTML的声明式写法
+  2. js的可编程能力
+  3. 需要babel解析工具解析后才能被浏览器识别
+
+  babel官网：https://babeljs.io/
+  
+  示例：
+  ```jsx
+  const element = <h1>Hello, {name}!</h1>;
+  ```
+
+### jsx中使用js表达式
+
+```js
+const count = 100
+function fun(){
+  return '我是一个函数'
+}
+function App() {
+  return (
+    <div className="App">
+      <p>this is a react project</p>
+      {/* 1.使用引号传递字符串 */}
+      <p>{'我是jsx字符串'}</p>
+      {/* 2.使用{}包裹js变量 */}
+      <p>{count}</p>
+      {/* 3.函数调用 */}
+      <p>{fun()}</p>
+      {/* 4.方法调用 */}
+      <p>{new Date().getFullYear()}</p>
+      {/* 5.使用style对象 */}
+      <p style={{color:'red',fontSize:20}}>我是样式</p>
+    </div>
+  );
+}
+```
+### JSX中使用循环渲染
+  map方法实现循环渲染。
+  key属性是必须的，用于提高渲染性能。
+
+```js
+const arr = [1,2,3]
+function App() {
+  return (
+    <div className="App">
+      {/* 循环渲染 */}
+      {
+        arr.map((item)=>(<p key={item}>我是数组的第{item}个元素</p>))
+      }
+    </div>
+  );
+}
+```
+### JSX中使用条件渲染
+  1. 使用三元运算符。
+  2. 使用逻辑与或非代替if-else。
+  3. 使用对象代替switch-case。
+
+  示例：
+  ```jsx
+  const isLogin = true
+    function render(){
+    if(isLogin){
+      return <p>登录成功4</p>
+    }else if(!isLogin){
+      return <p>未登录</p>
+    }else{
+      return <p>未知状态</p>
+    }
+  }
+  function App() {
+    return (
+      <div className="App">
+        {/* 三元运算符 */}
+        {isLogin ? <p>登录成功</p> : <p>未登录</p>}
+        {/* 逻辑与或非代替if-else */}
+        {!isLogin && <p>未登录</p>}
+        {isLogin && <p>登录成功</p>}
+        {/* 使用对象代替switch-case */}
+        // 通过[isLogin]语法，代码根据isLogin变量的值从对象中选择对应的属性进行访问。如果isLogin为true，则选择true属性对应的<p>登录成功</p>；如果为false，则选择false属性对应的<p>未登录</p>；如果既不是true也不是false（这里假设为空字符串''表示未知状态，尽管在实际应用中可能需要更明确的未知状态表示），则选择空字符串''属性对应的<p>未知状态</p>。
+        {
+          {
+            true: <p>登录成功</p>,
+            false: <p>未登录</p>,
+            '': <p>未知状态</p>,
+          }[isLogin]
+        }
+        {/* 复杂条件渲染，通过定义函数（if语句实现） */}
+        {render()}
+      </div> 
+    );
+  }
+  ```
+
+
+
+
+
+::: warning
+  1. 不能直接写if-else，可以使用三元运算符或者逻辑与或非代替。
+  2. 不能直接写for循环，可以使用数组的map方法代替。
+  3. 不能直接写switch-case，可以使用对象代替。
+:::
+
+## react事件绑定
+  语法: on+事件名 = {函数} 整体遵循驼峰命名法。
+
+  示例：
+  ```jsx
+  function App() {
+  function fun(e,a){
+    console.log('1-react事件this',this)
+    console.log('1-react事件对象e',e)
+    console.log('1-自定义参数a',a)
+  }
+  return (
+    <div className="App">
+      <p>this is a react project</p>
+      <button onClick={(e)=>fun(e,1)}>点击事件1</button>
+    </div>
+  );
+}
+```
+
+## React组件
+  一个组件就是首字母大写的函数或者类。渲染组件有两种方式： 
+  1. 直接使用标签形式渲染。
+  2. 使用JSX语法渲染。
+
+  ```jsx
+  function Header() {
+    return (
+      <div>
+        <h1>this is a header</h1>
+      </div>
+    );
+  }
+  function App() {
+    return (
+      <div className="App">
+        <p>this is a react project</p>
+        <Header></Header>
+      </div>
+    );
+  }
+  ```
+
+  ## react数据状态变更useState
+    useState是React中的一个Hook，用于在函数组件中添加状态（state）管理功能。
+    
+    ```jsx
+    import { useState } from "react";
+    function App() {
+      // 定义一个状态和一个修改状态的函数
+      const [count,setCount] = useState(0);
+      const addCount = () => {
+        // 修改状态的值,重新渲染组件,数据驱动视图
+        setCount((pre)=>pre + 1);
+      };
+      return (
+        <div className="App">
+          <p>this is a react project</p>
+          <p>{count}</p>
+          <button onClick={addCount}>增加</button>
+        </div>
+      );
+    }
+    ```
+::: warning
+  1. useState是React中的一个Hook，只能在函数组件中使用。
+  2. useState返回一个数组，第一个元素是状态值，第二个元素是一个函数，用于修改状态值。
+  3. 修改状态值后，组件会重新渲染。
+  4. 任何由useState Hook返回的更新函数的行为在表面上看似异步,但实际上并不是。
+  5. 当你调用setCount时，React并不会立即更新count的状态值。相反，它会将更新操作排入一个队列中。
+  随后，React会在其内部机制允许的情况下，即在当前的渲染周期结束后和下一个渲染周期开始前，应用这些更新。这种行为给人一种setCount是“异步”的错觉，因为它不会立即反映状态的变化。
+  6. React采用这种批量更新策略是为了提高性能，避免不必要的多次渲染。通过将多个状态更新合并为一个，React可以减少DOM操作的次数，从而提升应用的整体效率。
+:::

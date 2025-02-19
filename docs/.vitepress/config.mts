@@ -41,6 +41,15 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/react/':[
+        {
+          text: 'React',
+          items: [
+            { text: 'React思维导图', link: '/pages/react/index' },
+            { text: 'React基础', link: '/pages/react/react-base' },
+          ]
+        }
+      ],
       '/pages/note/':[
         {
           text: 'note',
