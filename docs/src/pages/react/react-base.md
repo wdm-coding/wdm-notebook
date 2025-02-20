@@ -158,11 +158,10 @@ function App() {
     );
   }
   ```
-
-  ## react数据状态变更useState
-    useState是React中的一个Hook，用于在函数组件中添加状态（state）管理功能。
+## react数据状态变更useState
+  useState是React中的一个Hook，用于在函数组件中添加状态（state）管理功能。
     
-    ```jsx
+  ```jsx
     import { useState } from "react";
     function App() {
       // 定义一个状态和一个修改状态的函数
@@ -171,15 +170,40 @@ function App() {
         // 修改状态的值,重新渲染组件,数据驱动视图
         setCount((pre)=>pre + 1);
       };
+      // 修改对象
+      const [obj,setObj] = useState({name:'lisi',age:18});
+      const addObj = () => {
+        setObj({...obj,name:'wangwu'})
+      }
+      // 修改数组
+      const [arr,setArr] = useState([1,2,3]);
+      const addArr = () => {
+        // 增加数组
+        setArr([...arr,4])
+        // 删除数组
+        setArr(arr.filter((item)=>item !== 3))
+        // 修改数组
+        setArr(arr.map((item)=>{
+          if(item === 2){
+            return item + 10;
+          }
+          return item;
+        }))
+      }
       return (
         <div className="App">
           <p>this is a react project</p>
           <p>{count}</p>
           <button onClick={addCount}>增加</button>
+          <p>{obj.name}</p>
+          <button onClick={addObj}>修改对象</button>
+          <p>{arr.join(',')}</p>
+          <button onClick={addArr}>修改数组</button>
         </div>
       );
     }
-    ```
+  ```
+
 ::: warning
   1. useState是React中的一个Hook，只能在函数组件中使用。
   2. useState返回一个数组，第一个元素是状态值，第二个元素是一个函数，用于修改状态值。
@@ -188,4 +212,9 @@ function App() {
   5. 当你调用setCount时，React并不会立即更新count的状态值。相反，它会将更新操作排入一个队列中。
   随后，React会在其内部机制允许的情况下，即在当前的渲染周期结束后和下一个渲染周期开始前，应用这些更新。这种行为给人一种setCount是“异步”的错觉，因为它不会立即反映状态的变化。
   6. React采用这种批量更新策略是为了提高性能，避免不必要的多次渲染。通过将多个状态更新合并为一个，React可以减少DOM操作的次数，从而提升应用的整体效率。
+  7. 状态不可变，只是新值替换旧值
 :::
+
+## 组件基础样式方案
+  1. 行内样式
+  2. class类名控制
