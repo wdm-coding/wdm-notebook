@@ -16,7 +16,7 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/note/')">
+        <div class="grid_item" @click="jumpHandle('/pages/react/index')">
           <n-button type="info">React</n-button>
         </div>
       </n-grid-item>
