@@ -55,6 +55,7 @@ export default defineConfig({
           items: [
             { text: 'React思维导图', link: '/pages/react/index' },
             { text: 'React基础', link: '/pages/react/react-base' },
+            { text: 'React的Hook和API', link: '/pages/react/react-hook-api' },
           ]
         }
       ],
