@@ -16,8 +16,18 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/vue/index')">
+          <n-button type="info">Vue</n-button>
+        </div>
+      </n-grid-item>
+      <n-grid-item>
         <div class="grid_item" @click="jumpHandle('/pages/react/index')">
           <n-button type="info">React</n-button>
+        </div>
+      </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/uniApp/index')">
+          <n-button type="info">Uni-App</n-button>
         </div>
       </n-grid-item>
       <n-grid-item>

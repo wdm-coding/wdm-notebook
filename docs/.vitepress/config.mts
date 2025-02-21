@@ -36,8 +36,16 @@ export default defineConfig({
             { text: 'js异步', link: '/pages/web/js-async' },
             { text: 'dom-bom', link: '/pages/web/dom-bom' },
             { text: 'js事件', link: '/pages/web/js-events' },
-            { text: 'AJAX', link: '/pages/web/ajax' },
-            { text: 'vue3-Api', link: '/pages/web/vue3-api' }
+            { text: 'AJAX', link: '/pages/web/ajax' }
+          ]
+        }
+      ],
+      '/pages/vue/':[
+        {
+          text: 'Vue',
+          items: [
+            { text: 'Vue思维导图', link: '/pages/vue/index' },
+            { text: 'Vue3Api', link: '/pages/vue/vue3-api' },
           ]
         }
       ],
@@ -47,6 +55,15 @@ export default defineConfig({
           items: [
             { text: 'React思维导图', link: '/pages/react/index' },
             { text: 'React基础', link: '/pages/react/react-base' },
+          ]
+        }
+      ],
+      '/pages/uniApp/':[
+        {
+          text: 'UniApp',
+          items: [
+            { text: 'UniApp思维导图', link: '/pages/uniApp/index' },
+            { text: 'weixin', link: '/pages/uniApp/weixin' },
           ]
         }
       ],
