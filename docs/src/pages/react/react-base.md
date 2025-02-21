@@ -241,7 +241,7 @@ function App() {
   2. 使用onChange事件处理器来更新组件的状态，当表单元素的值发生变化时。
   3. 将表单元素的值设置为组件状态中的对应值。
 
-  <img src="/assets/react/1.png" alt="受控表单">
+  <img src="/assets/react/1.png" alt="受控表单" style="margin-top:15px">
 
   ```js
   function ContralBindInput(){
@@ -293,43 +293,77 @@ function App() {
     特殊的props.children属性可以接收任意类型的数据，包括React元素。
     当组件标签内包含子元素时，这些子元素会被自动添加到props.children中。相当于插槽的概念。
   :::
-
-  ```js
-  import ChildOne from "./child-one";
-  // 父组件传递数据给子组件
-  function Father(){
-    const name = 'son-one';
-    const info = {
-      age: 18,
-      sex: 'male',
-      arr:[1,2,3],
-      jsx: <h1>jsx</h1>,
-      fn:()=>{console.log('fn')},
-      obj:{a:1,b:2},
-      date: new Date()
-    }
-    return (
-      <div>
-        <h3>父子组件通信</h3>
-        <ChildOne name={name} {...info}/>
-      </div>
-    )
-  }
-  // 子组件接收props数据
-  function ChildOne(props){
-    console.log('ChildOne',props);
-    return (
-      <div>
-        <p>ChildOne name is {props.name}</p>
-        <p>ChildOne age is {props.age}</p>
-        <p>ChildOne hobby is {props.hobby}</p>
-        <p>ChildOne address is {props.address}</p>
-        <p>{props.jsx}</p>
-      </div>
-    )
-  }
-
-  ```
   ### 2. 兄弟组件通信
-  ### 3. 跨级组件通信
+
+  兄弟组件通信通常通过共同的父组件作为中介进行。
+  1. 兄弟组件各自维护自己的状态，并通过回调函数或事件将数据传递给父组件。
+  2. 父组件接收子组件的数据后，可以通过props将这些数据传递到另一个子组件中。
+
+  <img src="/assets/react/2.png" alt="兄弟组件通信" style="margin-top:15px">
+    
+    ```js
+    function Father(){
+      const name = 'son-one';
+      const info = {
+        age: 18,
+        sex: 'male',
+        arr:[1,2,3],
+        jsx: <strong style={{color:'red'}}>jsx数据</strong>,
+        fn:()=>{console.log('fn')},
+        obj:{a:1,b:2},
+        date: new Date()
+      }
+      const [sonMsg,setSonMsg] = useState('')
+
+      const changeHandler = (msg)=>{
+        setSonMsg(msg)
+      }
+      const [branthName,setBranthName] = useState('')
+      const getbranth = (bn)=>{
+        setBranthName(bn)
+      }
+      return (
+        <div>
+          <h3>父子组件通信</h3>
+          <ChildOne name={name} {...info} onGetSonMsg={changeHandler} onGetbranth={getbranth}>
+            <h1>我是props.children</h1>
+          </ChildOne>
+          <h2>子传父</h2>
+          <p>{sonMsg}</p>
+          <h2>兄弟组件</h2>
+          <ChildTwo name={branthName}/>
+        </div>
+      )
+    }
+    function ChildOne(props){
+      console.log('ChildOne',props);
+      return (
+        <div>
+          <p>ChildOne name is {props.name}</p>
+          <p>ChildOne age is {props.age}</p>
+          <p>ChildOne hobby is {props.hobby}</p>
+          <p>ChildOne address is {props.address}</p>
+          <p>{props.jsx}</p>
+          <p>{props.children}</p>
+          <button onClick={()=>props.onGetSonMsg('来自子组件的数据')}>向父组件发送数据</button>
+          <br/>
+          <br/>
+          <button onClick={()=>props.onGetbranth('来着兄弟组件的数据')}>向兄弟组件发送数据</button>
+        </div>
+      )
+    }
+    function ChildTwo(props){
+      return (
+        <div>
+          <p>ChildTwo name is {props.name}</p>
+        </div>
+      )
+    }
+    ```
+  ### 3. Context API跨级组件通信
+    + 1.createContext创建上下文对象
+    + 2.Context.Provider在祖先组件上包裹要共享数据的子组件
+    + 3.使用Context.Consumer渲染子组件，并通过value属性获取上下文数据
+
+
     
