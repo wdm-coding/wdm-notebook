@@ -218,3 +218,118 @@ function App() {
 ## 组件基础样式方案
   1. 行内样式
   2. class类名控制
+## classnames 优化类名控制
+  *** npm install classnames ***
+  classnames库可以简化类名控制的写法，特别是在需要根据条件动态添加或移除多个类时。
+
+  ```jsx
+    import classnames from 'classnames';
+    1. 对象语法：
+    const cx = classnames({
+      'class-a': true,
+      'class-b': false,
+      'class-c': someCondition
+    });
+    2. 数组语法：
+    const cx = classnames(['class-a', 'class-b', someCondition ? 'class-c' : null]);
+    3. 混合语法：
+    const cx = classnames('class-a', { 'class-b': true }, 'class-c');
+  ```
+## 受控表单绑定
+  在React中，受控表单是一种表单处理方式，其中表单元素的值由React组件的状态来控制。
+  1. 在组件的状态中初始化表单数据。
+  2. 使用onChange事件处理器来更新组件的状态，当表单元素的值发生变化时。
+  3. 将表单元素的值设置为组件状态中的对应值。
+
+  <img src="/assets/react/1.png" alt="受控表单">
+
+  ```js
+  function ContralBindInput(){
+    const [value,setValue] = useState('init value')
+    const changeValue = (e)=>{
+      setValue(e.target.value)
+    }
+    return (
+      <div>
+        <h3>受控表单绑定(双向绑定)</h3>
+        <p>{value}</p>
+        <input type="text" value={value} onChange={changeValue}/>
+      </div>
+    )
+  }
+  ```
+## react获取dom元素
+  在React中，通过ref来获取对DOM节点的引用。
+  1. 使用useRef Hook创建ref对象。
+  2. 将ref对象的current属性设置为要引用的DOM节点。
+  3. 渲染完毕后，可以通过ref对象的current属性访问到DOM节点。
+
+  ```js
+    import { useRef } from 'react'
+    function GetDom(){
+      const inputRef = useRef(null)
+      return (
+        <div>
+          <h3>获取DOM</h3>
+          <input ref={inputRef} type='text'/>
+          <button onClick={()=>console.log('inputRef',inputRef.current)}>
+            获取dom
+          </button>
+        </div>
+      )
+    }
+  ```
+## 组件通信
+  组件通信是指在React应用中，不同组件之间如何传递数据或状态。
+  ### 1. 父子通信
+  父子通信是最常见的组件间通信方式，主要通过props和回调函数实现。
+  1. 父组件通过props将数据传递给子组件。
+  2. 子组件可以通过onChange事件向父组件传递信息或触发状态更新，在子组件中调用父组件的函数进行参数传递。
+  3. 单向数据流：父组件到子组件的通信是单向的，从顶层向下传递。
+  4. 子组件不能直接修改父组件的状态，只能通过回调函数通知父组件进行状态更新。
+  5. 通过展开运算符（...）可以将父组件的多个props传递给子组件。
+  
+  ::: info
+    特殊的props.children属性可以接收任意类型的数据，包括React元素。
+    当组件标签内包含子元素时，这些子元素会被自动添加到props.children中。相当于插槽的概念。
+  :::
+
+  ```js
+  import ChildOne from "./child-one";
+  // 父组件传递数据给子组件
+  function Father(){
+    const name = 'son-one';
+    const info = {
+      age: 18,
+      sex: 'male',
+      arr:[1,2,3],
+      jsx: <h1>jsx</h1>,
+      fn:()=>{console.log('fn')},
+      obj:{a:1,b:2},
+      date: new Date()
+    }
+    return (
+      <div>
+        <h3>父子组件通信</h3>
+        <ChildOne name={name} {...info}/>
+      </div>
+    )
+  }
+  // 子组件接收props数据
+  function ChildOne(props){
+    console.log('ChildOne',props);
+    return (
+      <div>
+        <p>ChildOne name is {props.name}</p>
+        <p>ChildOne age is {props.age}</p>
+        <p>ChildOne hobby is {props.hobby}</p>
+        <p>ChildOne address is {props.address}</p>
+        <p>{props.jsx}</p>
+      </div>
+    )
+  }
+
+  ```
+  ### 2. 兄弟组件通信
+  ### 3. 跨级组件通信
+    
