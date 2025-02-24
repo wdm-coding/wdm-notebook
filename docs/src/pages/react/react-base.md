@@ -222,19 +222,19 @@ function App() {
   *** npm install classnames ***
   classnames库可以简化类名控制的写法，特别是在需要根据条件动态添加或移除多个类时。
 
-  ```jsx
-    import classnames from 'classnames';
-    1. 对象语法：
-    const cx = classnames({
-      'class-a': true,
-      'class-b': false,
-      'class-c': someCondition
-    });
-    2. 数组语法：
-    const cx = classnames(['class-a', 'class-b', someCondition ? 'class-c' : null]);
-    3. 混合语法：
-    const cx = classnames('class-a', { 'class-b': true }, 'class-c');
-  ```
+```jsx
+  import classnames from 'classnames';
+  1. 对象语法：
+  const cx = classnames({
+    'class-a': true,
+    'class-b': false,
+    'class-c': someCondition
+  });
+  2. 数组语法：
+  const cx = classnames(['class-a', 'class-b', someCondition ? 'class-c' : null]);
+  3. 混合语法：
+  const cx = classnames('class-a', { 'class-b': true }, 'class-c');
+```
 ## 受控表单绑定
   在React中，受控表单是一种表单处理方式，其中表单元素的值由React组件的状态来控制。
   1. 在组件的状态中初始化表单数据。
@@ -243,7 +243,7 @@ function App() {
 
   <img src="/assets/react/1.png" alt="受控表单" style="margin-top:15px">
 
-  ```js
+```js
   function ContralBindInput(){
     const [value,setValue] = useState('init value')
     const changeValue = (e)=>{
@@ -257,14 +257,14 @@ function App() {
       </div>
     )
   }
-  ```
+```
 ## react获取dom元素
   在React中，通过ref来获取对DOM节点的引用。
   1. 使用useRef Hook创建ref对象。
   2. 将ref对象的current属性设置为要引用的DOM节点。
   3. 渲染完毕后，可以通过ref对象的current属性访问到DOM节点。
 
-  ```js
+```js
     import { useRef } from 'react'
     function GetDom(){
       const inputRef = useRef(null)
@@ -278,10 +278,10 @@ function App() {
         </div>
       )
     }
-  ```
+```
 ## 组件通信
   组件通信是指在React应用中，不同组件之间如何传递数据或状态。
-  ### 1. 父子通信
+### 1. 父子通信
   父子通信是最常见的组件间通信方式，主要通过props和回调函数实现。
   1. 父组件通过props将数据传递给子组件。
   2. 子组件可以通过onChange事件向父组件传递信息或触发状态更新，在子组件中调用父组件的函数进行参数传递。
@@ -293,7 +293,7 @@ function App() {
     特殊的props.children属性可以接收任意类型的数据，包括React元素。
     当组件标签内包含子元素时，这些子元素会被自动添加到props.children中。相当于插槽的概念。
   :::
-  ### 2. 兄弟组件通信
+### 2. 兄弟组件通信
 
   兄弟组件通信通常通过共同的父组件作为中介进行。
   1. 兄弟组件各自维护自己的状态，并通过回调函数或事件将数据传递给父组件。
@@ -301,7 +301,7 @@ function App() {
 
   <img src="/assets/react/2.png" alt="兄弟组件通信" style="margin-top:15px">
     
-    ```js
+```js
     function Father(){
       const name = 'son-one';
       const info = {
@@ -359,8 +359,8 @@ function App() {
         </div>
       )
     }
-    ```
-  ### 3. Context API跨级组件通信
+```
+### 3. Context API跨级组件通信
     + 1.createContext创建上下文对象
     + 2.Context.Provider在祖先组件上包裹要共享数据的子组件
     + 3.使用Context.Consumer渲染子组件，并通过value属性获取上下文数据
