@@ -104,3 +104,8 @@ useEffect(()=>{
   const {show,toggle} = useToggle()
   <div>{show?'显示':'隐藏'}</div>
 ```
+
+::: waring
+1. 只能在函数组件中使用自定义Hook，不能在类组件中直接使用。
+2. 只能在组件的顶层调用自定义Hook，不能在条件语句或循环中调用。
+:::
