@@ -66,3 +66,27 @@ outline: deep
       }
   });
   ```
+
+## 微信预览媒体文件
+wx.previewMedia 用于预览图片、视频等媒体文件。
+参数 sources 是一个对象数组，每个对象包含 url 和 type。type 可以是 image、video
+```js
+wx.previewMedia({
+  sources:[{
+    url:'',//图片或视频的地址
+    type:'',//['image', 'video']
+    poster:'',//视频封面图，仅type为video时有效
+  }],
+  current:0,//默认展示的索引
+  showmenu:true,//是否显示右上角菜单
+  success:function(res){ //预览成功回调函数
+    console.log('预览成功')
+  },
+  fail:function(err){ //预览失败回调函数
+    console.error('预览失败', err)
+  },
+  complete:function(res){ //预览完成回调函数
+    console.log('预览完成')
+  }
+})
+```

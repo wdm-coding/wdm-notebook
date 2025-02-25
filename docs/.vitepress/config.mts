@@ -65,6 +65,7 @@ export default defineConfig({
           items: [
             { text: 'UniApp思维导图', link: '/pages/uniApp/index' },
             { text: 'weixin', link: '/pages/uniApp/weixin' },
+            { text: 'uView', link: '/pages/uniApp/uView' },
           ]
         }
       ],
