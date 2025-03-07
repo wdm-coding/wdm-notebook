@@ -57,6 +57,8 @@ export default defineConfig({
             { text: 'React基础', link: '/pages/react/react-base' },
             { text: 'React的Hook和API', link: '/pages/react/react-hook-api' },
             { text: 'Redux', link: '/pages/react/react-redux' },
+            { text: 'React路由', link: '/pages/react/react-router' },
+            { text: 'React配置', link: '/pages/react/react-config' },
           ]
         }
       ],
