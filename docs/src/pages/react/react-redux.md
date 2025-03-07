@@ -129,3 +129,103 @@
 
 ```
 
+### 使用useSelector和useDispatch钩子函数获取状态值和分发action对象
+
+```js
+import {useSelector,useDispatch} from 'react-redux'
+import {SetUserInfo} from '../../store/modules/userStore.js'
+function ReactRedux(){
+    // 1. 使用useSelector钩子函数，根据state对象中的数据生成新的状态值
+    const {userInfo} = useSelector(state => state.user)
+    // 2. 使用useDispatch钩子函数，获取dispatch方法分发action对象
+    const dispatch = useDispatch()
+    const setHandler = () => {
+      // 3. 分发action对象，传递参数对象给action对象的payload属性
+        dispatch(SetUserInfo({
+            ...userInfo,
+            name:'张三',
+            age:20
+        }))
+    }
+    return (
+        <div>
+            <h3>我正在使用ReactRedux</h3>
+            <p>姓名：{userInfo.name}</p>
+            <p>年龄：{userInfo.age}</p>
+            <p>性别：{userInfo.gender}</p>
+            <button onClick={setHandler}>修改用户信息</button>
+        </div>
+    )
+}
+
+export default ReactRedux;
+```
+## redux异步操作
+
+  1. 在store的modules文件中同步代码配置不变。
+  2. 新增一个异步action创建函数，返回一个新函数，在函数中异步请求获取服务端数据，该函数接收dispatch为参数，dispatch提交同步action方法。
+  3. 组件中引入异步action创建函数，dispatch异步action对象进行数据修改。
+
+```js
+import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+const paramsStore = createSlice({
+  name: "params",
+  initialState: {
+    params: {},
+    list:[]
+  },
+  reducers: {
+    setParams(state, action) {
+      state.params = { ...action.payload };
+    },
+    setList(state, action) {
+      state.list = [...action.payload];
+    },
+  },
+});
+const { setParams,setList } = paramsStore.actions;
+// 异步操作
+const getList = () => {
+  // 返回一个函数，该函数接收dispatch作为参数
+  return async (dispatch)=>{
+    // 发送异步请求，获取数据
+    const {data} = await axios.get(`http://localhost:3004/comment`)
+    const {code, result} = data
+    if(code === 0){
+      // 更新状态
+      dispatch(setList(result))
+    }
+  }
+}
+
+const paramsReducer = paramsStore.reducer;
+
+export {getList,setParams,setList}
+export default paramsReducer;
+
+// 组件中使用异步action对象
+import { useSelector,useDispatch } from "react-redux";
+import {getList} from '../../store/modules/paramsStore.js'
+import { useEffect } from "react";
+function AsyncRedux(){
+    const {list} = useSelector(state=>state.params)
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(getList())
+    },[dispatch])
+    return (
+      <div>
+        <h3>AsyncRedux</h3>
+        {
+          list.map(item=>{
+            return <div key={item.id}>{item.name}-{item.content}</div>
+          })
+        }
+      </div>
+    );
+}
+```
+
+
+
