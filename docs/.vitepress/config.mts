@@ -72,6 +72,15 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/dataScreen/':[
+        {
+          text: '数据大屏可视化',
+          items: [
+            { text: '大屏开发', link: '/pages/dataScreen/index' },
+            { text: 'Echarts图表', link: '/pages/dataScreen/echarts' }
+          ]
+        }
+      ],
       '/pages/note/':[
         {
           text: 'note',

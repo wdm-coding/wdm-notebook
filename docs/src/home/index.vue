@@ -66,7 +66,7 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/note/dataVisual')">
+        <div class="grid_item" @click="jumpHandle('/pages/dataScreen/index')">
           <n-button type="primary">数据大屏可视化</n-button>
         </div>
       </n-grid-item>
