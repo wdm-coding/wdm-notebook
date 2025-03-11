@@ -59,6 +59,7 @@ export default defineConfig({
             { text: 'Redux', link: '/pages/react/react-redux' },
             { text: 'React路由', link: '/pages/react/react-router' },
             { text: 'React配置', link: '/pages/react/react-config' },
+            { text: 'AntDesign组件库', link: '/pages/react/react-antd' },
           ]
         }
       ],
