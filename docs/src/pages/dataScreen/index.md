@@ -1,6 +1,6 @@
 # 数据大屏可视化开发
 
-## 自适应方案
+## 全局自适应方案
 
 ### 方案一
 
@@ -58,3 +58,12 @@ body, html {
 ::: tip
 页面宽度单位使用vw，高度使用vh。可适应任何屏幕尺寸。但屏幕比例与设计图差别较大时会过度拉伸变形。
 :::
+
+## chart 图表文字大小自适应
+
+```js
+const fontSizeComp = (val, initWidth = 1920) => {
+	const nowClientWidth = document.documentElement.clientWidth
+	return val * (nowClientWidth / initWidth)
+}
+```
