@@ -26,3 +26,15 @@
   </Form>
   ```
 :::
+
+## 2.message全局提示
+
+  + 必须在useEffect()中调用
+```js
+  useEffect(()=>{
+      if(loginSucesss) {
+          message.success('登录成功');
+          setLoginSucesss(false)
+      }
+  },[loginSucesss])
+```

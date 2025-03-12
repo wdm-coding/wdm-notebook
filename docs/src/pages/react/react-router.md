@@ -171,6 +171,22 @@ const router = createBrowserRouter([
 ## 路由模式
   <img src="/assets/react/7.png" alt="路由模式" style="margin-top:15px">
 
+## Token 控制路由权限
+  1. 定义路由守卫组件(高阶组件)
+  <img src="/assets/react/9.png" alt="路由模式" style="margin-top:15px">
+  2. 使用路由守卫组件控制路由权限
+
+```js
+import { Navigate } from 'react-router-dom'
+function AuthGuard({ children }) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+```
+
 
   
 
