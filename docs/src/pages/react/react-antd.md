@@ -3,7 +3,14 @@
 [官网文档](https://ant-design.antgroup.com/index-cn)
 
 ## react安装antd
-  1. npm install antd --save
+  npm install antd --save
+## react项目初始化样式
+  第三方库样式重置Normalize.css
+  npm install normalize.css
+  import 'normalize.css'
+  
+  + 在scss文件中全局引入normalize
+  @import '~normalize.css';
 
 ## 1.form表单
 
