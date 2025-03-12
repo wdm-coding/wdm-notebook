@@ -36,7 +36,8 @@ export default defineConfig({
             { text: 'js异步', link: '/pages/web/js-async' },
             { text: 'dom-bom', link: '/pages/web/dom-bom' },
             { text: 'js事件', link: '/pages/web/js-events' },
-            { text: 'AJAX', link: '/pages/web/ajax' }
+            { text: 'AJAX', link: '/pages/web/ajax' },
+            { text: 'Axios', link: '/pages/web/axios' }
           ]
         }
       ],
