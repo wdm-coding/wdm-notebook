@@ -44,7 +44,8 @@
 				type: 'scatter',
 				coordinateSystem: 'geo',
 				data: [],
-				symbolSize: fontSizeComp(10),
+				symbolSize: fontSizeComp(20),
+				symbol: `image://${new URL(`./point-bottom.png`, import.meta.url).href}`,
 				label: {
 					position: 'top',
 					show: true,
