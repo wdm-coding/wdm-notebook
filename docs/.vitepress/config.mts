@@ -78,8 +78,17 @@ export default defineConfig({
         {
           text: '数据大屏可视化',
           items: [
-            { text: '大屏开发', link: '/pages/dataScreen/index' },
-            { text: 'Echarts图表', link: '/pages/dataScreen/echarts' }
+            { text: '大屏开发', link: '/pages/dataScreen/index' }
+          ]
+        }
+      ],
+      '/pages/echarts/':[
+        {
+          text: 'Echarts图表',
+          items: [
+            { text: 'echarts基础', link: '/pages/echarts/index' },
+            { text: '圆环图', link: '/pages/echarts/ring/index' },
+            { text: '二维地图', link: '/pages/echarts/map/index' }
           ]
         }
       ],
