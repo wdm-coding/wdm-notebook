@@ -88,7 +88,8 @@ export default defineConfig({
           items: [
             { text: 'echarts基础', link: '/pages/echarts/index' },
             { text: '圆环图', link: '/pages/echarts/ring/index' },
-            { text: '二维地图', link: '/pages/echarts/map/index' }
+            { text: '二维地图', link: '/pages/echarts/map/index' },
+            { text: '3D曲面', link: '/pages/echarts/curvedSurface3D/index' }
           ]
         }
       ],

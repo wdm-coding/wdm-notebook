@@ -1,7 +1,6 @@
 <script setup>
 import { ref,reactive, onMounted,shallowRef,onUnmounted } from 'vue'
 import * as echarts from 'echarts'
-import 'echarts-gl' // 3d图表库
 import { fontSizeComp, createColor } from '../index.js'
 	const chartRef = ref(null)
 	const colors = [
