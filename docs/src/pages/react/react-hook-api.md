@@ -171,22 +171,167 @@ export default UseReducerHook;
   3. useMemo会缓存计算结果，并在依赖项不变的情况下返回相同的值。
   4. 在组件中，你可以直接使用useMemo返回的结果。
 ```js
-import {useMemo} from 'react';
+import {useMemo,useState} from 'react';
+import {Button} from 'antd';
+const fib=(n)=>{
+  console.log('计算属性执行了')
+  if(n<=1) return n;
+  return fib(n-1)+fib(n-2);
+}
+
 function UseMemoHook(){
-  const [count,setCount] = useState(0);
-  // 1.定义一个函数，接收参数并返回计算结果
-  function getDouble(){
-    console.log('执行了')
-    return count*2;
-  }
-  // 2.调用useMemo钩子，传入函数和依赖项数组
-  const double = useMemo(getDouble,[count]);
+  const [count1,setCount1] = useState(0);
+  // const result = fib(count1)
+  const result = useMemo(()=>fib(count1),[count1]);
+  const [count2,setCount2] = useState(0);
+  console.log('组件渲染了');
   return (
     <>
       <h1>UseMemoHook</h1>
-      <p>Count:{double}</p>
-      <button onClick={()=>setCount(count+1)}>增加</button>
+      <p>result:{result}</p>
+      <Button color='success' variant="solid" onClick={()=>setCount1(count1+1)}>
+        count:{count1}
+      </Button>
+      <Button color='success' variant="solid" onClick={()=>setCount2(count2+1)} style={{marginLeft:'15px'}}>
+        count:{count2}
+      </Button>
     </>
   );
 }
 export default UseMemoHook;
+```
+## React.memo
+  1. React.memo是React中的一个高阶组件.
+  2. 用于缓存组件的渲染结果。当组件的props没有发生变化时，React.memo会直接返回上一次渲染的结果，从而避免不必要的重新渲染，提高性能。
+  类似于vue的computed
+```js
+import { memo,useState,useMemo } from "react";
+import {Button} from 'antd';
+// 子组件
+function Child1({name}){
+  console.log("Child1子组件渲染了");
+  return (
+    <div>
+      <h3>我是子组件</h3>
+      <p>name:{name}</p>
+    </div>
+  );
+}
+function Child2({info}){
+  console.log("Child2子组件渲染了");
+  return (
+    <div>
+      <h3>我是子组件</h3>
+      <p>{JSON.stringify(info)}</p>
+    </div>
+  );
+}
+// 子组件使用memo包裹子组件，让其变成记忆组件
+const ChildMemo1 = memo(Child1);
+const ChildMemo2 = memo(Child2);
+// 父组件
+function ReactMemo(){
+    console.log("父组件渲染");
+    // 当传递的props是基本类型，这里修改name会导致子组件重新渲染，因为name是父组件传递给子组件的props的一部分
+    const [name, setName] = useState("张三") 
+    // 这里修改count不会导致子组件重新渲染，因为count不是父组件传递给子组件的props的一部分
+    const [count, setCount] = useState(0) 
+    // 当传递的数据是对象或数组，即使内容没有变化，也会导致子组件重新渲染(会比较引用是否相同)
+    const [age, setAge] = useState(18);
+    const info = {sex:'男',age};
+    // 如何解决这个问题，可以使用useMemo包裹info
+    const memoInfo = useMemo(()=>info,[age]);
+    return(
+      <>
+        <div>我是父组件</div>
+        <Button color='success' variant="solid" onClick={()=>setCount(count+1)} style={{margin:'15px'}}>
+          修改count:{count}
+        </Button>
+        <ChildMemo1 name={name}/>
+        <Button color='success' variant="solid" onClick={()=>setName('李四')} style={{margin:'15px'}}>
+          修改name
+        </Button>
+        <ChildMemo2 info={memoInfo}/>
+        <Button color='success' variant="solid" onClick={()=>setAge(10)} style={{margin:'15px'}}>
+          修改age
+        </Button>
+      </>
+    );
+}
+
+export default ReactMemo
+```
+::: warning 注意 React.memo-props的比较机制
+  1. 使用原生方法Object.is进行比较，它会根据类型和值来判断两个对象是否相等。
+
+      Object.is(3,3) // true
+
+      Object.is('a','b') // false
+
+      Object.is({},{}) // false
+
+      Object.is([],[]) // false
+
+  2. 对于基本数据类型（如字符串、数字等），它会直接比较值。
+  3. 对于对象和数组，它会比较引用是否相同。如果新旧props的引用不同（即指向不同的内存地址），则认为它们不相等，组件会重新渲染。
+  React.memo默认只会对props进行浅比较，这意味着如果新旧props引用相同（即指向同一个对象），则不会触发组件的重新渲染。如果要实现深层次的对象或数组的比较，  可以使用`useMemo`或自定义比较函数。
+:::
+
+## useCallback
+  1. useCallback是React中的一个Hook，用于缓存函数。
+  2. 它类似于useMemo，但专门用于缓存函数。当函数的依赖项没有发生变化时，useCallback会返回上一次缓存的函数，从而避免不必要的重新创建和绑定事件
+
+  <img src="/assets/react/10.png" alt="useCallback" style="margin-top:15px">
+
+```js
+  import {memo,useState,useCallback} from 'react'
+  import {Button} from 'antd';
+  const Input = memo(function Input({onChange}){
+      console.log('Input 渲染了');
+      return (
+          <div>
+              <div style={{marginBottom:'15px'}}>Input</div>
+              <input type='text' onChange={(e)=>{onChange(e.target.value)}}/>
+          </div>
+      )
+  })
+  function UseCallbackHook(){
+      console.log('UseCallbackHook 渲染了');
+      // onChange函数是引用类型，相当于子组件的props，当父组件重新渲染时，子组件也会跟着重新渲染
+      // const onChange = (value) => {
+      //     console.log('value',value)
+      // }
+      // 使用useCallback包裹，可以避免不必要的渲染
+      const onChange = useCallback((value)=>{
+          console.log(value)
+      },[])
+      // 触发父组件重新渲染的按钮
+      const [count,setCount] = useState(0)
+      return (
+          <>  
+              <Input onChange={onChange}/>
+              <div style={{marginTop:'15px'}}>UseCallbackHook</div>
+              <Button 
+                  color='success'
+                  variant="solid" 
+                  onClick={()=>setCount(count+1)}
+                  style={{margin:'15px'}}
+              >
+                  count:{count}
+              </Button>
+          </>
+      )
+  }
+
+  export default UseCallbackHook;
+```
+
+## forwordRef 与 useImperativeHandle
+  1. forwardRef是React中的一个高阶组件，用于在父组件获取子组件的ref引用。
+  2. 它允许你将一个ref对象传递给函数式组件或类组件的实例，以便在这些组件内部访问DOM节点或其他元素。
+  3. useImperativeHandle是React中的一个Hook，用于在函数式组件中自定义暴露给父组件的ref对象的方法。
+  4. useImperativeHandle参数 第一个参数是ref对象，第二个参数是一个函数，该函数的返回值会被暴露给父组件。
+
+```js
+
+```
