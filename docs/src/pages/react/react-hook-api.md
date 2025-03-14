@@ -1,9 +1,45 @@
 # React Hook 以及 Api
 
-## useEffect
-  useEffect(()=>{},[])
-### useEffect参数说明
+## 自定义Hook函数
+  自定义Hook函数就是一个普通的JavaScript函数，它的名称必须以“use”开头。
+  自定义Hook可以让你将组件逻辑提取到可重用的函数中，这样可以减少代码的重复性，并使得你的组件更加简洁和易于理解。
+  自定义Hook可以接受参数，并且可以使用其他的Hooks（如useState、useEffect等）。'
+  自定义Hook可以让你在不同的组件之间共享逻辑，而不需要将相同的代码复制到每个组件中。
+```js
+// 一般写法
+  const [show,setShow] = useState(true)
+  const toggle = ()=>{
+    setShow(!show)
+  }
+  <div>{show?'显示':'隐藏'}</div>
+  <button onClick={toggle}>切换</button>
+// hook写法
+  import {useState} from 'react'
+  function useToggle(){
+      // 可复用的逻辑
+      const [show, setShow] = useState(false);
+      const toggle = ()=>{
+        setShow(!show)
+      }
+      // 返回一个对象，包含show和toggle两个属性
+      return { show, toggle };
+  }
+  export default useToggle;
 
+  // 使用hook
+  const {show,toggle} = useToggle()
+  <div>{show?'显示':'隐藏'}</div>
+```
+
+::: waring
+1. 只能在函数组件中使用自定义Hook，不能在类组件中直接使用。
+2. 只能在组件的顶层调用自定义Hook，不能在条件语句或循环中调用。
+:::
+
+
+## useEffect
+  useEffect是React中的一个Hook，用于在组件渲染后执行副作用操作。它可以让你在函数式组件中执行诸如数据获取、订阅或手动更改DOM等操作。
+### useEffect参数说明
   1. useEffect用于在react组件中创建不是有事件引起而是有渲染本身引起的操作，可能包括数据获取、订阅或手动更改 React 组件中的 DOM。
   2. useEffect 可以接受两个参数：一个是要执行的函数，另一个是依赖项数组。当依赖项数组中的值发生变化时，useEffect 中的函数会重新执行。
 
@@ -74,38 +110,83 @@ useEffect(()=>{
 },[])
 ```
 
-## 自定义Hook函数
-  自定义Hook函数就是一个普通的JavaScript函数，它的名称必须以“use”开头。
-  自定义Hook可以让你将组件逻辑提取到可重用的函数中，这样可以减少代码的重复性，并使得你的组件更加简洁和易于理解。
-  自定义Hook可以接受参数，并且可以使用其他的Hooks（如useState、useEffect等）。'
-  自定义Hook可以让你在不同的组件之间共享逻辑，而不需要将相同的代码复制到每个组件中。
+## useReduer
+  useReducer是React中的一个Hook，用于管理组件的复杂状态。它类似于Redux中的reducer函数，可以让你通过dispatch来更新状态，而不是直接修改状态。类似于useState，useReducer也可以接受一个初始状态和一个reducer函数作为参数。
+  1. 定义reducer函数，该函数接收当前状态和要执行的动作作为参数，并返回新的状态。
+  2. 使用useReducer Hook，将reducer函数和初始状态作为参数传入。
+  3. 使用dispatch函数来更新状态，并通过useReducer返回的状态值在组件中渲染。
 ```js
-// 一般写法
-  const [show,setShow] = useState(true)
-  const toggle = ()=>{
-    setShow(!show)
-  }
-  <div>{show?'显示':'隐藏'}</div>
-  <button onClick={toggle}>切换</button>
-// hook写法
-  import {useState} from 'react'
-  function useToggle(){
-      // 可复用的逻辑
-      const [show, setShow] = useState(false);
-      const toggle = ()=>{
-        setShow(!show)
-      }
-      // 返回一个对象，包含show和toggle两个属性
-      return { show, toggle };
-  }
-  export default useToggle;
+import {useReducer} from 'react';
+import {Button} from 'antd';
+function UseReducerHook(){
+    // 1.定义一个reducer函数，接收state和action作为参数
+    const reducerFun = (state,action)=>{
+        switch(action.type){
+            case 'increment':
+                return {...state,count:state.count+1}
+            case 'decrement':
+              return {...state,count:state.count-1}
+            case 'change':
+              return {...state,count:action.payload}
+            default:
+              return state;
+        }
+    }
+    // 2.调用useReducer钩子，传入reducer函数和初始状态值，返回一个数组[state,dispatch]
+    const [state,dispatch] = useReducer(reducerFun,{count:0});
+    // 3.使用dispatch进行逻辑处理,更新state值与UI更新
+    const add = ()=>{
+        dispatch({type:'increment'})
+    }
+    const minus = ()=>{
+        dispatch({type:'decrement'})
+    }
+    const update = (payload)=> {
+      dispatch({type:'change',payload})
+    }
+    return (
+      <>
+        <h1>UseReducerHook</h1>
+        <p>Count:{state.count}</p>
+        <Button color="primary " variant="solid" onClick={add} style={{marginRight:'15px'}}>
+          增加
+        </Button>
+        <Button color='danger' variant="solid" onClick={minus}>
+          减少
+        </Button>
+        <Button color='success' variant="solid" onClick={()=>update(10)} style={{marginLeft:'15px'}}>
+          更新
+        </Button>
+      </>
+    );
+}
 
-  // 使用hook
-  const {show,toggle} = useToggle()
-  <div>{show?'显示':'隐藏'}</div>
+export default UseReducerHook;
 ```
-
-::: waring
-1. 只能在函数组件中使用自定义Hook，不能在类组件中直接使用。
-2. 只能在组件的顶层调用自定义Hook，不能在条件语句或循环中调用。
-:::
+## useMemo
+  useMemo是React中的一个Hook，用于缓存计算结果。它可以让你在组件渲染时避免不必要的重新计算，从而提高性能。
+  类似于vue的computed
+  1. 定义一个函数，该函数接收一些参数并返回计算结果。
+  2. 使用useMemo Hook，将该函数和依赖项数组作为参数传入。
+  3. useMemo会缓存计算结果，并在依赖项不变的情况下返回相同的值。
+  4. 在组件中，你可以直接使用useMemo返回的结果。
+```js
+import {useMemo} from 'react';
+function UseMemoHook(){
+  const [count,setCount] = useState(0);
+  // 1.定义一个函数，接收参数并返回计算结果
+  function getDouble(){
+    console.log('执行了')
+    return count*2;
+  }
+  // 2.调用useMemo钩子，传入函数和依赖项数组
+  const double = useMemo(getDouble,[count]);
+  return (
+    <>
+      <h1>UseMemoHook</h1>
+      <p>Count:{double}</p>
+      <button onClick={()=>setCount(count+1)}>增加</button>
+    </>
+  );
+}
+export default UseMemoHook;
