@@ -360,10 +360,33 @@ function App() {
       )
     }
 ```
+
 ### 3. Context API跨级组件通信
     + 1.createContext创建上下文对象
     + 2.Context.Provider在祖先组件上包裹要共享数据的子组件
     + 3.使用Context.Consumer渲染子组件，并通过value属性获取上下文数据
+
+::: warning 子组件暴露方法和属性给父组件 useImperativeHandle
+  1. 使用useImperativeHandle自定义暴露给父组件的方法或属性。
+  2. 在父组件中，通过ref对象访问子组件的实例或方法。
+```js
+  const { ref } = props;
+  // 暴露图表方法给父组件
+  useImperativeHandle(ref, () => ({
+    // 获取 ECharts 实例
+    getInstance: () => myChart.current,
+    // 手动触发 resize
+    resize: () => {
+      if (myChart.current) {
+        myChart.current.resize();
+      }
+    }
+  }));
+  // 父组件使用
+  <Chart ref={chartRef} />
+  chartRef.current.resize();
+```
+:::
 
 
     
