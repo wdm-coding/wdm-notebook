@@ -1,6 +1,7 @@
 # 二维地图
 <script setup>
   import mapChart from './index.vue'
+  import Map3d from './3d-map.vue'
 </script>
 <mapChart />
 
@@ -68,4 +69,109 @@
       }
     }
   ]
+```
+## 二维地图与3d设计图实现3d地图联动效果
+
+<map-3d></map-3d>
+
+### 实现思路：
+  1. 在3d设计图上放置一个透明的二维地图
+  2. 确定geo配置的zoom, layoutSize,调整layoutCenter使其3d设计图对齐。
+  3. 调整3d设计图的background-size。
+  4. 为保证自适应，通过监听窗口大小变化，动态调整最外层容器的大小。
+
+
+```js
+// 地图大小适配屏幕大小
+const mapSize = () => {
+	const mapDom = document.querySelector('.echarts_map_3d_wrap')
+	if (!mapDom) return
+	const viewportWidth = window.innerWidth
+	const viewportHeight = window.innerHeight
+	const baseWidth = 1920
+	const baseHeight = 1080
+	// 计算缩放比例
+	const scaleWidth = viewportWidth / baseWidth
+	const scaleHeight = viewportHeight / baseHeight
+	const scale = Math.min(scaleWidth, scaleHeight) // 取较小的缩放比例
+	// 调整容器大小以适应缩放后的内容
+	mapDom.style.width = `${624 * scale}px`
+	mapDom.style.height = `${470 * scale}px`
+}
+const option = reactive({
+  backgroundColor: 'transparent',
+  // 画布布局
+  grid: {
+    width: '100%',
+    height: '100%'
+  },
+  geo: [
+    {
+      map: 'gansu',
+      aspectScale: 1,
+      roam: false, // 是否允许缩放
+      zoom: 1.3, // 默认显示级别
+      layoutSize: '100%',
+      layoutCenter: ['50%', '47%'],
+      itemStyle: {
+        areaColor: '#fff000',
+        borderColor: '#fff',
+        borderWidth: 4
+      },
+      emphasis: {
+        itemStyle: {
+          areaColor: '#59C3F9',
+          borderColor: 'transparent',
+          borderWidth: 1,
+          shadowBlur: 10,
+          shadowColor: 'rgba(255, 255, 255, 0.8)'
+        },
+        label: {
+          show: false
+        }
+      },
+      z: 1
+    }
+  ],
+  series: [
+    {
+      type: 'scatter',
+      coordinateSystem: 'geo',
+      data: [],
+      symbolSize: fontSizeComp(20),
+      symbol: `image://${new URL(`./point-bottom.png`, import.meta.url).href}`,
+      label: {
+        position: 'top',
+        show: true,
+        formatter: params => params.name,
+        color: 'red',
+        fontWeight: 'bold',
+        fontSize: fontSizeComp(10)
+      }
+    }
+  ]
+})
+// 组件模板
+<template>
+  <div class='echarts_map_3d_wrap'>
+    <div class="map_3d_bg" />
+    <div ref="chartRef" style="width: 673px;height: 446px;" />
+  </div>
+</template>
+// 样式
+<style lang='scss'>
+  .echarts_map_3d_wrap{
+    border: 1px solid #fff;
+    position: relative;
+    .map_3d_bg{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: url('./map3dBg.png') no-repeat center;
+      background-size: 99% 89%;
+    }
+  }
+</style>
 ```
