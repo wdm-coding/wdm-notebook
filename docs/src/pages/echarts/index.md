@@ -1,7 +1,5 @@
 # Echarts 图表
 
-## [地图json数据下载](https://datav.aliyun.com/portal/school/atlas/area_selector?spm=a2crr.23498931.0.0.315315ddRqZtR3)
-
 ## vue3中使用echarts
 
 ### 1. 安装echarts,echarts-gl 等
@@ -84,4 +82,48 @@ myChart.value.dispatchAction({
   geoIndex: 0,
   name: areaName
 })
+```
+## 自定义提示框组件tooltip
+
+```js
+tooltip: {
+  className: 'echarts-tooltip-bg',
+  borderColor: 'transparent',
+  backgroundColor: 'transparent',
+  formatter: function (params) {
+    const { name, value, percent } = params
+    const tooltipContent = `
+            <div class="echarts-tooltip-bg-content">
+                <div>${name}</div>
+                <div style="padding-left:0.5vw">
+                  <div style="margin:0.5vh 0">
+                    收支总数：
+                    <span style="color:#FFF600">${value}</span>
+                    /个
+                  </div>
+                  <div>
+                    占比：
+                    <span style="color:#00F6FF">${percent}%</span>
+                  </div>
+                </div>
+            </div>
+        `
+    return tooltipContent
+  }
+}
+// 自定义样式
+<style lang='scss'>
+  ::v-deep(.echarts-tooltip-bg){
+    padding: 0 !important;
+    .echarts-tooltip-bg-content{
+      width: 6.56vw;
+      background: linear-gradient(0deg, rgba(6,47,76,0.8) 0%, rgba(7,27,52,0.6) 100%);
+      border: 1px solid rgba(1, 109, 153,0.2);
+      color: #fff;
+      font-size: 0.63vw;
+      padding: 1vh 0.5vw;
+    }
+  }
+</style>
+
 ```

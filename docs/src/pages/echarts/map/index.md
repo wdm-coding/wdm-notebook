@@ -1,4 +1,7 @@
 # 二维地图
+
+## [地图json数据下载](https://datav.aliyun.com/portal/school/atlas/area_selector?spm=a2crr.23498931.0.0.315315ddRqZtR3)
+
 <script setup>
   import mapChart from './index.vue'
   import Map3d from './3d-map.vue'
