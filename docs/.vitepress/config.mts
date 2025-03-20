@@ -180,11 +180,12 @@ export default defineConfig({
   appearance:'dark',
   vite: {
     ssr: {
-      noExternal: ['naive-ui', 'date-fns', 'vueuc']
+      // 强制将 echarts-gl 包含在客户端构建中
+      noExternal: ['naive-ui', 'date-fns', 'vueuc','echarts-gl']
     },
     define: {
-      'self': 'window', // 将 self 替换为 window
-    },
+      'window.self': '{}' // 绕过 SSR 中的 self 未定义错误
+    }
   },
   postRender(context) {
     const styleRegex = /<css-render-style>((.|\s)+)<\/css-render-style>/
