@@ -181,7 +181,10 @@ export default defineConfig({
   vite: {
     ssr: {
       noExternal: ['naive-ui', 'date-fns', 'vueuc']
-    }
+    },
+    define: {
+      'self': 'window', // 将 self 替换为 window
+    },
   },
   postRender(context) {
     const styleRegex = /<css-render-style>((.|\s)+)<\/css-render-style>/

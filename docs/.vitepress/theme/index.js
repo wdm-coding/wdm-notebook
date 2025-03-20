@@ -9,7 +9,7 @@ import './style.scss'
 const allowPage = ['/wdm-notebook/']
 import { defineComponent, h, inject } from 'vue'
 import { getItem } from '../utils/storage.js'
-
+import { useRoute } from 'vitepress'
 const CssRenderStyle = defineComponent({
   setup() {
     const collect = inject('css-render-collect')
