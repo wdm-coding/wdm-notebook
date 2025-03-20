@@ -56,3 +56,4 @@ degit username/repo my-project
 ## 终止指定端口进程
   1. netstat -ano | findstr 8080
   2. taskkill /pid <PID号> /f
+### taskkill /f /im node.exe 强制杀死node进程
