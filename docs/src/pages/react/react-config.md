@@ -97,9 +97,8 @@ module.exports = {
     npm run build
 ### 本地预览
   1. 打包项目 npm run build
-  3. 安装serve（npm i -g serve）
-  4. 启动服务（serve -s build）
-  5. 在浏览器中访问 http://localhost:3000/ 查看效果
+  2. 安装serve（npm i -g serve）
+  3. 启动服务（serve -s build
 
 ### 打包优化-路由懒加载
   1. React.lazy引入懒加载组件
