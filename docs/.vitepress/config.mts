@@ -181,7 +181,7 @@ export default defineConfig({
   vite: {
     ssr: {
       // 强制将 echarts-gl 包含在客户端构建中
-      noExternal: ['naive-ui', 'date-fns', 'vueuc','echarts-gl','zrender']
+      noExternal: ['naive-ui', 'date-fns', 'vueuc','echarts-gl','zrender','echarts']
     },
     define: {
       'window.self': '{}' // 绕过 SSR 中的 self 未定义错误
