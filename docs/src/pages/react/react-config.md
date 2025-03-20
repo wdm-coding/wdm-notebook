@@ -26,7 +26,7 @@ module.exports = {
     host: '0.0.0.0',
     proxy: { // 配置代理
       '/api': {
-        target: 'http://localhost:3000',
+        target: '',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '',
