@@ -61,6 +61,7 @@ export default defineConfig({
             { text: 'React路由', link: '/pages/react/react-router' },
             { text: 'React配置', link: '/pages/react/react-config' },
             { text: 'React类组件', link: '/pages/react/react-class' },
+            { text: 'React-Zustand', link: '/pages/react/react-zustand' },
             { text: 'AntDesign组件库', link: '/pages/react/react-antd' },
           ]
         }
