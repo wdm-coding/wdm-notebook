@@ -55,4 +55,65 @@ const useStore = create((set) => ({
 }))
 export default useStore;
 ```
-## 切片模式
+## 切片模式 + 持久化存储
+ 相当于vuex 的 模块modules
+
+### user.js
+```js
+const useUser = set=>({
+  token: null,
+  // 异步获取token
+  setToken: async () => {
+    const res = await new Promise(resolve => setTimeout(() => resolve("token-wdm-0620"), 1000));
+    set({ token: res });
+  }
+})
+export default useUser;
+```
+### index.js
+```js
+import { create } from 'zustand'
+import useUser from './user.js'
+import useCount from './count.js'
+import { persist,createJSONStorage } from 'zustand/middleware'
+// 切片模式 + 持久化存储
+const useStore = create(persist(
+  (...a)=>{
+      return {
+        ...useUser(...a),
+        ...useCount(...a)
+      }
+  },
+  {
+    name: 'zustand', // 唯一名称
+    storage: createJSONStorage(() => sessionStorage), // 存储方式 localStorage | sessionStorage
+    partialize: (state) => ({ 
+      count: state.count,
+      token:state.token
+     }) // 持久化存储的字段
+  }
+))
+export default useStore;
+```
+### 组件中使用
+```js
+import useStore from '@/zustand/index.js';
+function PagesZustand() {
+    const {count,increment,decrement,setCount,asyncHandler,token,setToken} = useStore();
+    return (
+      <div>
+        <p>PagesZustand</p>
+        <div style={{display:'flex'}}>
+          <button onClick={increment}>+</button>
+          <p>count: {count}</p>
+          <button onClick={decrement}>-</button>
+        </div>
+        <button onClick={()=>{setCount(100)}}>设为100</button>
+        <br />
+        <button onClick={asyncHandler}>异步操作</button>
+        <br />
+        <button onClick={setToken}>异步获取token:{token}</button>
+      </div>
+    );
+}
+```
