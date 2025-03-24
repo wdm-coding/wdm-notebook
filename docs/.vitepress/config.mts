@@ -62,6 +62,7 @@ export default defineConfig({
             { text: 'React配置', link: '/pages/react/react-config' },
             { text: 'React类组件', link: '/pages/react/react-class' },
             { text: 'React-Zustand', link: '/pages/react/react-zustand' },
+            { text: 'React-Vite-Typescript', link: '/pages/react/react-vite-ts' },
             { text: 'AntDesign组件库', link: '/pages/react/react-antd' },
           ]
         }
