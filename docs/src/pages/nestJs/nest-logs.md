@@ -1,4 +1,4 @@
-# 日志
+# nestjs日志模块
 
 ## 日志等级
 <img src="/assets/nest/6.png">

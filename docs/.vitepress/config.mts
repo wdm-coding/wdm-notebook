@@ -140,12 +140,14 @@ export default defineConfig({
         {
           text: 'NestJs',
           items: [
-            { text: '简介', link: '/pages/nestJs/' },
-            { text: '核心', link: '/pages/nestJs/base.md' },
-            { text: '配置', link: '/pages/nestJs/config.md' },
-            { text: 'ORM', link: '/pages/nestJs/orm.md' },
-            { text: '日志', link: '/pages/nestJs/logs.md' },
-            { text: 'API开发', link: '/pages/nestJs/api.md' }
+            { text: 'Nest思维导图', link: '/pages/nestJs/' },
+            { text: 'Nest核心', link: '/pages/nestJs/nest-core.md' },
+            { text: 'Nest配置', link: '/pages/nestJs/nest-config.md' },
+            { text: 'Nest数据库', link: '/pages/nestJs/nest-database.md' },
+            { text: 'Nest日志', link: '/pages/nestJs/nest-logs.md' },
+            { text: 'NestApi', link: '/pages/nestJs/nest-api.md' },
+            { text: 'Nest鉴权', link: '/pages/nestJs/nest-auth.md' },
+            { text: 'Nest权限', link: '/pages/nestJs/nest-permissions.md' }
           ]
         }
       ],

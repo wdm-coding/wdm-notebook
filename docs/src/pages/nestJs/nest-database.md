@@ -1,4 +1,4 @@
-# 数据库模块 typeorm cli
+# nestjs 数据库模块
 
 ## ormconfig.ts
 

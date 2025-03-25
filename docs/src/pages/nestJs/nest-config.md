@@ -1,4 +1,15 @@
-# 配置相关
+# nestjs 配置模块
+
+## 多环境配置
+7.3
+### dotenv
+
+### joi
+
+
+
+
+
 
 ```js
 npm i --save @nestjs/config
