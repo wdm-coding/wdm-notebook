@@ -131,7 +131,8 @@ export default defineConfig({
             { text: 'project', link: '/pages/project/' },
             { text: '陇明公', link: '/pages/project/lmg.md' },
             { text: '算力调度', link: '/pages/project/computer.md' },
-            { text: '智领集控运枢平台', link: '/pages/project/edmp.md' }
+            { text: '智领集控运枢平台', link: '/pages/project/edmp.md' },
+            { text: '任务统计', link: '/pages/project/work-hour.md' }
           ]
         }
       ],
