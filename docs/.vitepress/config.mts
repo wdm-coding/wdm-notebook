@@ -142,6 +142,7 @@ export default defineConfig({
           items: [
             { text: 'Nest思维导图', link: '/pages/nestJs/' },
             { text: 'Nest核心', link: '/pages/nestJs/nest-core.md' },
+            { text: 'Nest项目初始化', link: '/pages/nestJs/nest-init.md' },
             { text: 'Nest配置', link: '/pages/nestJs/nest-config.md' },
             { text: 'Nest数据库', link: '/pages/nestJs/nest-database.md' },
             { text: 'Nest日志', link: '/pages/nestJs/nest-logs.md' },
