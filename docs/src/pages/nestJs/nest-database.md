@@ -1,5 +1,21 @@
 # nestjs 数据库模块
 
+## ORM（Object Relational Mapping）对象关系映射
+
+  1. 允许开发者使用面向对象的方式来操作数据库
+  2. 维护数据模型和数据库之间的映射关系
+  3. ORM的第三方库：TypeORM、prisma、Sequelize、knex,EdgeDB等
+  4. nestjs 官方推荐的 ORM：TypeORM
+  5. 最新版本的 nestjs 官方推荐的 ORM：Prisma
+
+
+
+
+
+
+
+
+
 ## ormconfig.ts
 
 ```js
