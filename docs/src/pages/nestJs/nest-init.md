@@ -126,5 +126,45 @@ $ nest g f filters/typeorm --flat --no-spec
   8. 守卫文件命名：`guards/xxx.guard.ts`
   9. 拦截器文件命名：`interceptors/xxx.interceptor.ts`
 
+## 从0开始搭建nest项目初始化框架
+
+### 1. 全局安装nest-cli工具包 npm i -g @nestjs/cli
+### 2. 创建项目 nest new nest-project
+### 3. 进入项目目录下载依赖包 npm install(node版本需要20.1.0以上版本)
+### 4. 添加.prettierrc配置文件,配置prettier规则
+### 5. 添加eslintrc.js或者eslint.config.mjs配置文件,配置prettier规则
+### 6. 环境变量配置
+:::tip 环境变量配置
+1. 创建环境变量枚举文件`src/enum/env.enum.ts`,枚举环境变量配置
+2. 安装cross-env控制环境变量 npm i cross-env
+3. 在package.json中配置环境变量运行脚本
+```json
+"scripts": {
+  "start:dev": "cross-env NODE_ENV=development nest start --watch",
+  "start:prod": "cross-env NODE_ENV=production nest start --watch",
+  "build:dev": "cross-env NODE_ENV=development nest build",
+  "build:prod": "cross-env NODE_ENV=production nest build",
+}
+```
+4. 安装nestjs-config配置模块作为环境配置方案 npm i --save @nestjs/config
+5. 在项目根目录下创建`.env`文件,配置默认环境变量信息
+6. 在项目根目录下创建`.env.development`文件,配置开发环境变量信息
+7. 在项目根目录下创建`.env.production`文件,配置生产环境变量信息
+5. 在app.module.ts文件中引入ConfigModule配置模块,并使用ConfigModule.forRoot()方法加载环境变量文件
+```ts
+ConfigModule.forRoot({
+  isGlobal: true, // 全局配置
+  envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'] // 如果在多个文件中找到某个变量，则第一个变量优先。
+})
+```
+:::
+### 7. 配置Docker-compose文件
+:::tip Docker-compose文件配置
+1. 项目根目录下创建`docker-compose.yml`文件,配置Docker容器信息
+2. 在项目根目录下执行命令`docker-compose up -d`,启动服务
+:::
+
+
+
 
 
