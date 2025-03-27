@@ -143,12 +143,12 @@ export default defineConfig({
             { text: 'Nest思维导图', link: '/pages/nestJs/' },
             { text: 'Nest核心', link: '/pages/nestJs/nest-core.md' },
             { text: 'Nest项目初始化', link: '/pages/nestJs/nest-init.md' },
-            { text: 'Nest配置', link: '/pages/nestJs/nest-config.md' },
-            { text: 'Nest数据库', link: '/pages/nestJs/nest-database.md' },
-            { text: 'Nest日志', link: '/pages/nestJs/nest-logs.md' },
-            { text: 'NestApi', link: '/pages/nestJs/nest-api.md' },
-            { text: 'Nest鉴权', link: '/pages/nestJs/nest-auth.md' },
-            { text: 'Nest权限', link: '/pages/nestJs/nest-permissions.md' }
+            { text: '环境变量配置', link: '/pages/nestJs/nest-env-config.md' },
+            { text: '数据库配置', link: '/pages/nestJs/nest-database.md' },
+            { text: '日志配置', link: '/pages/nestJs/nest-logs.md' },
+            { text: 'Api开发', link: '/pages/nestJs/nest-api.md' },
+            { text: '鉴权认证', link: '/pages/nestJs/nest-auth.md' },
+            { text: '权限控制', link: '/pages/nestJs/nest-permissions.md' }
           ]
         }
       ],
@@ -158,6 +158,15 @@ export default defineConfig({
           items: [
             { text: '表单配置', link: '/pages/naiveUi/form.md' },
             { text: '表单相关操作', link: '/pages/naiveUi/formAction.md' },
+          ]
+        }
+      ],
+      '/pages/docker/':[
+        {
+          text: 'Docker',
+          items: [
+            { text: 'Docker基础', link: '/pages/docker/' },
+            { text: 'Mysql镜像', link: '/pages/docker/docker-mysql.md' },
           ]
         }
       ],

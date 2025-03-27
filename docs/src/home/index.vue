@@ -36,7 +36,7 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/note/docker')">
+        <div class="grid_item" @click="jumpHandle('/pages/docker/')">
           <n-button type="info">Docker</n-button>
         </div>
       </n-grid-item>
