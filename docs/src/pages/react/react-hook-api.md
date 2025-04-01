@@ -385,3 +385,34 @@ function ForwordRefHoc(){
 
 export default ForwordRefHoc;
 ```
+
+## useTansition() 
+1. 用于在React组件中实现过渡效果，它允许你控制异步操作的优先级和渲染性能。
+2. 当你需要在用户界面中展示一些异步加载的内容时，使用useTransition可以确保这些内容在过渡期间保持流畅和响应。
+3. 它通过提供一个startTransition函数，允许你将异步操作包裹起来，并告诉React这些操作的优先级较低。这样，在过渡期间，React会优先处理其他高优先级的更新，从而保持界面的流畅性。
+4. 使用useTransition时，你可以通过isPending状态来判断当前是否处于过渡期间。如果isPending为true，表示正在进行异步操作，此时可以显示加载中的提示或动画等。
+5. 它可以帮助你优化用户体验，特别是在处理数据加载、动画或复杂计算时。
+```js
+import {useState, useTransition} from 'react'
+import {Button} from 'antd'
+  function UseTransitionHook(){
+    const [isPending,startTransition] = useTransition();
+    // 模拟异步操作
+    const handleClick = () => {
+      startTransition(()=>{
+        setTimeout(()=>{
+          console.log('异步操作完成');
+        },3000)
+      })
+    }
+    return (
+      <>
+        <div>我是父组件-useTansition</div>
+        <Button color='success' variant="solid" onClick={handleClick} style={{margin:'15px'}}>
+            点击我
+            {isPending?'(加载中)':''}
+        </Button>
+      </>
+    )
+  }
+```
