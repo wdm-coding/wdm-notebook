@@ -1,8 +1,46 @@
 #app{
   width: 100vw;
   height: 100vh;
+  .primary{
+    color: rgb(5, 147, 229);
+    font-weight: 600;
+  }
+  .warning{
+    color: rgb(249, 241, 5);
+    font-weight: 600;
+  }
+  .success{
+    color: rgb(10, 200, 10);
+    font-weight: 600;
+  }
+  .error{
+    color: rgb(255, 0, 0);
+    font-weight: 600;
+  }
+  // 定义字体(px)单位，12px-30px  font-S-24
+  @for $i from 12 through 32 {
+    .font-S-#{$i} {
+      font-size: $i + px;
+    }
+  }
+  // 定义外边距(px)单位，1px-300px  margin-t-24
+  @for $i from 1 through 32 {
+    .m-t-#{$i} {
+      margin-top: $i + px;
+    }
+    .m-b-#{$i} {
+      margin-bottom: $i + px;
+    }
+    .m-l-#{$i} {
+      margin-left: $i + px;
+    }
+    .m-r-#{$i} {
+      margin-right: $i + px;
+    }
+  }
 }
 #app > div{
   width: 100%;
   height: 100%;
+  line-height: 1;
 }

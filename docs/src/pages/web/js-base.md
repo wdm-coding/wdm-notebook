@@ -211,13 +211,13 @@ console.log('xialuo1.say()',xialuo1.say())
 1. 一个变量在当前的局部作用域中没有定义，但是被引用了。
 2. 向外层作用域查找变量值的过程，称为作用域链。
 3. 如果到全局作用域还没有找到，就会报错 xx is not defined。
-
+4. 对象字面量的大括号 {} ‌不形成作用域
 <h4>闭包</h4>
 
 1. 作用域应用的特殊场景：函数作为参数传递，函数作为返回值被返回
 2. 闭包的定义：当一个函数可以访问到其外部作用域中的变量时，这个函数就是一个闭包。
 <div style="color:red;font-weight:600;margin-top:15px">
-  自由变量寻找时在函数定义的上级作用域中寻找，不是在函数调用的上级作用域中查找
+  自由变量寻找时在函数定义的作用域中寻找，不是在函数调用的作用域中查找
 </div>
 <div style="color:red;font-weight:600;margin-top:15px">
   自由变量的作用域在函数定义时就确定了，不是在调用时确定的。
@@ -252,15 +252,24 @@ console.log('xialuo1.say()',xialuo1.say())
 ```
 <h4>this的用法</h4>
 
-1. 普通函数：this指向window。
-2. 箭头函数：this指向定义它的那个作用域,即上级作用域。
+1. 普通函数：this 是动态绑定的，取决于调用方式。
+2. 箭头函数：继承定义时的外层作用域的 this（静态绑定，不可更改）
 3. 构造函数：this指向新创建的对象。
 4. 事件处理函数：this指向触发事件的元素。
 5. 定时器函数：this指向全局对象。
 6. call、apply、bind：this指向指定的对象。
 7. 在对象的方法中：this指向调用它的那个对象。
-<div style="color:red;font-weight:600;margin-top:15px">
-  this指向的定义是在函数被执行时确定的，不是在定义的时候。
+<div class="error font-S-20 m-b-10">
+  注意：普通函数的this在调用时确定，取决于调用方式
+</div>
+<div class="primary font-S-16 m-b-10">
+  1. 普通函数作为普通函数调用时，非严格模式下this指向全局对象window, 严格模式下this指向undefined
+</div>
+<div class="primary font-S-16 m-b-30">
+  2. 普通函数作为对象的方法被调用时,this 指向调用该方法的对象
+</div>
+<div class="error font-S-20 m-b-10">
+  注意：箭头函数的this继承定义时的外层作用域的this（对象字面量的大括号 {} ‌不形成作用域）
 </div>
 
 ```js
@@ -334,6 +343,12 @@ console.log('xialuo1.say()',xialuo1.say())
   const newBind = fn.myBind({a:100},10,20,30)
   newBind(100)
 ```
+::: warning 区别: bind(), call(), apply()
+1. call() 方法立即调用一个函数，参数形式：参数列表(arg1,arg2,...)。即该方法一共有多个实参
+2. apply() 方法立即调用一个函数，参数形式：参数数组[arg1,arg2]。即该方法一共有两个实参
+3. bind() 方法返回一个新的函数，参数形式：参数列表(arg1,arg2,...)。即该方法一共有多个实参
+:::
+
 ## 9.实际开发中闭包的应用场景
 1. 隐藏数据，封装私有变量与方法，只暴露操作数据的API
 2. 通过使用闭包，我们可以轻松地解决循环中DOM事件处理函数的 this 绑定和变量共享问题。闭包使得每个事件处理函数都能独立地访问和记住它自己的变量值，从而确保事件处理逻辑的正确性。
@@ -352,8 +367,7 @@ console.log('xialuo1.say()',xialuo1.say())
   // 获取所有按钮元素
   const buttons = document.querySelectorAll('.btnClcik');
   // 循环遍历按钮，并为每个按钮添加点击事件监听器
-  // let i = 0
-  // for (i = 0; i < buttons.length; i++) {
+  // for (var i = 0; i < buttons.length; i++) {
   //   buttons[i].addEventListener('click', function() {
   //     // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
   //     console.log(`this`,this,i);
@@ -370,7 +384,15 @@ console.log('xialuo1.say()',xialuo1.say())
     });
   }
 ```
-
+<div class="error font-S-16 m-b-20">
+var 声明的 i 是函数作用域，循环结束后 i 的值变为 最后的值。事件监听器回调函数是异步执行的，触发时访问的是最终值 i = 循环后的值
+</div>
+<div class="error font-S-16 m-b-20">
+let 声明在每次循环中创建一个新的块级作用域。
+</div>
+<div class="error font-S-16 m-b-20">
+回调函数通过闭包访问当前循环的 i，等效于闭包保存了变量。
+</div>
 
 
 
@@ -378,25 +400,30 @@ console.log('xialuo1.say()',xialuo1.say())
   import { onMounted } from 'vue';
   onMounted(() => {
     // 获取所有按钮元素
-    const buttons = document.querySelectorAll('.btnClcik');
-    // 循环遍历按钮，并为每个按钮添加点击事件监听器
-    // let i = 0
-    // for (i = 0; i < buttons.length; i++) {
-    //   buttons[i].addEventListener('click', function() {
-    //     // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
-    //     console.log(`this`,this,i);
-    //     alert(i)
-    //   });
-    // }
+    let buttons = document.querySelectorAll('.btnClick')
+    // 使用立即执行函数表达式（IIFE）解决闭包问题
+		for (var i = 0; i < buttons.length; i++) {
+		  console.log(i)
+		  function clickFun1() {
+		    console.log('clickFun1', i)
+		  }
+		  (function(index) {
+		    function clickFun2() {
+		      console.log('clickFun2', index)
+		    }
+		    // 函数作为参数传递
+		    buttons[i].addEventListener('click', clickFun2)
+		  })(i)
+		}
     // 使用let声明变量i，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
-    // 让i变量成为每次for循环的块级作用域变量，这样就不会出现i共享的问题了
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', function() {
-        // 使用闭包，确保每个按钮的事件处理函数都能独立地访问和记住它自己的变量值
-        console.log(`this`,this,i);
-        alert(i)
-      });
-    }
+		for (let i = 0; i < buttons.length; i++) {
+		  console.log(i)
+
+		  function clickFun1() {
+		    console.log('clickFun1', i)
+		  }
+		  buttons[i].addEventListener('click', clickFun1)
+		}
   })
   const initObj = {
     name:'xxx',
