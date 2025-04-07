@@ -167,7 +167,7 @@
 3. Route组件定义路由规则，path,element属性。
 4. 路由可以嵌套在父路由中。
 5. 子路由通过父路由中的 `<Outlet/>` 进行呈现。
-<!-- ### 路由导航
+### 路由导航
 1. Link组件用于导航，to属性指定路径。
 2. NavLink组件用于导航，具有active样式。
 3. useNavigate 编程式导航函数。
@@ -209,7 +209,7 @@ export const fetchData = () => {
   };
 };
 ```
-## jsx 是什么？
+<!-- ## jsx 是什么？
 1. JSX 是 JavaScript XML 的缩写，允许在JS代码中写HTML。
 2. 编译时转换为React.createElement调用。
 3. 可以使用Babel插件如`@babel/preset-react`进行转换。
