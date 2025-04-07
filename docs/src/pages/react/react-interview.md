@@ -217,9 +217,9 @@ export const fetchData = () => {
 3. 可以使用`Babel`插件如`@babel/preset-react`进行转换。
 4. 使用`className`代替`class`，使用驼峰命名法。
 5. 可以嵌入表达式`{expression}`。
-6. 绑定事件如`onClick={handleClick}`。
-7. 绑定样式如`style={{color: red}}`。
-8. 绑定变量如`data-id={data}`
+<!-- 6. 绑定事件如`onClick={handleClick}`。
+7. 绑定样式如`style={{color: 'red'}}`。
+8. 绑定变量如`data-id={data}`。 -->
 :::
 
 ## React 的懒加载`（Lazy Loading）`如何实现？
