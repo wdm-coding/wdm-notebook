@@ -1,6 +1,6 @@
 # React 面试题
 
-## React 的核心特性是什么？‌
+<!-- ## React 的核心特性是什么？‌
 1. ‌组件化‌：将UI拆分为独立、可复用的组件。
 2. ‌虚拟DOM‌：通过高效的Diff算法减少直接操作真实DOM的开销。
 3. ‌单向数据流‌：数据通过props从父组件传递到子组件，状态提升保证可预测性。
@@ -33,32 +33,32 @@
 2. ‌函数组件‌：通过Hooks实现状态和生命周期，更简洁，推荐使用。
 
 ## 类组件的生命周期方法有哪些？
-1. 挂载阶段：
-  + `constructor` 初始化state和绑定事件。
-  + `getDerivedStateFromProps(nextProps, nextState)` 用于在组件实例化或接收到新的 props 时，根据 props 更新组件的 state。该方法在组件挂载（mount）和更新（update）时都会被调用。
-  + `render` 渲染UI(返回 JSX，描述组件 UI。)。
-  + `componentDidMount` 组件挂载后执行。
-2. 更新阶段：
-  + `getDerivedStateFromProps(nextProps, nextState)`(同挂载阶段，在每次更新前调用。)
-  + `shouldComponentUpdate(nextProps, nextState)` 控制组件是否重新渲染。该方法需要返回一个布尔值。如果返回 true，则组件将继续更新过程（即调用 `render` 方法）；如果返回 false，则组件将不会重新渲染，更新过程将被中断。
-  + `render` 渲染UI(同挂载阶段，生成新的虚拟 DOM。)。
-  + `getSnapshotBeforeUpdate(prevProps, prevState)` 它在最近一次渲染输出（提交到 DOM 节点）之前被调用。这个方法使得组件能在更新发生之前从 DOM 中捕获一些信息（例如，滚动位置或表单输入值）。这个信息随后可以作为 componentDidUpdate 的第三个参数使用。
-  + `componentDidUpdate(prevProps, prevState, snapshot)` DOM 更新完成后执行，适合操作更新后的 DOM 或发起请求。
-3. 卸载阶段：
-  + `componentWillUnmount` 组件卸载前执行，清理资源。
-4. 错误处理：
-  + `getDerivedStateFromError(error)` 捕获子组件抛出的错误。记录错误信息（如上报日志）。
-::: tip react生命周期与vue生命周期的比较
-1. 挂载阶段：
-constructor === beforeCreate + created
-render === beforeMount
-componentDidMount === mounted
-2. 更新阶段：
-getSnapshotBeforeUpdate === beforeUpdate
-componentDidUpdate === updated
-3. 卸载阶段：
-componentWillUnmount === beforeDestroy + destroyed
-:::
+  1. 挂载阶段：
+    + `constructor` 初始化state和绑定事件。
+    + `getDerivedStateFromProps(nextProps, nextState)` 用于在组件实例化或接收到新的 props 时，根据 props 更新组件的 state。该方法在组件挂载（mount）和更新（update）时都会被调用。
+    + `render` 渲染UI(返回 JSX，描述组件 UI。)。
+    + `componentDidMount` 组件挂载后执行。
+  2. 更新阶段：
+    + `getDerivedStateFromProps(nextProps, nextState)`(同挂载阶段，在每次更新前调用。)
+    + `shouldComponentUpdate(nextProps, nextState)` 控制组件是否重新渲染。该方法需要返回一个布尔值。如果返回 true，则组件将继续更新过程（即调用 `render` 方法）；如果返回 false，则组件将不会重新渲染，更新过程将被中断。
+    + `render` 渲染UI(同挂载阶段，生成新的虚拟 DOM。)。
+    + `getSnapshotBeforeUpdate(prevProps, prevState)` 它在最近一次渲染输出（提交到 DOM 节点）之前被调用。这个方法使得组件能在更新发生之前从 DOM 中捕获一些信息（例如，滚动位置或表单输入值）。这个信息随后可以作为 componentDidUpdate 的第三个参数使用。
+    + `componentDidUpdate(prevProps, prevState, snapshot)` DOM 更新完成后执行，适合操作更新后的 DOM 或发起请求。
+  3. 卸载阶段：
+    + `componentWillUnmount` 组件卸载前执行，清理资源。
+  4. 错误处理：
+    + `getDerivedStateFromError(error)` 捕获子组件抛出的错误。记录错误信息（如上报日志）。
+  ::: tip react生命周期与vue生命周期的比较
+  1. 挂载阶段：
+  constructor === beforeCreate + created
+  render === beforeMount
+  componentDidMount === mounted
+  2. 更新阶段：
+  getSnapshotBeforeUpdate === beforeUpdate
+  componentDidUpdate === updated
+  3. 卸载阶段：
+  componentWillUnmount === beforeDestroy + destroyed
+  :::
 
 ## 函数式组件useEffect如何模拟生命周期？
 1. `useEffect(()=>{},[])` 依赖项数组为空时，useEffect 仅在组件挂载时执行一次：componentDidMount
@@ -93,7 +93,7 @@ componentWillUnmount === beforeDestroy + destroyed
     return /* 根据 value 渲染组件 */;
   };
   ```
-  3. Redux、MobX等状态管理库 全局通信。
+  3. Redux、MobX等状态管理库 全局通信。 -->
 
 ## 什么是受控组件和非受控组件？‌
   1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
