@@ -209,7 +209,7 @@ export const fetchData = () => {
   };
 };
 ```
-## jsx 是什么？
+<!--## jsx 是什么？
 1. JSX 是 `JavaScript XML` 的缩写，允许在JS代码中写HTML。
 2. 编译时转换为`React.createElement`调用。
 3. 可以使用Babel插件如`@babel/preset-react`进行转换。
@@ -228,9 +228,9 @@ const LazyComponent = React.lazy(() => import('./LazyComponent'));
 <Suspense fallback={<div>Loading...</div>}>
   <LazyComponent />
 </Suspense>
-```
+``` -->
 
-<!-- ## 纯函数是什么？
+ ## 纯函数是什么？
 1. 纯函数是指不改变外部状态的函数。
 2. 接受相同的输入，总是返回相同的结果。
 3. 无副作用，不修改外部变量。
@@ -256,4 +256,4 @@ React 强调灵活性（JS 优先），Vue 提供更多内置功能（如模板�
 1. 并发模式（Concurrent Mode）：通过可中断的渲染过程，允许 React 同时处理多个状态更新，优先响应用户交互，提升应用流畅性。
 2. 自动批处理（Automatic Batching）：多个状态更新合并为单次渲染，提升性能。异步操作中的多次 setState 会被合并，触发一次渲染。
 3. 新Hooks：useId（生成唯一ID）、useTransition（区分紧急/非紧急更新）。
-4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。 -->
+4. createRoot 替代 `ReactDOM.render`‌：启用并发特性必须使用 createRoot。
