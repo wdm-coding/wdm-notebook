@@ -117,13 +117,13 @@
   2. 返回一个数组，包含当前状态值和更新状态的函数。
   3. useState 内部使用闭包保存状态，每次调用返回最新值。
   4. 每次渲染都会重新创建新的状态更新函数，但不会影响已渲染的组件。
-::: warning 执行setState 为什么是异步的？
-在 React 中，状态更新是异步的。当你调用 setState 时，React 会将更新排入队列，并在下一次渲染时应用这些更新。因此，你不能直接通过 setState 的返回值来获取更新后的状态值。
-1. 更新 state 会请求使用新的 state 值再次渲染，但不会影响已运行事件处理程序中的 JavaScript 变量。
-2. 如果需要使用 next state，可以在传递给 set 函数之前将其保存在变量中：
-3. 调用 setState 并传递一个新的值来更新state状态
-3. 当更新状态依赖于前一个状态时，你可以使用函数式更新的方式来更新state状态
-:::
+  ::: warning 执行setState 为什么是异步的？
+  在 React 中，状态更新是异步的。当你调用 setState 时，React 会将更新排入队列，并在下一次渲染时应用这些更新。因此，你不能直接通过 setState 的返回值来获取更新后的状态值。
+  1. 更新 state 会请求使用新的 state 值再次渲染，但不会影响已运行事件处理程序中的 JavaScript 变量。
+  2. 如果需要使用 next state，可以在传递给 set 函数之前将其保存在变量中：
+  3. 调用 setState 并传递一个新的值来更新state状态
+  3. 当更新状态依赖于前一个状态时，你可以使用函数式更新的方式来更新state状态
+  :::
 
 ## 类组件的setState 的工作原理是什么？
 1. 传递一个对象来更新组件的状态。这个对象包含了你想要更新的状态字段和它们的新值。
@@ -167,7 +167,7 @@
 3. Route组件定义路由规则，path,element属性。
 4. 路由可以嵌套在父路由中。
 5. 子路由通过父路由中的 `<Outlet/>` 进行呈现。
-### 路由导航
+<!-- ### 路由导航
 1. Link组件用于导航，to属性指定路径。
 2. NavLink组件用于导航，具有active样式。
 3. useNavigate 编程式导航函数。
@@ -256,4 +256,4 @@ React 强调灵活性（JS 优先），Vue 提供更多内置功能（如模板�
 1. 并发模式（Concurrent Mode）：通过可中断的渲染过程，允许 React 同时处理多个状态更新，优先响应用户交互，提升应用流畅性。
 2. 自动批处理（Automatic Batching）：多个状态更新合并为单次渲染，提升性能。异步操作中的多次 setState 会被合并，触发一次渲染。
 3. 新Hooks：useId（生成唯一ID）、useTransition（区分紧急/非紧急更新）。
-4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。
+4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。 -->
