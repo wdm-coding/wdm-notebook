@@ -112,7 +112,7 @@
   3. ‌特定依赖`[a, b]`‌：当a或b变化时执行。
   :::
 
-<!-- ## useState 的工作原理是什么？
+## useState 的工作原理是什么？
   1. useState 是一个 Hook，用于在函数组件中添加状态。
   2. 返回一个数组，包含当前状态值和更新状态的函数。
   3. useState 内部使用闭包保存状态，每次调用返回最新值。
@@ -256,4 +256,4 @@ React 强调灵活性（JS 优先），Vue 提供更多内置功能（如模板�
 1. 并发模式（Concurrent Mode）：通过可中断的渲染过程，允许 React 同时处理多个状态更新，优先响应用户交互，提升应用流畅性。
 2. 自动批处理（Automatic Batching）：多个状态更新合并为单次渲染，提升性能。异步操作中的多次 setState 会被合并，触发一次渲染。
 3. 新Hooks：useId（生成唯一ID）、useTransition（区分紧急/非紧急更新）。
-4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。 -->
+4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。
