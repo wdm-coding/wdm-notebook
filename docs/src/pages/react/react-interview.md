@@ -61,9 +61,9 @@ componentWillUnmount === beforeDestroy + destroyed
 :::
 
 ## 函数式组件useEffect如何模拟生命周期？
-1. useEffect(()=>{},[]) 依赖项数组为空时，useEffect 仅在组件挂载时执行一次：componentDidMount
-2. useEffect(()=>{},[deps]) 依赖项变化时执行：componentDidUpdate。
-3. useEffect(()=>{ return () => {} },[]) 返回清理函数，模拟 componentWillUnmount。
+1. `useEffect(()=>{},[])` 依赖项数组为空时，useEffect 仅在组件挂载时执行一次：componentDidMount
+2. `useEffect(()=>{},[deps])` 依赖项变化时执行：componentDidUpdate。
+3. `useEffect(()=>{ return () => {} },[])` 返回清理函数，模拟 componentWillUnmount。
 
 ## React 如何处理事件？
 1. 通过JSX直接绑定方法：`<button onClick={handleClick}>点击</button>`。
@@ -72,41 +72,41 @@ componentWillUnmount === beforeDestroy + destroyed
 4. 使用useCallback优化性能：`const memoizedHandler = useCallback(() => handleClick(), [])`。
 
 ## react 优化性能或避免不必要的组件渲染
-1. memo()：React中的一个高阶组件，缓存函数组件，浅比较props。
-2. useMemo(()=>{},[])：useMemo会缓存计算结果，并在依赖项不变的情况下返回相同的值。它可以让你在组件渲染时避免不必要的重新计算，从而提高性能。类似于vue的computed
-3. useCallback(()=>{},[])：专门用于缓存函数。第一个参数是要缓存的函数，第二个参数是依赖项数组。当函数的依赖项没有发生变化时返回上一次缓存的函数，从而避免不必要的重新创建和绑定事件（如input的onChange事件）。
-4. shouldComponentUpdate()：类组件中手动控制更新条件。
+1. `memo()`：React中的一个高阶组件，缓存函数组件，浅比较props。
+2. `useMemo(()=>{},[])`：useMemo会缓存计算结果，并在依赖项不变的情况下返回相同的值。它可以让你在组件渲染时避免不必要的重新计算，从而提高性能。类似于vue的computed
+3. `useCallback(()=>{},[])`：专门用于缓存函数。第一个参数是要缓存的函数，第二个参数是依赖项数组。当函数的依赖项没有发生变化时返回上一次缓存的函数，从而避免不必要的重新创建和绑定事件（如input的onChange事件）。
+4. `shouldComponentUpdate()`：类组件中手动控制更新条件。
 
 ## 如何实现组件通信？
-1. ‌Props & 回调函数 父子组件通信。
-2. Context API 跨层级组件通信,避免prop 属性穿透，逐层传递。
-```js
-// React.createContext() 创建一个 Context 对象,Context 对象提供Provider和Consumer组件
-const MyContext = React.createContext();
-//  使用 MyContext.Provider 包裹该组件并通过 value prop 提供要共享的数据。
-<MyContext.Provider value={/* 数据 */}>
-  {/* 子组件 */}
-</MyContext.Provider>
-// 使用 MyContext.Consumer 或 useContext Hook 访问共享数据。
-const MyComponent = () => {
-  const value = useContext(MyContext);
-  return /* 根据 value 渲染组件 */;
-};
-```
-3. Redux、MobX等状态管理库 全局通信。
+  1. ‌Props & 回调函数 父子组件通信。
+  2. Context API 跨层级组件通信,避免prop 属性穿透，逐层传递。
+  ```js
+  // React.createContext() 创建一个 Context 对象,Context 对象提供Provider和Consumer组件
+  const MyContext = React.createContext();
+  //  使用 MyContext.Provider 包裹该组件并通过 value prop 提供要共享的数据。
+  <MyContext.Provider value={/* 数据 */}>
+    {/* 子组件 */}
+  </MyContext.Provider>
+  // 使用 MyContext.Consumer 或 useContext Hook 访问共享数据。
+  const MyComponent = () => {
+    const value = useContext(MyContext);
+    return /* 根据 value 渲染组件 */;
+  };
+  ```
+  3. Redux、MobX等状态管理库 全局通信。
 
 ## 什么是受控组件和非受控组件？‌
-1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
-2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如`<input ref={inputRef} />`）。
+  1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
+  2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如`<input ref={inputRef} />`）。
 
 ## React 中的key有什么作用？‌
-1. ‌识别元素唯一性‌：帮助React在列表更新时正确复用DOM节点。
-2. ‌避免问题‌：不要用数组索引作为key（可能导致状态错乱），应使用唯一ID。
+  1. ‌识别元素唯一性‌：帮助React在列表更新时正确复用DOM节点。
+  2. ‌避免问题‌：不要用数组索引作为key（可能导致状态错乱），应使用唯一ID。
 
 ## useEffect 的依赖数组如何工作？‌
-1. ‌空数组[]‌：仅在组件挂载和卸载时执行（模拟componentDidMount和componentWillUnmount）。
-2. 无依赖数组‌：每次渲染后都执行。
-3. ‌特定依赖[a, b]‌：当a或b变化时执行。
+  1. ‌空数组[]‌：仅在组件挂载和卸载时执行（模拟componentDidMount和componentWillUnmount）。
+  2. 无依赖数组‌：每次渲染后都执行。
+  3. ‌特定依赖[a, b]‌：当a或b变化时执行。
 
 ## useState 的工作原理是什么？
   1. useState 是一个 Hook，用于在函数组件中添加状态。
