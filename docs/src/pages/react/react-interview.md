@@ -96,8 +96,8 @@ const MyComponent = () => {
 3. Redux、MobX等状态管理库 全局通信。
 
 ## 什么是受控组件和非受控组件？‌
-1. ‌受控组件‌：表单值由React state控制（如<input value={value} onChange={...}/>）。
-2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如<input ref={inputRef} />）。
+1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
+2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如`<input ref={inputRef} />`）。
 
 ## React 中的key有什么作用？‌
 1. ‌识别元素唯一性‌：帮助React在列表更新时正确复用DOM节点。
@@ -170,7 +170,7 @@ const MyComponent = () => {
 ### 路由参数
 1. 查询参数 useSearchParams 获取查询字符串(?name=xxx&age=18)。
 2. 动态路由参数 useParams 获取路径参数(path:/id)。
-3. state参数 useLocation 获取location对象。({path:'/',state:{name:'xxx'}})
+3. state参数 useLocation 获取location对象。(`{path:'/',state:{name:'xxx'}}`)
 
 ## Redux 的工作流程是怎样的？‌
 1. ‌Action‌：描述事件的普通对象（如{type: 'ADD_TODO', payload: '...'}）。
