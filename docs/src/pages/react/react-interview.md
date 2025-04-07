@@ -210,7 +210,7 @@ export const fetchData = () => {
 };
 ```
 
-## jsx 是什么？
+## `jsx`是什么？
 :::tip JSX
 1. `JSX` 是 `JavaScript XML` 的缩写，允许在`JS`代码中写`HTML`。
 2. 编译时转换为`React.createElement`调用。
