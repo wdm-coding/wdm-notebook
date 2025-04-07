@@ -218,8 +218,8 @@ export const fetchData = () => {
 4. 使用`className`代替`class`，使用驼峰命名法。
 5. 可以嵌入表达式`{expression}`。
 6. 绑定事件如`onClick={handleClick}`。
-7. 绑定样式如`style={{color: "red"}}`。
-8. 绑定变量如`data-id={data}`。
+7. 绑定样式。
+8. 绑定变量。
 :::
 
 ## React 的懒加载`（Lazy Loading）`如何实现？
