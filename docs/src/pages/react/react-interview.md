@@ -209,7 +209,7 @@ export const fetchData = () => {
   };
 };
 ```
-<!-- ## jsx 是什么？
+## jsx 是什么？
 1. JSX 是 JavaScript XML 的缩写，允许在JS代码中写HTML。
 2. 编译时转换为React.createElement调用。
 3. 可以使用Babel插件如`@babel/preset-react`进行转换。
@@ -230,7 +230,7 @@ const LazyComponent = React.lazy(() => import('./LazyComponent'));
 </Suspense>
 ```
 
-## 纯函数是什么？
+<!-- ## 纯函数是什么？
 1. 纯函数是指不改变外部状态的函数。
 2. 接受相同的输入，总是返回相同的结果。
 3. 无副作用，不修改外部变量。
