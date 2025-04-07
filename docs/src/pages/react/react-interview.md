@@ -162,7 +162,7 @@ const MyComponent = () => {
 2. Routes组件包裹路由规则。
 3. Route组件定义路由规则，path,element属性。
 4. 路由可以嵌套在父路由中。
-5. 子路由通过父路由中的 <Outlet/> 进行呈现。
+5. 子路由通过父路由中的 `<Outlet/>` 进行呈现。
 ### 路由导航
 1. Link组件用于导航，to属性指定路径。
 2. NavLink组件用于导航，具有active样式。
@@ -196,7 +196,7 @@ const store = createStore(
 export const fetchData = () => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch('https://api.example.com/data');
+      const response = await fetch('');
       const data = await response.json();
       dispatch({ type: 'FETCH_DATA_SUCCESS', payload: data });
     } catch (error) {
@@ -208,12 +208,12 @@ export const fetchData = () => {
 ## jsx 是什么？
 1. JSX 是 JavaScript XML 的缩写，允许在JS代码中写HTML。
 2. 编译时转换为React.createElement调用。
-3. 可以使用Babel插件如@babel/preset-react进行转换。
+3. 可以使用Babel插件如`@babel/preset-react`进行转换。
 4. 使用className代替class，使用驼峰命名法。
-5. 可以嵌入表达式{expression}。
-6. 绑定事件如onClick={handleClick}。
-7. 绑定样式如style={{color: 'red'}}。
-8. 绑定变量如data-id={data}。
+5. 可以嵌入表达式`{expression}`。
+6. 绑定事件如`onClick={handleClick}`。
+7. 绑定样式如`style={{color: 'red'}}`。
+8. 绑定变量如`data-id={data}`。
 
 ## React 的懒加载（Lazy Loading）如何实现？
 1. React.lazy 用于动态导入组件。
