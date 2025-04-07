@@ -209,7 +209,9 @@ export const fetchData = () => {
   };
 };
 ```
+
 ## jsx 是什么？
+:::tip JSX
 1. `JSX` 是 `JavaScript XML` 的缩写，允许在`JS`代码中写`HTML`。
 2. 编译时转换为`React.createElement`调用。
 3. 可以使用`Babel`插件如`@babel/preset-react`进行转换。
@@ -218,11 +220,12 @@ export const fetchData = () => {
 6. 绑定事件如`onClick={handleClick}`。
 7. 绑定样式如`style={{color: 'red'}}`。
 8. 绑定变量如`data-id={data}`。
+:::
 
-<!--## React 的懒加载`（Lazy Loading）`如何实现？
+## React 的懒加载`（Lazy Loading）`如何实现？
 1. `React.lazy`用于动态导入组件。
 2. `Suspense` 包裹懒加载的组件，显示`loading`状态。
-3. 使用`import()`语法进行代码分割。-->
+3. 使用`import()`语法进行代码分割。
 ```js
 const LazyComponent = React.lazy(() => import('./LazyComponent'));
 <Suspense fallback={<div>Loading...</div>}>
