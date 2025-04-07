@@ -95,7 +95,7 @@
   ```
   3. Redux、MobX等状态管理库 全局通信。 -->
 
-## 什么是受控组件和非受控组件？‌
+<!-- ## 什么是受控组件和非受控组件？‌
   1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
   2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如`<input ref={inputRef} />`）。
 
@@ -252,4 +252,4 @@ React 强调灵活性（JS 优先），Vue 提供更多内置功能（如模板�
 1. 并发模式（Concurrent Mode）：通过可中断的渲染过程，允许 React 同时处理多个状态更新，优先响应用户交互，提升应用流畅性。
 2. 自动批处理（Automatic Batching）：多个状态更新合并为单次渲染，提升性能。异步操作中的多次 setState 会被合并，触发一次渲染。
 3. 新Hooks：useId（生成唯一ID）、useTransition（区分紧急/非紧急更新）。
-4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。
+4. createRoot 替代 ReactDOM.render‌：启用并发特性必须使用 createRoot。 -->
