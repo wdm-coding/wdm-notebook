@@ -66,10 +66,10 @@ componentWillUnmount === beforeDestroy + destroyed
 3. useEffect(()=>{ return () => {} },[]) 返回清理函数，模拟 componentWillUnmount。
 
 ## React 如何处理事件？
-1. 通过JSX直接绑定方法：<button onClick={handleClick}>点击</button>。
+1. 通过JSX直接绑定方法：`<button onClick={handleClick}>点击</button>`。
 2. 自动绑定this到当前实例：类组件的constructor中bind(this)。
-3. 使用箭头函数自动绑定this：<button onClick={() => handleClick()}>点击</button>。
-4. 使用useCallback优化性能：const memoizedHandler = useCallback(() => handleClick(), []);。
+3. 使用箭头函数自动绑定this：`<button onClick={() => handleClick()}>点击</button>`。
+4. 使用useCallback优化性能：`const memoizedHandler = useCallback(() => handleClick(), [])`。
 
 ## react 优化性能或避免不必要的组件渲染
 1. memo()：React中的一个高阶组件，缓存函数组件，浅比较props。
