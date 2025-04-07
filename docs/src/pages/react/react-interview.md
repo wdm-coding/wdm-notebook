@@ -96,17 +96,21 @@
   3. Redux、MobX等状态管理库 全局通信。 -->
 
 ## 什么是受控组件和非受控组件？‌
+  :::tip 受控组件和非受控组件
   1. ‌受控组件‌：表单值由React state控制（如`<input value={value} onChange={...}/>`）。
   2. ‌非受控组件‌：通过ref直接访问DOM元素的值（如`<input ref={inputRef} />`）。
+  :::
 
 ## React 中的key有什么作用？‌
   1. ‌识别元素唯一性‌：帮助React在列表更新时正确复用DOM节点。
   2. ‌避免问题‌：不要用数组索引作为key（可能导致状态错乱），应使用唯一ID。
 
 ## useEffect 的依赖数组如何工作？‌
+  :::tip useEffect
   1. ‌空数组`[]‌`：仅在组件挂载和卸载时执行（模拟componentDidMount和componentWillUnmount）。
   2. 无依赖数组‌：每次渲染后都执行。
   3. ‌特定依赖`[a, b]`‌：当a或b变化时执行。
+  :::
 
 <!-- ## useState 的工作原理是什么？
   1. useState 是一个 Hook，用于在函数组件中添加状态。
