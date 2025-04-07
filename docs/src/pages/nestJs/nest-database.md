@@ -45,8 +45,42 @@
   ```js
   npm install @nestjs/typeorm typeorm mysql2
   ```
-  2. 配置数据库连接
+  2. 配置数据库连接 `app.module.ts`
+  ```js
+  import { Module } from '@nestjs/common'
+  import { ConfigModule, ConfigService } from '@nestjs/config'
+  import { TypeOrmModule } from '@nestjs/typeorm'
+  import { EnvConfig } from './enum/env.enum'
+  @Module({
+    imports: [
+      ConfigModule.forRoot({
+        isGlobal: true, // 全局配置
+        envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'] // 如果在多个文件中找到某个变量，则第一个变量优先。
+      }),
+      // 数据库模块 读取当前环境的数据库连接信息
+      TypeOrmModule.forRootAsync({
+        imports: [ConfigModule], // 导入配置模块
+        inject: [ConfigService], // 注入配置服务
+        useFactory: (configService: ConfigService) => ({
+          type: 'mysql', // 数据库类型
+          host: configService.get(EnvConfig.DB_HOST), // 读取配置文件中的 DB_HOST 环境变量值作为主机名
+          port: configService.get(EnvConfig.DB_PORT), // 读取配置文件中的 DB_PORT 环境变量值并转换为数字，作为端口号
+          username: configService.get(EnvConfig.DB_USERNAME), // 读取配置文件中的 DB_USER 环境变量值作为用户名
+          password: configService.get(EnvConfig.DB_PASSWORD), // 读取配置文件中的 DB_PASSWORD 环境变量值作为密码
+          database: configService.get(EnvConfig.DB_DATABASE), // 读取配置文件中的 DB_NAME 环境变量值作为数据库名
+          entities: [], // 实体类列表
+          synchronize: true, // 自动同步数据库结构，开发环境使用，生产环境禁用。
+          logging: ['error'] // 日志级别 'debug', 'log', 'warn', 'error'
+        })
+      })
+      // 其他模块...
+    ],
+    controllers: [],
+    providers: []
+  })
+  export class AppModule {}
 
+  ```
 
 
 
