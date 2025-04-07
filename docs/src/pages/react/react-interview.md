@@ -104,9 +104,9 @@
   2. ‌避免问题‌：不要用数组索引作为key（可能导致状态错乱），应使用唯一ID。
 
 ## useEffect 的依赖数组如何工作？‌
-  1. ‌空数组[]‌：仅在组件挂载和卸载时执行（模拟componentDidMount和componentWillUnmount）。
+  1. ‌空数组`[]‌`：仅在组件挂载和卸载时执行（模拟componentDidMount和componentWillUnmount）。
   2. 无依赖数组‌：每次渲染后都执行。
-  3. ‌特定依赖[a, b]‌：当a或b变化时执行。
+  3. ‌特定依赖`[a, b]`‌：当a或b变化时执行。
 
 ## useState 的工作原理是什么？
   1. useState 是一个 Hook，用于在函数组件中添加状态。
@@ -168,15 +168,15 @@
 2. NavLink组件用于导航，具有active样式。
 3. useNavigate 编程式导航函数。
 ### 路由参数
-1. 查询参数 useSearchParams 获取查询字符串(?name=xxx&age=18)。
-2. 动态路由参数 useParams 获取路径参数(path:/id)。
+1. 查询参数 useSearchParams 获取查询字符串`(?name=xxx&age=18)`。
+2. 动态路由参数 useParams 获取路径参数`(path:/id)`。
 3. state参数 useLocation 获取location对象。(`{path:'/',state:{name:'xxx'}}`)
 
 ## Redux 的工作流程是怎样的？‌
-1. ‌Action‌：描述事件的普通对象（如{type: 'ADD_TODO', payload: '...'}）。
-2. Reducer‌：纯函数，根据旧状态和Action生成新状态。
-3. Store‌：保存全局状态，通过dispatch(action)触发更新。
-4. ‌Middleware‌：处理异步逻辑（如redux-thunk）。
+1. ‌Action‌：描述事件的普通对象`（如{type: 'ADD_TODO', payload: '...'}）`。
+2. Reducer‌：纯函数，根据旧状态和`Action`生成新状态。
+3. Store‌：保存全局状态，通过`dispatch(action)`触发更新。
+4. ‌Middleware‌：处理异步逻辑`（如redux-thunk）`。
 
 ## redux-thunk 的作用是什么？
 1. redux-thunk 是 Redux 的一个中间件.
