@@ -19,8 +19,8 @@
   + 对于函数组件，可以使用React.memo来缓存组件的渲染结果，并在props发生变化时通过浅比较来决定是否重新渲染组件。
 
 ## HOC & Render Props：通过高阶组件和渲染属性实现代码复用。
-1. HOC 是一个函数‌，接收一个组件（类/函数）作为参数，返回一个新的增强版组件。
-2. HOC 适用于需要操作组件生命周期或 Props 的场景。
+1. HOC是一个函数‌，接收一个组件（类/函数）作为参数，返回一个新的增强版组件。
+2. HOC适用于需要操作组件生命周期或 Props 的场景。
 
 ## 自定义Hooks：通过自定义Hook实现逻辑复用。
 1. 自定义Hook是一个函数，封装可复用的逻辑（如状态管理、副作用操作等），供多个组件共享。
@@ -34,20 +34,20 @@
 
 ## 类组件的生命周期方法有哪些？
 1. 挂载阶段：
-  + constructor 初始化state和绑定事件。
-  + getDerivedStateFromProps(nextProps, nextState) 用于在组件实例化或接收到新的 props 时，根据 props 更新组件的 state。该方法在组件挂载（mount）和更新（update）时都会被调用。
-  + render 渲染UI(返回 JSX，描述组件 UI。)。
-  + componentDidMount 组件挂载后执行。
+  + `constructor` 初始化state和绑定事件。
+  + `getDerivedStateFromProps(nextProps, nextState)` 用于在组件实例化或接收到新的 props 时，根据 props 更新组件的 state。该方法在组件挂载（mount）和更新（update）时都会被调用。
+  + `render` 渲染UI(返回 JSX，描述组件 UI。)。
+  + `componentDidMount` 组件挂载后执行。
 2. 更新阶段：
-  + getDerivedStateFromProps(nextProps, nextState)(同挂载阶段，在每次更新前调用。)
-  + shouldComponentUpdate(nextProps, nextState) 控制组件是否重新渲染。该方法需要返回一个布尔值。如果返回 true，则组件将继续更新过程（即调用 render 方法）；如果返回 false，则组件将不会重新渲染，更新过程将被中断。
-  + render 渲染UI(同挂载阶段，生成新的虚拟 DOM。)。
-  + getSnapshotBeforeUpdate(prevProps, prevState) 它在最近一次渲染输出（提交到 DOM 节点）之前被调用。这个方法使得组件能在更新发生之前从 DOM 中捕获一些信息（例如，滚动位置或表单输入值）。这个信息随后可以作为 componentDidUpdate 的第三个参数使用。
-  + componentDidUpdate(prevProps, prevState, snapshot) DOM 更新完成后执行，适合操作更新后的 DOM 或发起请求。
+  + `getDerivedStateFromProps(nextProps, nextState)`(同挂载阶段，在每次更新前调用。)
+  + `shouldComponentUpdate(nextProps, nextState)` 控制组件是否重新渲染。该方法需要返回一个布尔值。如果返回 true，则组件将继续更新过程（即调用 `render` 方法）；如果返回 false，则组件将不会重新渲染，更新过程将被中断。
+  + `render` 渲染UI(同挂载阶段，生成新的虚拟 DOM。)。
+  + `getSnapshotBeforeUpdate(prevProps, prevState)` 它在最近一次渲染输出（提交到 DOM 节点）之前被调用。这个方法使得组件能在更新发生之前从 DOM 中捕获一些信息（例如，滚动位置或表单输入值）。这个信息随后可以作为 componentDidUpdate 的第三个参数使用。
+  + `componentDidUpdate(prevProps, prevState, snapshot)` DOM 更新完成后执行，适合操作更新后的 DOM 或发起请求。
 3. 卸载阶段：
-  + componentWillUnmount 组件卸载前执行，清理资源。
+  + `componentWillUnmount` 组件卸载前执行，清理资源。
 4. 错误处理：
-  + getDerivedStateFromError(error) 捕获子组件抛出的错误。记录错误信息（如上报日志）。
+  + `getDerivedStateFromError(error)` 捕获子组件抛出的错误。记录错误信息（如上报日志）。
 ::: tip react生命周期与vue生命周期的比较
 1. 挂载阶段：
 constructor === beforeCreate + created
