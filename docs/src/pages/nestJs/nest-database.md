@@ -41,6 +41,9 @@
 ## nestjs 数据库解决方案
 
 ### 一、@nestjs/typeorm
+
+  [Typeorm文档](https://typeorm.bootcss.com/one-to-one-relations)
+
   1. 安装依赖
   ```js
   npm install @nestjs/typeorm typeorm mysql2
@@ -81,6 +84,156 @@
   export class AppModule {}
   ```
 ## 数据库设计
+  <img src="/assets/nest/11.png" alt="数据库设计" style="margin-top:10px">
+
+## 实体类
+<div class="warning">实体类创建数据库表的映射关系</div>
+
+### 1. 创建实体类
+  1. 创建实体类文件 `src/entities/user/user.entity.ts`
+  ```js
+  import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+  @Entity() // 实体类装饰器，告诉 TypeORM 这个类是一个实体类。
+  export class User {
+    @PrimaryGeneratedColumn() // 主键字段装饰器，告诉 TypeORM 这个属性是主键。
+    id: number
+    @Column({ type: 'varchar', length: 255 }) // 字段装饰器，告诉 TypeORM 这个属性是一个数据库列。
+    name: string
+    @Column({ type: 'varchar', length: 255 }) // 字段装饰器，告诉 TypeORM 这个属性是一个数据库列。
+    password: string
+  }
+  ```
+  2. 在`app.module.ts`注册实体类 
+  ```js
+  import { User } from './user/user.entity'
+  import { Profile } from './profile/profile.entity'
+  import { Roles } from './roles/roles.entity'
+  import { Logs } from './logs/logs.entity'
+  TypeOrmModule.forRootAsync({
+    imports: [ConfigModule], // 导入配置模块
+    inject: [ConfigService], // 注入配置服务
+    useFactory: (configService: ConfigService) =>
+      ({
+        type: configService.get(EnvConfig.DB_TYPE), // 数据库类型
+        host: configService.get(EnvConfig.DB_HOST), // 读取配置文件中的 DB_HOST 环境变量值作为主机名
+        port: configService.get(EnvConfig.DB_PORT), // 读取配置文件中的 DB_PORT 环境变量值并转换为数字，作为端口号
+        username: configService.get(EnvConfig.DB_USERNAME), // 读取配置文件中的 DB_USER 环境变量值作为用户名
+        password: configService.get(EnvConfig.DB_PASSWORD), // 读取配置文件中的 DB_PASSWORD 环境变量值作为密码
+        database: configService.get(EnvConfig.DB_DATABASE), // 读取配置文件中的 DB_NAME 环境变量值作为数据库名
+        entities: [User, Profile, Roles, Logs], // 实体类列表
+        synchronize: true, // 自动同步数据库结构，开发环境使用，生产环境禁用。
+        logging: ['error'] // 日志级别 'debug', 'log', 'warn', 'error'
+      }) as any
+  })
+  ```
+### 2. 创建实体类之间的关系
+
+  1. 一对一关系：一对一是一种 A 只包含一个 B 实例，而 B 只包含一个 A 实例的关系。
+  ```js
+  // user 与 profile 关系
+  // 一个用户只有一个个人资料，而一个个人资料只属于一个用户。
+  import { Users } from 'src/user/user.entity'
+  import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm'
+  @Entity()
+  export class Profile {
+    @PrimaryColumn()
+    id: number // 主键id字段
+    @Column({ type: 'int' })
+    gender: number // 性别字段
+    @Column({ type: 'varchar', length: 11 })
+    phone: string // 手机号字段
+    @Column({ type: 'varchar', length: 255 })
+    address: string // 地址字段
+    // 一对一创建关联关系
+    @OneToOne(() => Users) // 关联到User实体类
+    @JoinColumn({ name: 'user_id' }) // 关联字段名
+    users: Users // 用户字段
+  }
+  ```
+  ::: tip 提示：
+    1. 在profile文件中添加@OneToOne、@JoinColumn
+    2. @OneToOne、@JoinColumn必选项并且只能在关系的一侧设置。
+    3. 设置@JoinColumn的哪一方，哪一方的表将包含一个"relation id"和目标实体表的外键。
+  :::
+
+  2. 多对一/一对多关系：是指 A 包含多个 B 实例的关系，但 B 只包含一个 A 实例。。
+
+  ```js
+  // user 与 logs 关系
+  // 一个用户可以有多个日志记录，但每个日志只属于一个用户。
+  // 在 User 实体类中定义关系
+  @OneToMany(() => Logs, logs => logs.users) // 关系装饰器，告诉 TypeORM 这个属性是一对多关系。
+  logs: Logs[]
+  // 在 Logs 实体类中定义关系
+  @ManyToOne(() => Users, users => users.logs) // 关系装饰器，告诉 TypeORM 这个属性是一对多关系。
+  @JoinColumn({ name: 'user_id' }) // 关联列装饰器，告诉 TypeORM 这个属性是外键字段。
+  users: Users
+  ```
+
+  3. 多对多关系：多对多是一种 A 包含多个 B 实例，而 B 包含多个 A 实例的关系。
+
+  ```js
+  // user 与 roles 关系
+  // 一个用户可以有多个角色，一个角色也可以被多个用户拥有。
+  // 在 User 实体类中定义关系
+  @ManyToMany(() => Roles, roles => roles.users) // 关系装饰器，告诉 TypeORM 这个属性是多对多关系。
+  @JoinTable({
+    name: 'users-roles', // 关联表的名字。
+    joinColumn: {
+      // 关联表的外键字段。
+      name: 'users_id', // 外键字段的名字。
+      referencedColumnName: 'id' // 外键字段引用的列名。
+    },
+    inverseJoinColumn: {
+      // 关联表的另一个外键字段。
+      name: 'roles_id', // 另一个外键字段的名字。
+      referencedColumnName: 'id' // 另一个外键字段引用的列名。
+    },
+    schema: 'nest-test-db'
+  }) // 关联表装饰器，告诉 TypeORM 这个属性是多对多关系并且需要创建一个关联表。
+  roles: Roles[]
+  // 在 Roles 实体类中定义关系
+  @ManyToMany(() => Users, users => users.roles) // 关系装饰器，告诉 TypeORM 这个属性是多对多关系。
+  users: Users[] // 用户字段
+  ```
+
+  ::: tip 提示：@OneToMany、@ManyToOne、@ManyToMany的参数
+  1. 第一个参数是关联的实体类，可以是实体类本身或者实体类的构造函数。
+  2. 第二个参数是一个回调函数，用于指定反向关系。
+  :::
+
+  ::: tip 提示：@JoinColumn选项
+  1. @JoinColumn() 当我们设置@ JoinColumn时，它会自动在数据库中创建一个名为propertyName + referencedColumnName的列。
+  2. j@JoinColumn({ name: "cat_id" }) 当我们在@JoinColumn中指定name时，它将创建一个名为"cat_id"的列。
+  3. @JoinColumn({ referencedColumnName: "name" }) 当我们指定referencedColumnName时，它将创建一个名为propertyName的列，但会将外键指向"name"字段。
+  :::
+
+  ::: tip 提示：@JoinTable选项
+  1. @ JoinTable用于“多对多”关系，并描述"junction"表的连接列。 
+  2. 联结表是由 TypeORM 自动创建的一个特殊的单独表，其中的列引用相关实体。 
+  3. 你可以使用@ JoinColumn更改联结表及其引用列中的列名： 你还可以更改生成的"junction"表的名称。
+  :::
+
+### 3. 使用已有数据库创建实体类
+  
+  + 下载插件 `typeorm-model-generator`
+  ```js
+  npm install typeorm-model-generator -D
+  ```
+  + 生成实体类
+  ```js
+  typeorm-model-generator -h 127.0.0.1 -d mydatabase -p 3306 -u root -x password -e mysql -o ./src/entity
+  ```
+  + package.json 添加脚本
+  ```js
+  "scripts": {
+    "gen": "typeorm-model-generator -h 127.0.0.1 -d [数据库] -p [端口] -u [用户名] -x [密码] -e mysql -o [实体类存放路径]"
+  }
+  ```
+  + 执行脚本
+  ```js
+  npm run gen
+  ```
 
 
 
@@ -90,38 +243,30 @@
 
 
 
-## ormconfig.ts
 
-```js
 
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
-import { Logs } from 'src/logs/logs.entity'
-import { Profile } from 'src/profile/profile.entity'
-import { Roles } from 'src/roles/roles.entity'
-import { User } from 'src/user/user.entity'
 
-export default {
-  type: 'mysql',
-  host: '127.0.0.1',
-  port: 3306,
-  user: 'root',
-  password: 'example',
-  database: 'nestdb',
-  entities: [User, Profile, Logs, Roles],
-  synchronize: true,
-  logging: true
-} as TypeOrmModuleOptions
 
-```
 
-## ts-node
 
-```js
-npm install ts-node --save-dev
 
-在 package.json 中的 scripts 下添加 typeorm 命令
-"script" {
-    ...
-    "typeorm": "typeorm-ts-node-commonjs"
-}
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
