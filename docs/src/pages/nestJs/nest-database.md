@@ -235,6 +235,87 @@
   npm run gen
   ```
 
+## Typeorm增删改查
+
+可以通过`getRepository(Entity)`访问存储库。
+```ts
+// 在user.service.ts中导入Repository
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Users } from '../entities/users/users.entity'
+@Injectable() // NestJS装饰器，用于将类标记为服务。
+export class UserService {
+  constructor(
+    @InjectRepository(Users) // 注入Repository<Users>类型，
+    private readonly userRepository: Repository<Users> // 并将其赋值给userRepository属性。
+  ) {}
+  findAll() { // 查询所有用户信息
+    return this.userRepository.find()
+  }
+}
+```
+### 查询数据
+  + find 方法：查找所有记录。
+    ```js
+    const users = await getRepository(Users).find()
+    console.log('users', users)
+    ```
+  + findOne 方法：根据条件查找一条记录。
+    ```js
+    const user = await getRepository(Users).findOne({ id: 1 })
+    console.log('user', user)
+    ```
+  + findByIds 方法：根据多个id查找多条记录。
+    ```js
+    const users = await getRepository(Users).findByIds([1, 2])
+    console.log('users', users)
+    ```
+  + findAndCount 方法：同时返回符合条件的记录和总数。
+    ```js
+    const [users, count] = await getRepository(Users).findAndCount()
+    console.log('users', users)
+    console.log('count', count)
+    ```
+  + findBy 方法：根据一个或多个字段的值来查找记录。
+    ```js
+    const users = await getRepository(Users).findBy({ name: '张三' })
+    console.log('users', users)
+    ```
+### 插入数据
+  + save 方法：插入一条记录。
+    ```js
+    const user = new Users()
+    user.name = '张三'
+    await getRepository(Users).save(user)
+    console.log('user', user)
+    ```
+### 更新数据
+  + update 方法：根据id更新一条记录。
+    ```js
+    await getRepository(Users).update({ id: 1 }, { name: '李四' })
+    ```
+  + save 方法：更新一条记录。
+    ```js
+    const user = await getRepository(Users).findOne({ id: 1 })
+    user.name = '王五'
+    await getRepository(Users).save(user)
+    ```
+### 删除数据
+  + delete 方法：根据id删除一条记录。
+    ```js
+    await getRepository(Users).delete({ id: 1 })
+    ```
+  + remove 方法：删除一条记录。
+    ```js
+    const user = await getRepository(Users).findOne({ id: 1 })
+    await getRepository(Users).remove(user)
+    ```
+### 关联查询 nestjs-8-10
+
+
+
+
 
 
 
