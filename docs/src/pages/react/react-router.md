@@ -187,10 +187,238 @@ function AuthGuard({ children }) {
 }
 ```
 
+## 项目中路由配置
 
+### API 路由配置
+1. 安装React-Router
+```bash
+$ npm install react-router-dom
+```
+2. 项目根目录下创建`src/router/index.tsx`文件
+3. 配置文件内容
+```js
+import { createHashRouter, RouteObject } from 'react-router-dom'
+const router: RouteObject[] = [
+	{ path: '/', element: <div>首页</div> },
+	{ path: '/about', element: <div>关于</div> },
+	{ path: '/user', element: <div>用户</div> }
+]
+export default createHashRouter(router)
+```
+
+4. 通过RouterProvider组件包裹App
+```js
+import { RouterProvider } from 'react-router-dom'
+import router from './router'
+function App() {
+	return <RouterProvider router={router} />
+}
+export default App
+```
+
+5. 创建嵌套路由
+```js
+import { createHashRouter, RouteObject } from 'react-router-dom'
+const router: RouteObject[] = [
+  {
+    path: '/',
+    element: <Home />,
+    children: [
+      { path: 'user', element: <div>用户</div> },
+      { path: 'about', element: <div>关于</div> }
+    ]
+  }
+]
+export default createHashRouter(router)
+// 在Home.tsx中使用
+import { Outlet } from 'react-router-dom'
+function Home() {
+  return (
+    <div>
+      Home
+      <Outlet />
+    </div>
+  )
+}
+export default Home
+```
+
+6. 创建动态路由
+```js
+import { createHashRouter, RouteObject } from 'react-router-dom'
+const router: RouteObject[] = [
+  {
+    path: '/',
+    element: <Home />,
+    children: [
+      { path: 'user/:id', element: <User /> },
+      { path: 'about', element: <div>关于</div> }
+    ]
+  }
+]
+export default createHashRouter(router)
+// 在User.tsx中使用
+import { useParams } from 'react-router-dom'
+function User() {
+  const { id } = useParams()
+  return <div>用户{id}</div>
+}
+export default User
+```
+7. Loader API
+ + Loader API 允许你在路由加载时执行异步操作，例如从服务器获取数据。
+ + 使用`loader: async () => {}`
+ + 使用`useLoaderData()`获取数据
+
+8. Action API
+ + Action API 允许你在表单提交时执行异步操作，例如向服务器发送数据。
+ + 使用`action: async () => {}`
+ + 使用`useActionData()`获取数据
+
+
+```js
+import { createHashRouter, RouteObject } from 'react-router-dom'
+const router: RouteObject[] = []
+```
+### 组件化路由配置
+1. 在`APP.tsx`引入BrowserRouter或者HashRouter组件
+2. 引入Routes和Route组件
+3. 在`APP.tsx`中使用Routes和Route组件包裹页面组件
+
+```js
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from '@/views/Login.tsx'
+import NotFound from '@/views/NotFound.tsx'
+import Home from '@/views/Home/index.tsx'
+function App() {
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="*" element={<NotFound />} />
+			</Routes>
+		</BrowserRouter>
+	)
+}
+export default App
+```
+
+4. 创建嵌套路由
+```js
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from '@/views/Login.tsx'
+import NotFound from '@/views/NotFound.tsx'
+import Home from '@/views/Home/index.tsx'
+import User from '@/views/Home/User.tsx'
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route index element={<div>首页</div>} />
+          <Route path="user" element={<User />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+export default App
+```
+
+5. 创建动态路由
+```js
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from '@/views/Login.tsx'
+import NotFound from '@/views/NotFound.tsx'
+import Home from '@/views/Home/index.tsx'
+import User from '@/views/Home/User.tsx'
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route index element={<div>首页</div>} />
+          <Route path="user/:id" element={<User />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+export default App
+```
+
+### 路由跳转的方式
+  + Link 组件包裹a标签，实现路由跳转
+  ```js
+  import { Link } from 'react-router-dom'
+  <Link to="/about">关于</Link>
+  ```
+  + NavLink 组件包裹a标签，实现路由跳转并高亮当前路径
+  ```js
+  import { NavLink } from 'react-router-dom'
+  <NavLink to="/about">关于</NavLink>
+  ```
+  + Navigate 组件实现路由重定向
+  ```js
+  import { Navigate } from 'react-router-dom'
+  <Navigate to="/about" />
+  ```
+  + useNavigate hook 实现路由跳转
+  ```js
+  import { useNavigate } from 'react-router-dom'
+  const navigate = useNavigate()
+  navigate('/about')
+  ```
   
-
-
+### API路由 + 组件化路由配置
+1. 安装React-Router
+```bash
+$ npm install react-router-dom
+```
+2. 项目根目录下创建`src/router/index.tsx`文件
+```ts
+import { useRoutes, RouteObject, Navigate } from 'react-router-dom'
+import Login from '@/views/Login.tsx'
+import NotFound from '@/views/NotFound.tsx'
+import Home from '@/views/Home/index.tsx'
+import Layout from '@/layout/index.tsx'
+// 定义路由配置数组
+const router: RouteObject[] = [
+	{
+		path: '/',
+		element: <Layout />,
+		children: [
+			{ path: 'home', element: <Home /> },
+			{ path: 'about', element: <div>about</div> }
+		]
+	},
+	{ path: '/login', element: <Login /> },
+	{ path: '/404', element: <NotFound /> },
+	{ path: '*', element: <Navigate to="/404" /> }
+]
+// 创建路由组件
+function Router() {
+	return useRoutes(router)
+}
+export default Router
+// 在App.tsx中使用
+import { BrowserRouter } from 'react-router-dom'
+import Router from './router'
+// API+组件化创建的路由
+function App() {
+	return (
+		<BrowserRouter>
+			<Router />
+		</BrowserRouter>
+	)
+}
+export default App
+```
 
 
 
