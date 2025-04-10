@@ -133,3 +133,22 @@ export default Loading
   100% { transform: rotate(360deg); }
 }
 ```
+3. 封装loading组件的展示和隐藏
+```ts
+let count = 0
+export const showLoading = () => {
+  if (count === 0) {
+    const loadingDiv = document.getElementById('root-loading') as HTMLDivElement
+    loadingDiv.style.setProperty('display', 'flex')
+  }
+  count++
+}
+export const hideLoading = () => {
+  if (count < 0) return
+  count--
+  if (count === 0) {
+    const loadingDiv = document.getElementById('root-loading') as HTMLDivElement
+    loadingDiv.style.setProperty('display', 'none')
+  }
+}
+```
