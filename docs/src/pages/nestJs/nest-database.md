@@ -312,10 +312,55 @@ export class UserService {
     await getRepository(Users).remove(user)
     ```
 ### 关联查询 nestjs-8-10
-
-
-
-
+1. relations 选项：指定要加载的关联关系。
+```ts
+// 查询用户详情信息
+findProfile(id: number) {
+  return this.userRepository.findOne({
+    relations: {
+      profile: true
+    },
+    where: { id }
+  })
+}
+// 查询用户日志信息
+async findUserLogs(id: number) {
+  const user = await this.findOne(id)
+  return this.logsRepository.find({
+    relations: {
+      users: false
+    },
+    where: { users: user as Users }
+  })
+}
+```
+2. QueryBuilder：构建复杂的查询。
+```ts
+// 日志高级查询
+  async findLogsByGroup(id: number) {
+    // 查询logs 的 result 字段分组统计
+    // this.logsRepository.query(
+    //   'SELECT result, COUNT(result) as count FROM logs GROUP BY result',
+    // )
+    return this.logsRepository
+      .createQueryBuilder('logs') // 创建查询构建器，指定别名logs
+      .select(['logs.result as result', 'COUNT(logs.result) as count']) // 指定查询的字段和别名
+      .leftJoinAndSelect('logs.users', 'user') // 左连接users表，并选择相关字段
+      .where('user.id = :id', { id: id }) // 添加查询条件，指定用户ID
+      .groupBy('logs.result') // 根据logs.result字段分组统计
+      .orderBy('count', 'DESC') // 根据统计结果降序排序
+      .addOrderBy('result', 'DESC') // 根据日志结果升序排序
+      .offset(1) // 设置查询偏移量，用于分页查询-pageNumber
+      .limit(3) // 限制查询结果数量为10条 -pageSize
+      .getRawMany() // 执行查询并返回原始结果集
+  }
+```
+3. 原生SQL查询：直接执行原生SQL语句。
+```ts
+this.logsRepository.query(
+  'SELECT result, COUNT(result) as count FROM logs GROUP BY result',
+)
+```
 
 
 
