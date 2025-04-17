@@ -4,18 +4,113 @@
 <img src="/assets/nest/6.png">
 
 ## nestjs 内置日志模块
-
-```typescript
-  const logger = new Logger()
-  logger.warn('Hello warn!')
-  logger.error('Hello error!')
+1. 引入nest内置日志模块
+```ts
+import { Logger } from '@nestjs/common'
+const logger = new Logger()
 ```
+2. 在`main.ts`文件中配置日志等级
+```ts
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
+import 'crypto'
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    logger: ['warn', 'error'] // ['error', 'warn', 'log', 'verbose', 'debug', setLogLevels, fatal]
+  })
+  app.setGlobalPrefix('api')
+  await app.listen(process.env.PORT ?? 3000)
+}
+bootstrap()
+```
+3. 在控制器中使用日志模块
+```ts
+import { Controller, Delete, Get, Logger, Patch, Post } from '@nestjs/common'
+import { UserService } from './user.service'
+import { Users } from '../entities/users/users.entity'
+
+@Controller('user')
+export class UserController {
+  // 引入logger 装饰器，用于打印日志信息。
+  private logger = new Logger(UserController.name)
+  constructor(private userService: UserService) {
+    // 打印日志信息
+    this.logger.warn('UserController已经创建成功')
+  }
+  // 查询用户详情信息
+  @Get('profile/:id')
+  async getProfile(): Promise<any> {
+    const data = await this.userService.findProfile(1)
+    this.logger.warn('查询用户详情信息成功')
+    return {
+      code: 0,
+      msg: 'success',
+      data
+    }
+  }
+}
+
+```
+<div style="color:red;margin-bottom:15px">注意：nest内置日志模块更多用于调试打印</div>
+<div style="color:red">注意：nest内置日志模块不支持自定义日志格式，如果要自定义日志格式，可以使用第三方库</div>
 
 ## 第三方日志模块 Pino
-
-```typescript
-pnpm install nestjs-pino
+1. 下载依赖
+```bash
+$ npm install nestjs-pino
 ```
+2. 在module文件中注册
+```ts
+import { Module } from '@nestjs/common'
+import { UserController } from './user.controller'
+import { UserService } from './user.service'
+import { LoggerModule } from 'nestjs-pino'
+@Module({
+  imports: [LoggerModule.forRoot()],
+  controllers: [UserController],
+  providers: [UserService]
+})
+export class UserModule {}
+```
+3. 在控制器中使用日志模块
+```ts
+import { Logger } from 'nestjs-pino'
+constructor(
+  private userService: UserService,
+  private logger: Logger // 引入pino日志
+) {
+  this.logger.log('UserController 初始化完成')
+}
+```
+4. 格式化打印内容
+```bash
+$ npm install pino-pretty -S
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```typescript
 import { NestFactory } from '@nestjs/core'
