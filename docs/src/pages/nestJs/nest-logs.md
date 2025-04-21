@@ -484,6 +484,54 @@ constructor(
 
 ## 数据库代码重构：TypeORM与Nestjs整合
 
+1. 安装ts-node
+```bash
+$ npm install ts-node --save-dev
+```
+2. package.json中配置typeorm-ts-node
+```json
+"scripts": {
+  "typeorm":"typeorm-ts-node-commonjs"
+}
+```
+
+3. 在项目根目录下创建`ormconfig.ts`文件，配置数据库连接信息
+```ts
+import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { Logs } from 'src/entities/logs/logs.entity'
+import { Profile } from 'src/entities/profile/profile.entity'
+import { Roles } from 'src/entities/roles/roles.entity'
+import { Users } from 'src/entities/users/users.entity'
+
+export default {
+  type: 'mysql',
+  host: '127.0.0.1',
+  port: 3306,
+  username: 'root',
+  password: '123456',
+  database: 'nest-test-db',
+  entities: [Users, Profile, Roles, Logs],
+  synchronize: true,
+  logging: false
+} as TypeOrmModuleOptions
+```
+
+4. 在`app.module.ts`中配置TypeORM
+```ts
+import ormconfig from '../ormconfig'
+@Module({
+  imports:[
+    TypeOrmModule.forRoot(ormconfig),
+  ]
+})
+```
+
+
+
+
+
+
+
 
 
 ```typescript
