@@ -368,89 +368,123 @@ bootstrap()
 
 ## 重构日志系统（logs模块）9-7
 
-### 1.logs.module.ts
+1.  日志`modules`创建
+```bash
+$ nest g module logs
+```
 
-```typescript
+2. 在`src/enum/log.enum.ts`文件中配置日志枚举
+```ts
+export enum LogConfig {
+  LOG_LEVEL = 'LOG_LEVEL',
+  LOG_ON = 'LOG_ON'
+}
+```
+
+3. 在.env文件中配置日志变量
+```bash
+LOG_LEVEL=info
+LOG_ON=true
+```
+
+4. 在`logs.module.ts`文件中配置日志
+```ts
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { utilities, WinstonModule } from 'nest-winston'
 import * as winston from 'winston'
-import { WinstonModule, WinstonModuleOptions, utilities } from 'nest-winston'
-import { Console } from 'winston/lib/winston/transports'
+import { LogConfig } from '../enum/log.enum'
 import * as DailyRotateFile from 'winston-daily-rotate-file'
-import { LoggerEnum } from 'src/enum/config.enum'
+const consoleConfig = () =>
+  new winston.transports.Console({
+    level: 'info', // 日志等级
+    format: winston.format.combine(
+      winston.format.timestamp(), // 添加时间戳
+      winston.format.json(), // 添加 json 格式
+      // 设置 nestLike 格式，此处设置为 NestJs-Log 应用名称
+      utilities.format.nestLike('NestJs-Log', {
+        colors: true, // 开启彩色输出
+        prettyPrint: true, // 开启美化输出
+        processId: true, // 开启进程 ID
+        appName: true // 开启应用名称
+      })
+    )
+  })
+const warnDailyRotateFileConfig = (configService: ConfigService) =>
+  new DailyRotateFile({
+    level: configService.get(LogConfig.LOG_LEVEL), // 设置日志级别，此处设置为 info 及以上级别的日志才会输出到文件
+    dirname: 'logs/winston-log', // 设置日志文件目录，此处设置为 logs 文件夹下的 winston-log 子文件夹
+    filename: `${configService.get(LogConfig.LOG_LEVEL)}-%DATE%.log`, // 设置日志文件名，此处设置为当前日期.log
+    datePattern: 'YYYY-MM-DD-HH', // 设置日志文件日期格式，此处设置为 YYYY-MM-DD
+    zippedArchive: true, // 设置日志文件是否压缩，此处设置为压缩
+    maxSize: '20m', // 设置日志文件最大大小，此处设置为 20MB
+    maxFiles: '14d', // 设置日志文件最大数量，此处设置为 14 天
+    format: winston.format.combine(
+      winston.format.timestamp(), // 添加时间戳
+      winston.format.simple() // 添加简单格式
+    )
+  })
+const infoDailyRotateFileConfig = () =>
+  new DailyRotateFile({
+    level: 'info', // 设置日志级别，此处设置为 info 及以上级别的日志才会输出到文件
+    dirname: 'logs/winston-log', // 设置日志文件目录，此处设置为 logs 文件夹下的 winston-log 子文件夹
+    filename: `info-%DATE%.log`, // 设置日志文件名，此处设置为当前日期.log
+    datePattern: 'YYYY-MM-DD-HH', // 设置日志文件日期格式，此处设置为 YYYY-MM-DD
+    zippedArchive: true, // 设置日志文件是否压缩，此处设置为压缩
+    maxSize: '20m', // 设置日志文件最大大小，此处设置为 20MB
+    maxFiles: '14d', // 设置日志文件最大数量，此处设置为 14 天
+    format: winston.format.combine(
+      winston.format.timestamp(), // 添加时间戳
+      winston.format.simple() // 添加简单格式
+    )
+  })
 
 @Module({
   imports: [
     WinstonModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const consoleTransPorts = new Console({
-          level: 'info',
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            utilities.format.nestLike()
-          )
-        })
-        const dailyTransPorts = new DailyRotateFile({
-          level: configService.get(LoggerEnum.LOG_LEVEL),
-          dirname: 'logs',
-          filename: 'app-%DATE%.log', // 文件名
-          datePattern: 'YYYY-MM-DD-HH', // 文件名格式
-          zippedArchive: true, // 压缩文件
-          maxSize: '20m', // 文件大小
-          maxFiles: '14d', // 保存文件天数 14 天
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.json()
-          )
-        })
-        const dailyInfoTransPorts = new DailyRotateFile({
-          level: configService.get(LoggerEnum.LOG_LEVEL),
-          dirname: 'logs',
-          filename: 'info-%DATE%.log', // 文件名
-          datePattern: 'YYYY-MM-DD', // 文件名格式
-          zippedArchive: true, // 压缩文件
-          maxSize: '20m', // 文件大小
-          maxFiles: '14d', // 保存文件天数 14 天
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.json()
-          )
-        })
-        return {
-          transports: [
-            consoleTransPorts,
-            ...(configService.get(LoggerEnum.LOG_ON)
-              ? [dailyInfoTransPorts, dailyTransPorts]
-              : [])
-          ]
-        } as WinstonModuleOptions
-      }
+      useFactory: (configService: ConfigService) => ({
+        // 自定义提供器
+        transports: [
+          // Console输出
+          consoleConfig(),
+          // warn文件输出
+          warnDailyRotateFileConfig(configService),
+          // info文件输出
+          infoDailyRotateFileConfig()
+        ]
+      })
     })
   ]
 })
 export class LogsModule {}
-
 ```
-### 2.main.ts
 
-```typescript
+5. 在`main.ts`中全局注册日志
+```ts
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
-app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
+// 1. 全局注册日志
+app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER)) 
+// 2. 全局注册异常过滤器
+app.useGlobalFilters(new AllExceptionsFilter(httpAdapter, app.get(WINSTON_MODULE_NEST_PROVIDER))) 
 ```
 
-### 3.controller使用
-
-```typescript
+6. 在控制器中使用日志
+```ts
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston' 
+import { Inject,LoggerService } from '@nestjs/common'
 constructor(
+  private userService: UserService,
   @Inject(WINSTON_MODULE_NEST_PROVIDER)
-  private readonly logger: LoggerService
+  private logger: LoggerService
 ) {
-  this.logger.log('用户模块初始化')
+  this.logger.log('log-日志测试')
 }
 ```
 
-## 模块私有异常捕获
+## 数据库代码重构：TypeORM与Nestjs整合
+
+
 
 ```typescript
 // controller.ts
