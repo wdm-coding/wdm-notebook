@@ -30,3 +30,5 @@
 ## no.6 字段联动改造地方
 1. 完善类改造内容 baseinfo --> baseinfo-fill.vue --> formItem --> improveClass.data.js
 2. 提升类改造内容 baseinfo --> baseinfo-fill.vue --> formItem --> promocjaTypu.data.js
+
+## `http://192.168.20.20:19040/#/login`
