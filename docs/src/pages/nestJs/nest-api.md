@@ -2,6 +2,14 @@
 
 <img src="/assets/nest/7.png" style="margin-top:15px">
 
+## 获取参数的注解
+1. `@Body() dto:any` 获取body参数
+2. `@Query() dto:any` 获取query查询参数
+3. `@Param('id') id: number` 获取params路径参数
+4. `@Headers() headers:any` 获取headers参数
+5. `@Req() request: any` 获取request对象
+
+
 ## Query
 
 ::: warning
