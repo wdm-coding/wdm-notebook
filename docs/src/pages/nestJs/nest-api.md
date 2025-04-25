@@ -189,105 +189,121 @@ findAll(query: UserQuery) {
 
 ::: tips 方案二：动态条件对象构建
 ```js
-findAll(query: UserQuery) {
-
-}
-```
-:::
-
-
-
-
-
-
-
-```js
-/user/list?page=1&limit=5&username=wdm&gender=1&roleId=2
-// 分页查询用户与角色关联查询
-const { limit, page, roleId, gender, username } = query
-const take = limit || 10
-const skip = ((page || 1) - 1) * take
-return this.userRepository.find({
-  select: {
-    id: true,
-    username: true,
-    roles: { name: true },
-    profile: { gender: true }
-  },
-  relations: ['roles', 'profile'], // 关联查询
-  where: {
-    username, // 用户名(当前表的字段)
-    roles: { id: roleId }, // 角色id (关联表roles的字段)
-    profile: { gender } // 性别(关联表profile的字段)
-  }, // 查询条件
-  skip, // 查询条数
-  take, // 查询条数
-  order: { id: 'DESC' } // 排序 DESC 倒序 ASC 升序
-})
-```
-
-## Query Builder 查询
-
-
-
-### conditionUtils 工具函数 (查询条件非空判断)
-
-
-```js
-
-conditionUtils是一个泛型函数，它使用<T>来指定queryBuilder的类型参数。
-T代表了你正在查询的实体（Entity）的类型。
-这允许conditionUtils函数在不知道具体实体类型的情况下，
-接受任何SelectQueryBuilder<T>类型的参数。
-
-import { SelectQueryBuilder } from 'typeorm'
-export const conditionUtils = <T>(
+// 1. unils文件中封装动态条件对象构建函数db.helper.ts
+import { ObjectLiteral, SelectQueryBuilder } from 'typeorm'
+export const conditionUtils = <T extends ObjectLiteral>(
   queryBuilder: SelectQueryBuilder<T>,
-  obj: Record<string, unknown>
+  record: Record<string, unknown>
 ) => {
-  Object.keys(obj).forEach((key) => {
-    if (obj[key]) {
-      queryBuilder.andWhere(`${key} = :${key}`, { [key]: obj[key] })
+  Object.keys(record).forEach(key => {
+    if (record[key]) {
+      queryBuilder.andWhere(`${key} = :${key}`, { [key]: record[key] })
     }
   })
   return queryBuilder
 }
-
+// 2. 调用封装好的函数
+  async findAll(query: UserQuery) {
+    const { username, roleId, gender, pageNum, pageSize } = query
+    // 分页参数，默认为第一页每页10条数据
+    const take = Number(pageSize) || 10 // 每页显示多少条数据
+    const skip = (Number(pageNum || 1) - 1) * take // 跳过多少条数据
+    // 1. 关联查询
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.profile', 'profile')
+      .leftJoinAndSelect('users.roles', 'roles')
+      // 2. 动态查询条件，如果条件为空则不添加该条件。(第一个查询条件为1=1，后续的条件为AND条件)
+      .where(username ? 'users.username LIKE :username' : '1=1', username ? { username: `%${username}%` } : {})
+    const searchList = {
+      'roles.id': roleId,
+      'profile.gender': gender
+    }
+    const list = conditionUtils<Users>(queryBuilder, searchList)
+    const total = await list.getCount() // 总条数
+    const result = await list.skip(skip).take(take).getMany()
+    // getRawMany()不直接支持分页，因为它只是执行原始SQL查询。
+    return {
+      pageSize: take, // 每页显示多少条数据
+      pageNum: Number(pageNum || 1), // 当前页码
+      total, // 总条数
+      list: result.map(item => ({
+        userId: item.id,
+        password: '',
+        address: item.profile?.address,
+        gender: item.profile?.gender,
+        phone: item.profile?.phone,
+        username: item.username,
+        roleName: item.roles.map(role => role.name).join(','),
+        roleIds: item.roles.map(role => role.id).join(',')
+      }))
+    }
+  }
 ```
+:::
 
-### 查询示例
+::: warning 注意
+1. getRawMany()方法本身不直接支持分页，因为它只是简单地执行SQL查询并返回原始结果。相比之下，getMany()方法在内部处理了分页逻辑，这是通过调用take()和skip()方法实现的。
+2. 字段唯一性设置：在entity中，如果想让某个字段唯一，可以使用`unique: true`约束。
+```ts
+@Column({ type: 'varchar', length: 255, unique: true })
+username: string
+```
+:::
 
-```js
-// 创建QueryBuilder对象
-const qb = this.userRepository.createQueryBuilder('user')
-const total = await qb.getCount() // 计算总数
-qb.innerJoinAndSelect('user.roles', 'roles') // 关联查询roles表
-qb.innerJoinAndSelect('user.profile', 'profile') // 关联查询profile表
-// 查询条件
-const queryBuilder = conditionUtils(qb, {
-  'user.username': username,
-  'roles.id': roleId,
-  'profile.gender': gender
-})
-// 查询结果筛选出部分字段
-queryBuilder.select([
-  'user.id as id',
-  'user.username as username',
-  'roles.name as roleName',
-  'profile.gender as gender',
-  'profile.photo as photo',
-  'profile.address as address'
-])
-// 分页查询
-return {
-  list: await queryBuilder
-    .skip(skip)
-    .take(take)
-    .orderBy('user.id', 'DESC')
-    .getRawMany(),
-  total
+## 创建typeorm的异常过滤器
+1. 在filters目录下创建`typeorm.filter.ts`文件
+```bash
+$ nest g f filters/typeorm --flat --no-spec
+```
+2. 编写异常过滤器代码
+```ts
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
+import { QueryFailedError, TypeORMError } from 'typeorm'
+
+@Catch(TypeORMError)
+export class TypeormFilter implements ExceptionFilter {
+  catch(exception: TypeORMError, host: ArgumentsHost) {
+    const ctx = host.switchToHttp()
+    const response = ctx.getResponse()
+    let msg = exception.message
+    if (exception instanceof QueryFailedError) {
+      const errno = exception.driverError?.errno || null
+      switch (errno) {
+        case 1062: // 唯一约束冲突
+          msg = `字段重复，请检查数据是否已存在`
+          break
+        default:
+          msg = exception.message || '数据库查询异常'
+          break
+      }
+    }
+    response.status(500).json({
+      code: -1,
+      msg,
+      data: null
+    })
+  }
 }
 ```
+
+3. 单个模块中使用异常过滤器
+```ts
+import { TypeormFilter } from 'src/filters/typeorm.filter'
+@UseFilters(new TypeormFilter())
+```
+
+
+
+
+
+
+
+
+
+
+
+
 ## remove 与 delete 区别
 
 <img src="/assets/nest/9.png" style="margin-top:15px">
