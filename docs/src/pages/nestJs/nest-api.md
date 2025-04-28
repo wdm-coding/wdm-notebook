@@ -305,9 +305,41 @@ import { TypeormFilter } from 'src/filters/typeorm.filter'
 
 
 ## remove 与 delete 区别
+1. `remove()` 方法是 TypeORM 提供的一个便捷方法来删除实体。当你调用 `remove(entity)` 时，TypeORM 会先从数据库中检索该实体的完整状态（包括关联的子实体），然后将其标记为删除，并最终执行实际的 DELETE 操作。这意味着在调用 `remove()` 方法时，TypeORM 会确保所有相关的数据都被正确地处理和删除。
+2. `delete()` 方法则是直接执行 SQL DELETE 语句来删除记录。当你使用 `delete(entity)` 时，TypeORM 会生成一个 DELETE 语句并立即执行它，而不会检索实体的完整状态或处理任何关联的子实体。这意味着如果你在调用 `delete()` 方法时，你需要确保你已经正确地处理了所有关联的子实体。
+3. `remove()`方法会触发实体生命周期钩子，例如 `beforeRemove` 和 `afterRemove`。这对于在删除操作前后执行一些额外的逻辑非常有用，比如清理缓存、发送通知等。
 
-<img src="/assets/nest/9.png" style="margin-top:15px">
+```ts
+// entities\users\users.entity.ts
+// 钩子函数 装饰器，告诉 TypeORM 这个函数是一个钩子函数。
+@AfterInsert() // 数据插入后的钩子函数。
+afterInsert() {
+  // 执行一些操作。
+  console.log('afterInsert')
+}
+
+@AfterRemove() // 数据删除后的钩子函数。
+afterRemove() {
+  // 执行一些操作。
+  console.log('afterRemove')
+}
+```
 
 ## update
+
+1. 单模型更新：`this.userRepository.update(id, user)`
+2. 联合更新:在实体类中设置`@OneToOne(() => Profile, { cascade: true })`
+
+```ts
+// 1. 查询用户信息
+const temProfile = await this.findProfile(id)
+if (!temProfile) {
+  throw new Error('User not found')
+}
+// 2. 合并更新数据
+const newUser = this.userRepository.merge(temProfile, user)
+// 3. 保存更新后的数据
+return this.userRepository.save(newUser)
+```
 
 
