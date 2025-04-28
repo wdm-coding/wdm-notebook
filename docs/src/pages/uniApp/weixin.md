@@ -90,3 +90,11 @@ wx.previewMedia({
   }
 })
 ```
+
+## 微信小程序获取胶囊按钮位置
+
+```js
+const menuButtonInfo = wx.getMenuButtonBoundingClientRect()
+const {width,height,top,left,right,bottom} = menuButtonInfo
+```
+
