@@ -342,4 +342,20 @@ const newUser = this.userRepository.merge(temProfile, user)
 return this.userRepository.save(newUser)
 ```
 
+::: tip cascade的用法
+1. `cascade: true` 表示级联操作，即在执行某个操作时（如删除、更新等），自动对关联的实体也进行相应的操作。
+2. `cascade: ['update', 'remove', 'insert', 'soft-remove']` 表示对更新、删除、插入和软删除操作都进行级联。
+:::
+
+::: tip 根据id组成的数组批量查询数据
+```ts
+const ids = [1, 2, 3]
+const users = await this.userRepository.find({
+  where: { id: In(ids) } // 使用In查询条件来匹配id数组中的值
+})
+:::
+
+
+
+
 
