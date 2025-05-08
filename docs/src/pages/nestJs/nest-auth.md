@@ -368,11 +368,114 @@ export class AuthModule {}
 ```bash
 $ npm install argon2
 ```
+2. 注册接口中使用argon2加密密码
+```ts
+import * as argon2 from 'argon2'
+async signUp(username: string, password: string) {
+  const user = await this.userService.findOneByName(username)
+  if (user) throw new ForbiddenException('用户已存在,请直接登录')
+  // 密码加密
+  const hashPassword = await argon2.hash(password)
+  const userTmp = await this.userService.registerUser({ username, password: hashPassword })
+  return userTmp
+}
+```
+3. 登录接口中使用argon2验证密码
+```ts
+async signIn(username: string, password: string) {
+  const user = await this.userService.findOneByName(username)
+  if (!user) throw new ForbiddenException('用户名不存在')
+  // 用户密码校验
+  const isPasswordValid = await argon2.verify(user.password, password)
+  if (!isPasswordValid) throw new UnauthorizedException('用户名或密码错误')
+  // 生成JWT
+  const result = await this.jwtService.signAsync({
+    username,
+    sub: user.id
+  })
+  return result
+}
+```
 
+## 拦截器
+1. 创建拦截器
+```bash
+$ nest g interceptor interceptors/serialize --no-spec
+```
+2. 编写拦截器逻辑
+```ts
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common'
+import { map, Observable } from 'rxjs'
+@Injectable()
+export class SerializeInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    console.log('拦截器执行之前')
+    return next.handle().pipe(
+      map(data => {
+        console.log('拦截器执行之后')
+        return data
+      })
+    )
+  }
+}
+```
+3. 局部使用拦截器
+```ts
+@UseInterceptors(SerializeInterceptor)
+async getAllUsers(@Query() query: UserQuery): Promise<any> {
+  const result = await this.userService.findAll(query)
+  return {
+    code: 0,
+    msg: 'success',
+    data: result
+  }
+}
+```
+4. 全局使用拦截器
+```ts
+app.useGlobalInterceptors(new SerializeInterceptor())
+```
 
-
-
-
-
-
-
+5. 拦截器序列化
+```ts
+// 1. 在entity中定义排除字段
+@Exclude() // 排除属性装饰器，告诉 TypeORM 这个属性不应该被序列化。
+password: string
+// 2. 在拦截器中使用class-transformer库的plainToClass方法进行序列化
+@UseInterceptors(ClassSerializerInterceptor)
+```
+6. 自定义拦截器序列化
++ 在拦截器中使用class-transformer库的plainToClass方法进行序列化
+```ts
+export class SerializeInterceptor implements NestInterceptor {
+  constructor(private dto: any) {}
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req = context.switchToHttp().getRequest()
+    console.log('拦截器执行之前')
+    return next.handle().pipe(
+      map(data => {
+        console.log('拦截器执行之后')
+        const result = plainToInstance(this.dto, data, {
+          excludeExtraneousValues: true // 排除掉多余的值,必须设置Exporse或者Exclude
+        })
+        return result
+      })
+    )
+  }
+}
+```
+7. 创建decotator/serialize.decotator.ts装饰器
+```ts
+import { UseInterceptors } from '@nestjs/common'
+import { SerializeInterceptor } from '../interceptors/serialize.interceptor'
+interface ClassConstructor {
+  new (...args: any[]): any
+}
+export function Serialize(dto: ClassConstructor) {
+  return UseInterceptors(new SerializeInterceptor(dto))
+}
+```
+8. 使用装饰器
+```ts
+@Serialize(UserDto)
+```
