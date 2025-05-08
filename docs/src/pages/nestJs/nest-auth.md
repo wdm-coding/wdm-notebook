@@ -180,7 +180,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
   validate(payload: any) {
-    // 验证token是否有效，并返回用户信息，此处仅为演示，实际项目中应该从数据库中查询用户信息并返回
+    // 验证token是否有效，并返回用户信息
     return payload
   }
 }
@@ -261,9 +261,113 @@ async getAllUsers(@Query() query: UserQuery): Promise<any> {
 }
 ```
 
-9. 11.13 鉴权守卫
+## AuthGuard 守卫
 
+### 自定义守卫
+1. 创建guard守卫文件
+```bash
+$ nest g guard guards/admin --no-spec
+```
+2. 在`guards/admin.guard.ts`中编写逻辑
+```ts
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
+import { UserService } from '../user/user.service'
+import { Users } from '../entities/users/users.entity'
 
+@Injectable()
+export class AdminGuard implements CanActivate {
+  constructor(private userService: UserService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // 1. 获取请求对象
+    const req = context.switchToHttp().getRequest()
+    // 2. 获取请求头中的token, 解析token, 获取其中的用户信息, 判断用户是否为拥有角色权限
+    const user = (await this.userService.findOneByName(req.headers['username'])) as Users
+    if (user.roles.find(role => role.code === 'admin')) {
+      // 如果用户是管理员，则返回true，否则返回false。
+      return true
+    } else {
+      return false
+    }
+  }
+}
+```
+3. 在`user.controller.ts`中导入守卫
+```ts
+// 查询所有用户
+@Get('list')
+// 1. 多个装饰器的执行顺序是从下到上
+// @UseGuards(AdminGuard)
+// @UseGuards(AuthGuard('jwt'))
+// 2. 装饰器传递多个守卫，执行顺序是从前往后
+@UseGuards(AdminGuard, AuthGuard('jwt'))
+async getAllUsers(@Query() query: UserQuery): Promise<any> {
+  const result = await this.userService.findAll(query)
+  return {
+    code: 0,
+    msg: 'success',
+    data: result
+  }
+}
+```
+
+::: warning 装饰器执行顺序
+1. 多个装饰器的执行顺序是从下到上
++ `@UseGuards(AdminGuard)`
++ `@UseGuards(AuthGuard('jwt'))`
+2. 装饰器传递多个守卫，执行顺序是从前往后
++ `@UseGuards(AdminGuard, AuthGuard('jwt'))`
+:::
+
+### 全局守卫（jwt守卫）
+1. 创建`guards/jwt.guard.ts`文件
+```ts
+import { AuthGuard } from '@nestjs/passport'
+
+export class JwtGuard extends AuthGuard('jwt') {
+  constructor() {
+    super()
+  }
+}
+```
+2. 在`controll`中使用全局守卫
+```ts
+@Controller('user')
+@UseFilters(new TypeormFilter())
+@UseGuards(JwtGuard)
+```
+3. 在`main.ts`中使用全局守卫
+```ts
+// 无法使用其他模块的服务
+app.useGlobalGuards(new JwtGuard())
+```
+
+4. 在`auth.module.ts`中使用全局守卫
+```ts
+@Module({
+  imports: [],
+  controllers: []
+  providers: [{
+    provide: APP_GUARD,
+    useClass: JwtGuard
+  }], // 注入策略服务
+  exports: []
+})
+export class AuthModule {}
+```
+
+::: tip nestjs中一些全局装饰器
+1. 全局过滤器`useGlobalFilters()`
+2. 全局守卫`useGlobalGuards()`
+3. 全局拦截器`useGlobalInterceptors()`
+4. 全局管道`useGlobalPipes()`
+5. 全局Module`@Global()`
+:::
+
+## 敏感信息加密（argon2）
+1. 安装argon2库
+```bash
+$ npm install argon2
+```
 
 
 
