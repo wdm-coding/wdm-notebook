@@ -14,7 +14,49 @@
 $ nest g resource roles --no-spec
 # 选择REST 
 ```
-2. migration:create 创建迁移文件
+2. nest创建menus增删改查模块
+```bash
+$ nest g resource menus --no-spec
+# 选择REST 
+```
+3. 编辑menus的Entity文件
+```ts
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Roles } from '../roles/roles.entity'
+@Entity()
+export class Menus {
+  @PrimaryGeneratedColumn()
+  id: number
+  @Column()
+  name: string
+  @Column()
+  path: string
+  @Column()
+  icon: string
+  @Column()
+  order: number
+  @Column()
+  acl: string
+  // 多对多关系，一个菜单可以属于多个角色，一个角色可以拥有多个菜单。
+  @ManyToMany(() => Roles, roles => roles.menus)
+  @JoinTable({ name: 'role_menu' })
+  roles: Roles[]
+}
+```
+4. 编辑roles的Entity文件
+```ts
+@ManyToMany(() => Menus, menus => menus.roles) // 关系装饰器，告诉 TypeORM 这个属性是多对多关系。
+menus: Menus[] // 菜单字段
+```
+5. 执行迁移文件，更新数据库
+```bash
+$ npm run migration:generate menus
+```
+
+
+
+## 通过 migration 更新数据库
+1. migration:create 创建迁移文件
 ```bash
 $ npm run migration:create src/migrations/init
 ```
