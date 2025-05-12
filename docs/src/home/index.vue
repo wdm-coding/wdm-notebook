@@ -75,6 +75,11 @@ function  jumpHandle(path) {
           <n-button type="primary">Echarts图表</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/flutter/index')">
+          <n-button type="primary">Flutter</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>

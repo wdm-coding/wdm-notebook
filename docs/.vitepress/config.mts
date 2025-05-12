@@ -170,6 +170,14 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/flutter/':[
+        {
+          text: 'Flutter',
+          items: [
+            { text: 'flutter基础', link: '/pages/flutter/' }
+          ]
+        }
+      ],
     },
     socialLinks: [
       {
