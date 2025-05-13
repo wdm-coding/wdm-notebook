@@ -131,10 +131,77 @@ $ npm install @casl/ability --save
 2. 下载 vscode 插件`quokka.js`，用于测试代码片段
  + 安装插件后，在代码片段中输入`quokka`即可测试
 
+3. 在auth模块下新建`casl-ability.service.ts`文件，定义权限工厂
+```ts
+import { Injectable } from '@nestjs/common'
+import { AbilityBuilder, createMongoAbility } from '@casl/ability'
+@Injectable()
+export class CaslAbilityService {
+  constructor() {}
+  forRoot() {
+    const { can, cannot, build } = new AbilityBuilder(createMongoAbility)
+    const ability = build({
+      detectSubjectType: item => item.constructor.name
+    })
+    ability.can('manage', 'all')
+    return ability
+  }
+}
+```
+4. 在decotator目录下新建`casl-ability.decorator.ts`文件，定义权限装饰器
+```ts
+import { AnyMongoAbility, InferSubjects } from '@casl/ability'
+import { SetMetadata } from '@nestjs/common'
+import { Action } from '../enum/action.enum'
 
+export enum CHECK_POLICIES_KEY {
+  HANDLER = 'CHECK_POLICIES_HANDLER',
+  CAN = 'CHECK_POLICIES_CAN',
+  CANNOT = 'CHECK_POLICIES_CANNOT'
+}
+type PolicyHandlerCallback = (ability: AnyMongoAbility) => boolean
+// 代码解释：这段代码定义了三个装饰器，用于在NestJS应用程序中实现基于能力的授权检查。这些装饰器允许你为特定的路由处理器、能力或禁止操作指定一组策略处理程序（handlers）。
+// 作用 1. CheckPolices: 允许你为特定的路由处理器指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
+export const CheckPolices = (...handlers: PolicyHandlerCallback[]) => SetMetadata(CHECK_POLICIES_KEY.HANDLER, handlers)
+// 作用 2. Can: 允许你为特定的能力指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
 
+export const Can = (action: Action, subject: InferSubjects<any>, conditions: any) =>
+  // 设置元数据，键为CHECK_POLICIES_KEY.CAN
+  SetMetadata(
+    CHECK_POLICIES_KEY.CAN,
+    // 使用一个函数作为值，该函数接受一个AnyMongoAbility类型的参数ability
+    (ability: AnyMongoAbility) =>
+      // 调用ability的can方法，传入action、subject和conditions参数，返回结果
+      ability.can(action, subject, conditions)
+  )
+// 作用 3. Cannot: 允许你为特定的禁止操作指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
+export const Cannot = (action: Action, subject: InferSubjects<any>, conditions: any) =>
+  // 设置元数据，键为CHECK_POLICIES_KEY.CAN
+  SetMetadata(
+    CHECK_POLICIES_KEY.CAN,
+    // 返回一个函数，该函数接收一个AnyMongoAbility类型的参数
+    (ability: AnyMongoAbility) =>
+      // 调用ability对象的cannot方法，传入action、subject和conditions参数
+      ability.cannot(action, subject, conditions)
+  )
+```
 
+5. 在enum目录下新建`action.enum.ts`文件，定义操作枚举
+```ts
+export enum Action {
+  Manage = 'manage', // 管理权限
+  Create = 'create', // 创建权限
+  Read = 'read', // 读取权限
+  Update = 'update', // 更新权限
+  Delete = 'delete' // 删除权限
+}
+```
 
+6. 在guards目录下新建`casl-ability.guard.ts`文件，定义权限守卫
+```bash
+$ nest g guard guards/casl-ability --no-spec
+```
++ 12.15 更新中...
 
 
 
