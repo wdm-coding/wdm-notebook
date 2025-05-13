@@ -123,6 +123,13 @@ export class RoleGuard implements CanActivate {
 
 ## 方案二、ACL权限控制模块(基于策略的权限控制)
 
+1. 下载`casl-ability`包
+```bash
+$ npm install @casl/ability --save
+```
+
+2. 下载 vscode 插件`quokka.js`，用于测试代码片段
+ + 安装插件后，在代码片段中输入`quokka`即可测试
 
 
 
