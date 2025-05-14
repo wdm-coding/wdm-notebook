@@ -128,65 +128,70 @@ export class RoleGuard implements CanActivate {
 $ npm install @casl/ability --save
 ```
 
-2. 下载 vscode 插件`quokka.js`，用于测试代码片段
- + 安装插件后，在代码片段中输入`quokka`即可测试
-
-3. 在auth模块下新建`casl-ability.service.ts`文件，定义权限工厂
+2. 在auth模块下新建`casl-ability.service.ts`文件，定义权限工厂
 ```ts
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 import { AbilityBuilder, createMongoAbility } from '@casl/ability'
+import { UserService } from '../user/user.service'
+import getEntities from '../utils/getEntities'
 @Injectable()
 export class CaslAbilityService {
-  constructor() {}
-  forRoot() {
-    const { can, cannot, build } = new AbilityBuilder(createMongoAbility)
+  constructor(private userService: UserService) {}
+  async forRoot(username: string) {
+    const { can, build } = new AbilityBuilder(createMongoAbility) // CASL 提供的工具，用于构建 Ability 对象。
+    const user = await this.userService.findOneByName(username)
+    if (!user) throw new ForbiddenException('用户不存在')
+    user.roles.forEach(role => {
+      role.menus.forEach(menu => {
+        menu.acl.split(',').forEach(action => {
+          can(action, getEntities(menu.path))
+        })
+      })
+    })
     const ability = build({
+      // 生成 Ability 对象 表示用户的权限 并传入配置对象，其中 detectSubjectType 是一个函数，用于确定主体类型。
       detectSubjectType: item => item.constructor.name
     })
-    ability.can('manage', 'all')
+    // 在守卫中使用 ability 对象来检查权限等操作。例如，在守卫中可以使用 can 方法来判断用户是否有执行某个操作的权限。
     return ability
   }
 }
 ```
-4. 在decotator目录下新建`casl-ability.decorator.ts`文件，定义权限装饰器
+3. 在decotator目录下新建`casl.decorator.ts`文件，定义权限装饰器
 ```ts
-import { AnyMongoAbility, InferSubjects } from '@casl/ability'
 import { SetMetadata } from '@nestjs/common'
-import { Action } from '../enum/action.enum'
+import { AnyMongoAbility, InferSubjects } from '@casl/ability'
+import { Action } from 'src/enum/action.enum'
 
 export enum CHECK_POLICIES_KEY {
-  HANDLER = 'CHECK_POLICIES_HANDLER',
-  CAN = 'CHECK_POLICIES_CAN',
-  CANNOT = 'CHECK_POLICIES_CANNOT'
+  HANDLER = 'CHECK_POLICIES_HANDLER', // 自定义的权限监察逻辑处理函数
+  CAN = 'CHECK_POLICIES_CAN', // 表示用户被允许执行某个操作(ability.can)
+  CANNOT = 'CHECK_POLICIES_CANNOT' // 表示用户不被允许执行某个操作(ability.cannot)
 }
-type PolicyHandlerCallback = (ability: AnyMongoAbility) => boolean
-// 代码解释：这段代码定义了三个装饰器，用于在NestJS应用程序中实现基于能力的授权检查。这些装饰器允许你为特定的路由处理器、能力或禁止操作指定一组策略处理程序（handlers）。
-// 作用 1. CheckPolices: 允许你为特定的路由处理器指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
+// 回调函数类型，接收一个 ability 对象（CASL 的权限对象），返回一个布尔值，表示权限检查的结果。
+export type PolicyHandlerCallback = (ability: AnyMongoAbility) => boolean
+// 自定义的权限检查逻辑处理函数类型，可以是单个回调函数或者一个回调函数的数组。
+// @CheckPolices 装饰器接收一个或多个回调函数，并将其存储在 CHECK_POLICIES_KEY.HANDLER 中。
+export type CaslHandlerType = PolicyHandlerCallback[]
+// SetMetadata 将这些回调函数存储到 CHECK_POLICIES_KEY.HANDLER 中
 export const CheckPolices = (...handlers: PolicyHandlerCallback[]) => SetMetadata(CHECK_POLICIES_KEY.HANDLER, handlers)
-// 作用 2. Can: 允许你为特定的能力指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
+// 定义了一个装饰器 Can，用于将 ability.can 的权限检查逻辑绑定到元数据。
 
-export const Can = (action: Action, subject: InferSubjects<any>, conditions: any) =>
-  // 设置元数据，键为CHECK_POLICIES_KEY.CAN
-  SetMetadata(
-    CHECK_POLICIES_KEY.CAN,
-    // 使用一个函数作为值，该函数接受一个AnyMongoAbility类型的参数ability
-    (ability: AnyMongoAbility) =>
-      // 调用ability的can方法，传入action、subject和conditions参数，返回结果
-      ability.can(action, subject, conditions)
-  )
-// 作用 3. Cannot: 允许你为特定的禁止操作指定一组策略处理程序。这些处理程序将在执行请求之前被调用，以确定用户是否有权访问该资源。
-export const Cannot = (action: Action, subject: InferSubjects<any>, conditions: any) =>
-  // 设置元数据，键为CHECK_POLICIES_KEY.CAN
-  SetMetadata(
-    CHECK_POLICIES_KEY.CAN,
-    // 返回一个函数，该函数接收一个AnyMongoAbility类型的参数
-    (ability: AnyMongoAbility) =>
-      // 调用ability对象的cannot方法，传入action、subject和conditions参数
-      ability.cannot(action, subject, conditions)
-  )
+/**
+ *
+ * @param action 权限动作，例如 'read', 'create' 等。
+ * @param subject 权限对象，例如一个模型类或者具体的实例。
+ * @param conditions 额外的条件，用于更细粒度的权限控制。例如，在某些情况下你可能需要根据用户的角色或特定的属性来决定是否允许执行某个操作。这些条件会被传递给 ability.can 方法作为第三个参数。
+ * @returns 使用 SetMetadata 将 ability.can 的逻辑存储到 CHECK_POLICIES_KEY.CAN 中
+ */
+export const Can = (action: Action, subject: InferSubjects<any>, conditions?: any) =>
+  SetMetadata(CHECK_POLICIES_KEY.CAN, (ability: AnyMongoAbility) => ability.can(action, subject, conditions))
+
+export const Cannot = (action: Action, subject: InferSubjects<any>, conditions?: any) =>
+  SetMetadata(CHECK_POLICIES_KEY.CANNOT, (ability: AnyMongoAbility) => ability.cannot(action, subject, conditions))
 ```
 
-5. 在enum目录下新建`action.enum.ts`文件，定义操作枚举
+4. 在enum目录下新建`action.enum.ts`文件，定义操作枚举
 ```ts
 export enum Action {
   Manage = 'manage', // 管理权限
@@ -197,11 +202,87 @@ export enum Action {
 }
 ```
 
-6. 在guards目录下新建`casl-ability.guard.ts`文件，定义权限守卫
+5. 在guards目录下新建`casl-ability.guard.ts`文件，定义权限守卫
 ```bash
 $ nest g guard guards/casl-ability --no-spec
 ```
-+ 12.15 更新中...
+
+```ts
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
+import { CaslHandlerType, CHECK_POLICIES_KEY, PolicyHandlerCallback } from '../decotator/casl.decorator'
+import { CaslAbilityService } from 'src/auth/casl-ability.service'
+
+@Injectable()
+export class CaslGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector, // 用于获取装饰器上的数据
+    private caslAbilityService: CaslAbilityService // 用于获取当前用户的权限
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // handlers‌：读取 CHECK_POLICIES_KEY.HANDLER 对应的自定义权限检查逻辑
+    const handlers = this.reflector.getAllAndMerge<PolicyHandlerCallback[]>(CHECK_POLICIES_KEY.HANDLER, [
+      context.getHandler(),
+      context.getClass()
+    ])
+    // canHandlers：读取 CHECK_POLICIES_KEY.CAN 对应的权限检查逻辑
+    const canHandlers = this.reflector.getAllAndMerge<any[]>(CHECK_POLICIES_KEY.CAN, [
+      context.getHandler(),
+      context.getClass()
+    ]) as CaslHandlerType
+    // cannotHandlers：读取 CHECK_POLICIES_KEY.CANNOT 对应的权限检查逻辑
+    const cannotHandlers = this.reflector.getAllAndMerge<any[]>(CHECK_POLICIES_KEY.CANNOT, [
+      context.getHandler(),
+      context.getClass()
+    ]) as CaslHandlerType
+    // 判断，如果用户未设置上述的任何权限，那么就直接返回true
+    if (handlers.length === 0 && canHandlers.length === 0 && cannotHandlers.length === 0) return true
+    const req = context.switchToHttp().getRequest()
+    if (!req.user) throw new ForbiddenException('用户不存在')
+    // 获取当前用户的权限 调用 CaslAbilityService 的 forRoot 方法，根据用户的用户名生成一个 Ability 对象，表示用户的权限。
+    const ability = await this.caslAbilityService.forRoot(req.user.username)
+    let flag = true
+    // 如果 handlers 存在，遍历每个回调函数，传入 ability 对象，检查是否都返回 true。
+    if (handlers) {
+      flag = flag && handlers.every(handler => handler(ability))
+    }
+    // 如果 flag 为 true，并且 canHandlers 存在，再次遍历每个回调函数，传入 ability 对象，检查是否都返回 true。
+    if (flag && canHandlers) {
+      flag = flag && canHandlers.every(handler => handler(ability))
+    }
+    // 如果 flag 为 true，并且 cannotHandlers 存在，再次遍历每个回调函数，传入 ability 对象，检查是否都返回 false。
+    if (flag && cannotHandlers) {
+      flag = flag && cannotHandlers.every(handler => handler(ability))
+    }
+    return flag
+  }
+}
+```
+7. 在controller目录下使用定义的装饰器
+```ts
+@UseGuards(JwtGuard, CaslGuard)
+@CheckPolices(ability => ability.can(Action.Read, Logs))
+@Can(Action.Read, Logs)
+```
+
+::: tip CASL 权限管理的流程
+1. CaslAbilityService 负责根据用户信息构建权限对象。类似于
+```js
+[
+  { action: 'read', subject: [class Users] },
+  { action: 'create', subject: [class Users] },
+  { action: 'delete', subject: [class Users] },
+  { action: 'update', subject: [class Users] },
+  { action: 'manage', subject: [class Users] },
+  { action: 'read', subject: [class Logs] },
+  { action: 'create', subject: [class Logs] },
+  { action: 'delete', subject: [class Logs] }
+]
+```
+2. CaslGuard 负责根据CaslAbilityService构建的权限对象，判断当前用户是否有对应的操作权限来进行守卫。
+3. CaslDecorator 负责在控制器或者方法上定义权限规则。(CheckPolices, Can, Cannot)
+:::
 
 
 
