@@ -120,6 +120,28 @@ export class RoleGuard implements CanActivate {
   }
 }
 ```
+4. 在controller中使用角色装饰器
+```ts
+// 查询所有菜单列表
+@Get('list')
+@Roles(Role.USER)
+findAll() {
+  return this.menusService.findAll()
+}
+```
+
+::: tip RABC 权限管理的流程
+1. 定义角色枚举
+```js
+{
+  ADMIN = 'admin', // 管理员
+  USER = 'user', // 用户
+  GUEST = 'guest' // 游客
+}
+```
+2. RoleGuard 负责根据获取装饰器中的数据，判断当前用户是否有对应的操作权限来进行守卫。
+3. Roles装饰器 负责在控制器或者方法上定义权限规则。(@Roles(Role.Admin))
+:::
 
 ## 方案二、ACL权限控制模块(基于策略的权限控制)
 
