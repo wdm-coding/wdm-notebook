@@ -13,3 +13,14 @@ git checkout -b master origin/master
 git merge --squash develop
 git  checkout --theirs ./src （批量解决src文件的冲突）
 ```
+
+```bash
+git checkout master
+git pull
+git merge --squash develop
+git checkout --theirs ./src
+git add .
+git commit -m "合并develop分支"
+git push
+git checkout develop
+```
