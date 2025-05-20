@@ -80,6 +80,11 @@ function  jumpHandle(path) {
           <n-button type="primary">Flutter</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/uiComponents/virtual-list')">
+          <n-button type="primary">前端特殊组件</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>
