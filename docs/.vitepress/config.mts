@@ -178,6 +178,14 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/uiComponents/':[
+        {
+          text: '前端特殊组件',
+          items: [
+            { text: '虚拟列表', link: '/pages/uiComponents/virtual-list' }
+          ]
+        }
+      ],
     },
     socialLinks: [
       {
