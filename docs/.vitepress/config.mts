@@ -37,7 +37,8 @@ export default defineConfig({
             { text: 'dom-bom', link: '/pages/web/dom-bom' },
             { text: 'js事件', link: '/pages/web/js-events' },
             { text: 'AJAX', link: '/pages/web/ajax' },
-            { text: 'Axios', link: '/pages/web/axios' }
+            { text: 'Axios', link: '/pages/web/axios' },
+            { text: 'Webpack', link: '/pages/web/webpack' }
           ]
         }
       ],
