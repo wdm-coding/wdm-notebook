@@ -38,7 +38,7 @@ npm install -D webpack-dev-server
 
 ## 配置webpack
 
-### 1. 拆分配置与合并 通过`webpack-merge`插件合并common,dev,prod配置文件
+### 拆分配置与合并 通过`webpack-merge`插件合并common,dev,prod配置文件
 ```js
 const webpackCommonConf = require('./webpack.common');
 const {merge} = require('webpack-merge');
@@ -54,6 +54,10 @@ module.exports = merge(webpackCommonConf,{
 module.exports = merge(webpackCommonConf,{
   // 生产环境配置
 });
+```
+### 1.上下文配置
+```js
+context: path.resolve(__dirname, '../'), // 默认是当前目录，这里改成项目根目录
 ```
 ### 2.入口配置
 ```js
