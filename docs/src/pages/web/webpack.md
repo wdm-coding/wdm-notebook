@@ -1,8 +1,6 @@
 # [Webpacks](https://webpack.docschina.org/)
 
-## 使用webpaack打包一个前端原生项目
-
-### 初始化项目
+## 使用webpaack打包一个前端ji基础原生项目
 
 1. 建立项目文件夹，在里面初始化npm环境
 ```bash
@@ -24,22 +22,52 @@ npm install webpack webpack-cli --save-dev
 # 安装css-loader和style-loader，用于加载CSS文件
 # 安装html-webpack-plugin，用于生成HTML文件
 npm install css-loader style-loader html-webpack-plugin --save-dev
-# 安装webpack-dev-server 用于启动一个本地开发服务器
+```
+8. 启动本地开发服务器 安装webpack-dev-server
+```bash
 npm install -D webpack-dev-server
 ```
-8. 配置运行脚本
+9. 配置`package.json`运行脚本
 ```json
 "scripts": {
-  "dev": "webpack serve --config ./webpack-config/config-base/webpack.config.js"
+  "dev": "webpack serve --config ./webpack-config/config-base/webpack.config.js",
+  "build:dev": "webpack --config ./webpack-config/config-base/webpack.dev.js",
+  "build:prod": "webpack --config ./webpack-config/config-base/webpack.prod.js"
 }
 ```
 
 ## 配置webpack
 
 ### 1. 拆分配置与合并 通过`webpack-merge`插件合并common,dev,prod配置文件
-
-### 2. 启动本地开发服务器 安装webpack-dev-server
-
+```js
+const webpackCommonConf = require('./webpack.common');
+const {merge} = require('webpack-merge');
+// webpack.common.js
+module.exports = {
+  // 公共配置
+}
+// webpack.dev.js
+module.exports = merge(webpackCommonConf,{
+  // 开发环境配置
+});
+// webpack.prod.js
+module.exports = merge(webpackCommonConf,{
+  // 生产环境配置
+});
+```
+### 2.入口配置
+```js
+entry: {
+  entry: './src/main.js', // 默认 src/index.js
+}
+```
+### 3.输出配置
+```js
+output: {
+  path: path.resolve(__dirname, '../public'), // 打包后的文件存放的地方
+  filename: 'bundle.[contenthash].js', // 打包后的文件名(hash是打包后生成的唯一标识，contenthash是根据文件内容生成的hash值)
+},
+```
 
 2. 
 ## 一、基础核心
