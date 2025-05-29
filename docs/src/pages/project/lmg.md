@@ -67,3 +67,8 @@ ZBM-P-20250527-19024704
 
 设置账户：ts_msg
 密码：azxc@s145$
+
+
+
+<!-- this.url = `https://dev.silkiip.com/api/client/chatgml/sse/chat?prompt=1` -->
+<!-- this.url = `https://test.gslmg.com/dc/api/message/subscribe?userId=${params.userId}&userType=${params.userType}` -->
