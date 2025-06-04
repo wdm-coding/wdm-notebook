@@ -3,7 +3,22 @@
 
 1. path：输出目录的绝对路径。
 2. filename：入口 chunk 的名称。
+```js
+module.exports = {
+  entry: {
+    main:{
+      import:'/src/main.js',
+      dependOn:'lodash'
+    },
+    lodash:'lodash',
+  }
+  output: {
+    filename: '[name].[contenthash].js', // name 对应 entry 的 key
+  }
+}
+```
 3. publicPath：所有的资源都会引用 publicPath 下的路径作为前缀。(一般配合服务器配置使用)
+4. library：导出库的名字。
 
 
 
