@@ -35,6 +35,11 @@ npm install -D webpack-dev-server
   "build:prod": "webpack --config ./webpack-config/config-base/webpack.prod.js"
 }
 ```
+10. windows 删除文件夹命令
+```bash
+npm install rimraf --save-dev
+rimraf dist
+```
 
 ## 配置webpack
 
@@ -68,15 +73,26 @@ entry: {
 ### 3.输出配置
 ```js
 output: {
-  path: path.resolve(__dirname, '../public'), // 打包后的文件存放的地方
+  path: path.resolve(__dirname, '../dev-dist'), // 打包后的文件存放的地方
   filename: 'bundle.[contenthash].js', // 打包后的文件名(hash是打包后生成的唯一标识，contenthash是根据文件内容生成的hash值)
 },
 ```
+### 4.html插件配置
+```js
+plugins: [
+  // 输出HTML文件
+  new HtmlWebpackPlugin({
+    template: path.resolve(__dirname, '../src/index.html'),
+  })
+],
+```
+### 5.css-loader配置
+css-loader 是用来将CSS文件转换成JS模块
 
-2. 
+### 6.style-loader配置
+style-loader是用来将样式添加到DOM中。
+
 ## 一、基础核心
-核心概念
-
 入口(Entry)
 
 输出(Output)
