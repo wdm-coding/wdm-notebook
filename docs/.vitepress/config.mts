@@ -187,6 +187,20 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/webpack/':[
+        {
+          text: 'Webpack',
+          items: [
+            { text: '入口(Entry)', link: '/pages/webpack/entry' },
+            { text: '出口(Output)', link: '/pages/webpack/output' },
+            { text: 'Loader', link: '/pages/webpack/loader' },
+            { text: '插件(Plugin)', link: '/pages/webpack/plugin' },
+            { text: '优化(optimization)', link: '/pages/webpack/optimization' },
+            {text:'源码分析(Sourcemap)', link: '/pages/webpack/sourcemap'},
+            {text:'开发服务(devServer)', link: '/pages/webpack/devServer'}
+          ]
+        }
+      ],
     },
     socialLinks: [
       {

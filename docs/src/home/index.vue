@@ -76,8 +76,8 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/flutter/index')">
-          <n-button type="primary">Flutter</n-button>
+        <div class="grid_item" @click="jumpHandle('/pages/Webpack/entry')">
+          <n-button type="info">Webpack</n-button>
         </div>
       </n-grid-item>
       <n-grid-item>

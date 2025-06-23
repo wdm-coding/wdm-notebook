@@ -13,8 +13,16 @@ module.exports = {
     lodash:'lodash',
   }
   output: {
-    filename: '[name].[contenthash].js', // name 对应 entry 的 key
-  }
+    filename: '[name].[contenthash].js',// 打包后的文件名，使用contenthash防止缓存问题
+    path: path.resolve(__dirname, '../dev-dist'), // 打包后的目录
+    clean: true, // 打包前清理/dist文件夹
+    publicPath:'/', // 打包后文件的访问路径
+    chunkFilename:'chunk.[contenthash].js', // 异步引入的js文件命名规则
+    // library: { // 打包后的库配置
+    //   name:'wdm',
+    //   type: 'umd' // 打包后的库暴露方式
+    // }
+  },
 }
 ```
 3. publicPath：所有的资源都会引用 publicPath 下的路径作为前缀。(一般配合服务器配置使用)
