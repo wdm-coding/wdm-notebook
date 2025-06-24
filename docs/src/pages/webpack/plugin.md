@@ -43,3 +43,60 @@ plugins: [
   new PrefetchPlugin()
 ]
 ```
+
+## postcss-loader + autoprefixer (自动补全css前缀，兼容浏览器样式)
+1. 自动添加前缀，兼容浏览器样式
+2. 移除过时前缀 - 会清理不再需要的老旧前缀
+3. 精准适配 - 通过配置 browserslist 指定需要支持的浏览器范围
+4. 下载 `npm install --save-dev postcss-loader autoprefixer`
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')({
+                    grid: true,// 启用 grid 支持
+                    overrideBrowserslist: ['> 1%', 'last 2 versions']// 指定要支持的浏览器范围
+                  })
+                ]
+              }
+            }
+          }
+        ]
+      },
+      // 对于 Sass 文件
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')({
+                    grid: true, // 启用 grid 支持
+                    overrideBrowserslist: ['> 1%', 'last 2 versions'] // 指定要支持的浏览器范围
+                  })
+                ]
+              }
+            }
+          },
+          'sass-loader'
+        ]
+      }
+    ]
+  }
+}
+```
