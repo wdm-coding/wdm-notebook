@@ -40,6 +40,4 @@ plugins: [
 ```
 2. 动态生成入口文件
 下载glob包，动态生成入口文件 npm install glob --save-dev
-```js
-const glob = require("glob");
-const path = require("path");
+

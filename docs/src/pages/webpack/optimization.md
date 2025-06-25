@@ -135,3 +135,96 @@ module.exports = {
   }
 };
 ```
+
+## tree-shaking 
+Tree-shaking（摇树优化）是一种用于消除JavaScript中未使用代码的优化技术。它通过静态分析代码来确定哪些模块、函数或变量没有被实际使用，并将其从最终的打包文件中移除，从而减少最终包的大小并提高性能。
+1. 使用ES6模块语法（import/export）‌：Tree-shaking依赖于ES6模块的静态结构特性，因此你的代码必须使用ES6模块语法，而不是CommonJS（require）等。
+2. ‌设置mode为production‌：Webpack在生产模式（production）下会自动启用Tree-shaking相关的优化。
+3. 配置optimization.usedExports‌：显式地告诉Webpack去确定每个模块使用的导出，然后将其标记为未使用的导出将被移除。
+4. 配置optimization.sideEffects‌：通过package.json的"sideEffects"属性标识项目中的文件是否有副作用，从而让Webpack安全地删除未被导入且标记为无副作用的模块。
+```js
+module.exports = {
+  // ... 其他配置
+  mode: 'production', // 生产模式会自动启用tree shaking和代码压缩
+  optimization: {
+    usedExports: true, // 标记未使用的导出
+    minimize: true,    // 压缩代码，移除未使用的导出
+  },
+};
+// package.json
+{
+  "name": "your-project",
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "./src/some-side-effectful-file.js"
+  ]
+}
+```
+
+## 自动清理dist目录
+1. 使用 clean-webpack-plugin 插件自动清理dist目录。
+```js
+// npm install --save-dev clean-webpack-plugin
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+plugins: [
+  new CleanWebpackPlugin()
+  // 或者
+]
+```
+2. 配置output.clean为true
+```js
+module.exports = {
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    clean: true, // 在每次构建前清理output目录
+    // 也可以使用对象配置
+    // clean: {
+    //   keep: /ignored\/dir\//, // 保留某些文件
+    // }
+  }
+};
+```
+3. package.json 使用 rimraf
+```json
+{
+  "scripts": {
+    "build": "rimraf dist && webpack --config webpack.config.js"
+  }
+}
+```
+
+## 构建时去除调试日志
+1. Webpack 4+ 默认使用 TerserPlugin 进行代码压缩，可以配置去除 console
+```js
+// 下载 npm install --save-dev terser-webpack-plugin
+const TerserPlugin = require('terser-webpack-plugin');
+
+module.exports = {
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true, // 移除所有console
+            // 或者指定要移除的console类型
+            // drop_console: ['log', 'info', 'warn', 'error'] 
+          },
+        },
+      }),
+    ],
+  },
+}
+```
+2. 使用 babel-plugin-transform-remove-console 通过 Babel 插件在编译阶段移除
+```js
+// 下载 npm install babel-plugin-transform-remove-console --save-dev
+// .babelrc 或 babel.config.js
+{
+  "plugins": [
+    ["transform-remove-console", { 
+      "exclude": ["error", "warn"] // 保留error和warn
+    }]
+  ]
+}
+```
