@@ -201,6 +201,14 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/vite/':[
+        {
+          text: 'Vite',
+          items: [
+            { text: '基础', link: '/pages/vite/index' },
+          ]
+        }
+      ],
     },
     socialLinks: [
       {

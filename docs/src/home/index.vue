@@ -85,6 +85,11 @@ function  jumpHandle(path) {
           <n-button type="primary">前端特殊组件</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/vite/index')">
+          <n-button type="primary">Vite</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>
