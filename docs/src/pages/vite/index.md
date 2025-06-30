@@ -108,7 +108,7 @@ export default defineConfig({
 })
 
 ```
-### 配置@别名
+## 配置@别名
 
 ```js
 import path from 'path'
@@ -123,7 +123,7 @@ export default {
 // @import '@/styles/index.css';
 ```
 
-### vite 配置 tyepscript
+## vite 配置 tyepscript
 1. vite 默认支持 TypeScript，无需额外配置。
 2. 只是编译不校验类型。
 3. 校验需要tsc --noEmit 命令,意思是不编译，只校验类型。
@@ -146,8 +146,127 @@ export default {
     "noUnusedLocals": true, // 报告未使用的局部变量
     "noUnusedParameters": true, // 报告未使用的参数
     "esModuleInterop": true, // 允许导入非ES模块的包
-    "forceConsistentCasingInFileNames": true // 强制文件名大小写一致性
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致性
+    "types": ["vite/client"], // 指定额外的类型声明文件
   },
   "include": ["src"]
+}
+```
+### vue中配置ts
+安装 vue-tsc
+```bash
+npm install vue-tsc -D
+# "build": "vue-tsc --noEmit && tsc --noEmit && vite build",
+```
+
+## vite处理静态资源
+1. Vite 会自动处理静态资源，例如图片、字体等。当你通过 import 语句导入一个文件时，Vite 会将其作为模块来处理，并返回该文件的 URL。
+2. `?url` 参数可以获取资源的URL。
+3. `?raw` 参数可以获取资源的原始内容。
+4. `?inline` 参数可以将资源内联到代码中。
+5. `?worker` 参数可以将资源作为 Web Worker 的入口。
+6. Web Assembly (WASM Web 程序集)
++ WASM 是一种允许其他编程语言编译成接近原生性能的代码的技术。
++ Vite 支持 WASM，你可以通过 import 语句导入 .wasm 文件。
++ 例如，你可以这样导入一个 WASM 文件：
+```js
+import wasm from './example.wasm?init';
+```
+
+## vite集成eslint、prettier
+
+1. 项目根目录下创建 `.eslintrc.js` 文件
+2. 安装 eslint 相关依赖
+```bash
+npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin -D
+```
+3. 初始化 eslint
+```bash
+npx eslint --init
+```
+4. 配置 `.eslintrc.js`
+```js
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  plugins: [
+    '@typescript-eslint',
+  ],
+  rules: {
+    // 自定义规则配置
+  },
+};
+```
+5. 安装 prettier
+```bash
+npm install prettier -D
+```
+6. 创建 `.prettierrc` 文件
+```json
+{
+  "semi": false,
+  "singleQuote": true
+  // 其他配置...
+}
+```
+7. VS Code配置
++ format on save
++ foretmatter defalut
+
+8. package.json
+```json
+"scipts": {
+  "lint": "eslint . --ext js src/", // 添加 lint 脚本
+  "format": "prettier --write ." // 添加 format 脚本
+}
+```
+9. husky 配置
+```bash
+npm install husky -D
+```
+10. 修改 package.json
+```json
+"husky": {
+  "hooks": {
+    "pre-commit": "lint-staged" // 添加 pre-commit 钩子
+  }
+},
+```
+
+## vite 的 环境变量
+1. MODE 环境变量默认情况下，Vite 会读取 `mode` 字段从 `package.json` 或者命令行参数 `--mode` 来决定使用哪个环境变量文件。
+2. BASE_URL 环境变量
+3. PROD 环境变量
+4. DEP 环境变量
+5. 通过`import.meta.env`访问环境变量
+
+### 项目根目录下创建 `.env` 文件
+```bash
+VITE_SOME_KEY=123
+```
+1. 项目根目录下创建 `.env.development` 文件
+  + 只在开发环境生效的环境变量文件 npm run dev 时生效。
+2. 项目根目录下创建 `.env.development.local` 文件
+  + 只在开发环境生效的环境变量文件，优先级高于 `.env.development` 文件 npm run dev 时生效。
+3. 项目根目录下创建 `.env.production` 文件
+  + 只在生产环境生效的环境变量文件。npm run build 时生效。
+4. 项目根目录下创建 `.env.test` 文件
+  + 配置mode为test时的环境变量文件。npm run build --mode test 时生效。
+5. 项目根目录下创建 `vite-env.d.ts` 文件 声明环境变量类型。
+```ts
+/// <reference types="vite/client" />
+interface ImportMetaEnv {
+  readonly VITE_SOME_KEY: string;
 }
 ```
