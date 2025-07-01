@@ -41,3 +41,10 @@ const globModules = import.meta.glob('./*.js')
  + ‌预编译触发时机‌：首次启动‌：全量预编译所有依赖。
  + 依赖变更‌：仅重新编译变化的依赖（通过 package.json 或 lockfile 比对）。
 4. 将类似于lodash这样的库打包在一个单独的chunk中
+
+## nodejs服务集成vite
+
+### 安装express
+```bash
+npm install express
+```
