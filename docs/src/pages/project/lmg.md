@@ -68,7 +68,8 @@ ZBM-P-20250527-19024704
 设置账户：ts_msg
 密码：azxc@s145$
 
+## 2025-07-01
 
-
-<!-- this.url = `https://dev.silkiip.com/api/client/chatgml/sse/chat?prompt=1` -->
-<!-- this.url = `https://test.gslmg.com/dc/api/message/subscribe?userId=${params.userId}&userType=${params.userType}` -->
+1. 陇明公APP打卡页面结构搭建，考勤统计迁移，底部tabbar开发。
+2. 监管端APP参建单位列表，参建单位详情，我的消息，项目收藏按钮，指派按钮，分享按钮
+3. 监管端APP项目通知

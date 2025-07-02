@@ -90,6 +90,11 @@ function  jumpHandle(path) {
           <n-button type="primary">Vite</n-button>
         </div>
       </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/css/index')">
+          <n-button type="primary">Css样式</n-button>
+        </div>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>

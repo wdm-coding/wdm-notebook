@@ -209,6 +209,14 @@ export default defineConfig({
           ]
         }
       ],
+      '/pages/css/':[
+        {
+          text: 'Css',
+          items: [
+            { text: 'css', link: '/pages/css/index' },
+          ]
+        }
+      ],
     },
     socialLinks: [
       {
