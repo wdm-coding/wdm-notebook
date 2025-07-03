@@ -1,4 +1,6 @@
 # Rollup
+[官网](https://cn.rollupjs.org/introduction/)
+
 1. 全局安装 `npm install rollup -g`
 2. rollup 命令介绍
 ```bash
@@ -38,6 +40,7 @@ npm install @rollup/plugin-replace --save-dev
 npm install @rollup/plugin-json --save-dev
 ```
 2. 使用json插件
++ 对象格式
 ```js
 import json from '@rollup/plugin-json';
 export default {
@@ -51,3 +54,122 @@ export default {
   ]
 };
 ```
++ 数组格式
+```js
+export default[
+  {
+    input:'./src/index.js', // 入口文件路径
+    output:{ // 输出配置
+      file: process.env.NODE_ENV ==='development' ? 'dist/dev.es.js' : 'dist/prod.es.js', // 输出文件路径
+      format: 'es' // 输出格式，可选值有amd,cjs,esm,iife,umd等
+    },
+    watch:{
+      include:'src/**'
+    },
+    plugins:[
+      json()
+    ]
+  },
+  {
+    input:'./src/index.js', // 入口文件路径
+    output:{ // 输出配置
+      file: process.env.NODE_ENV ==='development' ? 'dist/dev.es.js' : 'dist/prod.umd.js', // 输出文件路径
+      format: mode==='local' ? 'es' : 'umd' // 输出格式，可选值有amd,cjs,esm,iife,umd等
+    },
+    watch:{
+      include:'src/**'
+    },
+    plugins:[
+      json()
+    ]
+  }
+]
+```
+### `@rollup/plugin-node-resolve` 插件可以让 Rollup 找到外部模块。 
+1. 安装插件
+```bash
+npm install --save-dev @rollup/plugin-node-resolve
+```
+2. 使用插件
+```js
+// rollup.config.js
+import resolve from '@rollup/plugin-node-resolve';
+
+export default {
+	input: 'src/main.js',
+	output: {
+		file: 'bundle.js',
+		format: 'cjs'
+	},
+	plugins: [resolve()]
+};
+```
+### `@rollup/plugin-commonjs` 插件可以将 CommonJS 模块转换为 ES6，以便 Rollup 可以处理它们。
+1. 安装插件
+```bash
+npm install --save-dev @rollup/plugin-commonjs
+```
+2. 使用插件
+```js
+// rollup.config.js
+import commonjs from '@rollup/plugin-commonjs';
+
+export default {
+	input: 'src/main.js',
+	output: {
+		file: 'bundle.js',
+		format: 'cjs'
+	},
+	plugins: [commonjs()]
+};
+```
+## output.plguins 输出插件
+
+### `@rollup/plugin-terser` 插件可以压缩代码，去除多余的空格和注释等。
+1. 安装插件
+```bash
+npm install --save-dev @rollup/plugin-terser
+```
+2. 使用插件
+```js
+// rollup.config.mjs
+import json from '@rollup/plugin-json';
+import terser from '@rollup/plugin-terser';
+
+export default {
+	input: 'src/main.js',
+	output: [
+		{
+			file: 'bundle.js',
+			format: 'cjs'
+		},
+		{
+			file: 'bundle.min.js',
+			format: 'iife',
+			name: 'version',
+			plugins: [terser()]
+		}
+	],
+	plugins: [json()]
+};
+```
+
+## rollup 插件
+[rollup插件](https://github.com/rollup/plugins/tree/master)
+1. `@rollup/plugin-alias`  路径别名插件
+2. `@rollup/plugin-babel`  Babel 插件 编译ES6代码为兼容旧版本浏览器支持的JS代码
+3. `@rollup/plugin-commonjs` 转换CommonJS模块为ES6
+4. `@rollup/plugin-json` 允许导入JSON文件作为模块
+5. `@rollup/plugin-node-resolve` 让Rollup找到外部模块
+6. `@rollup/plugin-replace` 替换代码中的字符串
+7. `@rollup/plugin-terser` 压缩代码
+8. `@rollup/plugin-typescript` 编译TypeScript
+9. `rollup-plugin-livereload` 开发时自动刷新浏览器
+10. `rollup-plugin-serve` 开发时启动一个HTTP服务器
+11. `rollup-plugin-visualizer` 生成代码体积分析报告
+12. `rollup-plugin-postcss` 处理CSS
+13. `rollup-plugin-scss` 处理SCSS
+14. `rollup-plugin-less` 处理LESS
+15. `rollup-plugin-stylus` 处理Stylus
+16. `@rollup/plugin-image` 处理图片
+17. `@rollup/plugin-strip` 移除代码中的console.log等
