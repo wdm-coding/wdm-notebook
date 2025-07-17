@@ -263,3 +263,16 @@ markRaw 函数用于标记一个对象，使其被 Vue 视为一个普通对象�
     console.log('markRawValue', markRawValue)
   }
 </script>
+
+## resolveComponent 解析已注册的组件
+```js
+// 在渲染函数中使用
+import { h, resolveComponent } from 'vue'
+
+export default {
+  setup() {
+    const MyButton = resolveComponent('MyButton')
+    return () => h(MyButton, { onClick: () => console.log('clicked') })
+  }
+}
+```
