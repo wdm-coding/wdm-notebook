@@ -57,6 +57,13 @@ simpleAJAX('https://api.example.com/data', 'GET', null, function (error, data) {
     }
 });
 ```
+::: tip AJAX的重点
+    1. new XMLHttpRequest()
+    2. open()
+    3. onreadystatechange()
+    4. onerror()
+    5. send()
+:::
 
 # 同源策略
     同源策略是一种浏览器安全措施，用于限制一个域下的文档或脚本如何与另一个来源的资源进行交互。它主要用来防止恶意网站读取敏感数据或者执行恶意操作。
