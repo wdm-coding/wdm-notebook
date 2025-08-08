@@ -4,7 +4,7 @@
 git config user.name xxx
 git config user.email
 ```
-## 查看具体修改的文件内容
+## 查看未add前具体修改的文件内容
 ```bash
 git diff
 git diff 文件名
