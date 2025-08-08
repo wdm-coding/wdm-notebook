@@ -26,6 +26,10 @@ git reset --hard HEAD~1 # 撤销到上次提交，删除本次commit的代码
 git reset --mixed HEAD~1 # 撤销到git add .前 保存代码
 git reset --soft HEAD~1 # 撤销到git commit .前 恢复到暂存区
 ```
+## 撤销git push 操作
+```bash
+git revert commitID # Git 会打开一个文本编辑器让你输入撤销提交的信息，保存并退出编辑器。:wq 并按 Enter。这会保存文件并退出 Vim。 
+```
 ## 回退
 
 ```js
