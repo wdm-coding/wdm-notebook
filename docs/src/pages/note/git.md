@@ -20,6 +20,12 @@ git checkout 文件名 # 撤销某个文件修改
 git reset HEAD # 撤销所有修改
 git reset HEAD 文件名 # 撤销某个文件修改 git reset HEAD src/main.java
 ```
+## 撤销git commit 操作
+```bash
+git reset --hard HEAD~1 # 撤销到上次提交，删除本次commit的代码
+git reset --mixed HEAD~1 # 撤销到git add .前 保存代码
+git reset --soft HEAD~1 # 撤销到git commit .前 恢复到暂存区
+```
 ## 回退
 
 ```js
