@@ -56,7 +56,11 @@ git stash # 在master分支修改了内容，突然需要切换到develop分支
 git checkout develop # 切换到develop分支
 git stash pop # 恢复最近一次存储并删除堆栈记录
 ```
-
+## 删除分支
+```bash
+git branch -d 分支名 # 删除本地已合并的分支
+git push origin --delete 分支名 #删除远程分支
+```
 ## git fetch 与 git pull 的区别
 
 1. git fetch 从远程仓库获取最新的分支和提交信息，但不自动合并到本地分支
