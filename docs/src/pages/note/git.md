@@ -10,10 +10,15 @@ git diff
 git diff 文件名
 git show [commitID]
 ```
-## 撤销修改
+## 撤销未提交到暂存区的修改
 ```bash
 git checkout . # 撤销所有修改
 git checkout 文件名 # 撤销某个文件修改
+```
+## 撤销git add . 操作
+```bash
+git reset HEAD # 撤销所有修改
+git reset HEAD 文件名 # 撤销某个文件修改 git reset HEAD src/main.java
 ```
 ## 回退
 
