@@ -13,7 +13,7 @@ git show [commitID]
 ## 撤销修改
 ```bash
 git checkout . # 撤销所有修改
-git checkout . # 撤销某个文件修改
+git checkout 文件名 # 撤销某个文件修改
 ```
 ## 回退
 
