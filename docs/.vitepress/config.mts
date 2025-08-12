@@ -38,7 +38,9 @@ export default defineConfig({
             { text: 'js事件', link: '/pages/web/js-events' },
             { text: 'AJAX', link: '/pages/web/ajax' },
             { text: 'Axios', link: '/pages/web/axios' },
-            { text: 'Webpack', link: '/pages/web/webpack' }
+            { text: 'Webpack', link: '/pages/web/webpack' },
+            { text: 'ES新特性', link: '/pages/web/es-new' },
+            { text: '其他', link: '/pages/web/other' }
           ]
         }
       ],
