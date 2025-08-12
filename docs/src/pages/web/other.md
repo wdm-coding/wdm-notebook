@@ -235,3 +235,18 @@ function max(...args){
 2. 可以在回调函数中更新动画状态，并再次调用requestAnimationFrame
 3. 浏览器会自动优化动画性能，例如在浏览器标签不可见时暂停动画。
 4. 浏览器根据屏幕刷新率自动调整动画的帧数，通常是60fps
+
+## 数组求和 reducer
+1. 数组的reduce方法可以将一个函数累积应用到数组中的每个元素上，最终返回一个单一的值。
+2. 数组的reduce方法可以接受两个参数，第一个是回调函数，第二个是初始值。
+```js
+const arr = [10,20,30]
+const sum = arr.reduce(
+  (prev, cur, index, arr) => {
+    console.log(prev,cur) // 此处的prev是上一次迭代的返回值，也就是下一次迭代的初始值 cur是当前迭代的值
+    return prev + cur // 此处的返回值是下一次迭代的prev值
+  }, 
+  1
+)
+console.log('sum', sum)
+```

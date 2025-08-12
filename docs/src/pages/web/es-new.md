@@ -50,3 +50,60 @@ m.get('key10') // 输出: undefined
 // 转换为数组
 const arr = [...m] // 输出: [['key1', 'value1'], ['key3', 'value3'], [objKey, 'value5']]
 ```
+
+## Set 和 数组 的对比
+1. Set 是一个值的集合，其中的值都是唯一的。
+2. Set 是无序的,没有索引。
+```js
+const arr = new Set([1, 2, 3])
+// 新增元素
+arr.add(4)
+// 删除元素
+arr.delete(3)
+// 判断是否存在某个元素
+// console.log(arr.has(2))
+// 清除所有元素
+// arr.clear()
+// size 属性
+// console.log(arr.size)
+// 遍历元素
+for (let item of arr) {
+  // console.log(item)
+}
+// 遍历key
+console.log(arr.keys())
+// 遍历value
+console.log(arr.values())
+// 遍历key和value
+for (let [key, value] of arr.entries()) {
+  console.log(key, value)
+}
+```
+
+## WeakMap
+1. WeakMap 只接受对象作为键名（null除外），不接受其他类型的值作为键名。
+2. WeakMap 是弱引用，即如果其他对象都不再引用该对象，那么这些对象占用的内存就会被垃圾回收掉。
+3. WeakMap 不能遍历，因此没有keys()、values()和entries()方法。
+4. 使用场景：两个对象建立关联关系，又想保证两个对象独立
+```js
+const wMap = new WeakMap()
+function fun(){
+  const obj = { name: 1 }
+  wMap.set(obj, 'abc') // gc 回收 obj
+}
+console.log(wMap)
+```
+## WeakSet
+1. WeakSet 是一个集合，其中的元素都是唯一的。
+2. WeakSet 是弱引用，只能用对象作为成员，不能用其他类型的值。
+3. WeakSet 没有size属性，不能遍历。
+```js
+const wSet = new WeakSet()
+function fun(){
+  const obj = { name: 1 }
+  wSet.add(obj) // gc 回收 obj
+}
+fun()
+console.log(wSet)
+```
+
