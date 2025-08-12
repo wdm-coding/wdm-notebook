@@ -26,6 +26,16 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/Webpack/entry')">
+          <n-button type="info">Webpack</n-button>
+        </div>
+      </n-grid-item>
+      <n-grid-item>
+        <div class="grid_item" @click="jumpHandle('/pages/vite/index')">
+          <n-button type="primary">Vite</n-button>
+        </div>
+      </n-grid-item>
+      <n-grid-item>
         <div class="grid_item" @click="jumpHandle('/pages/uniApp/index')">
           <n-button type="info">Uni-App</n-button>
         </div>
@@ -76,18 +86,8 @@ function  jumpHandle(path) {
         </div>
       </n-grid-item>
       <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/Webpack/entry')">
-          <n-button type="info">Webpack</n-button>
-        </div>
-      </n-grid-item>
-      <n-grid-item>
         <div class="grid_item" @click="jumpHandle('/pages/uiComponents/virtual-list')">
           <n-button type="primary">前端特殊组件</n-button>
-        </div>
-      </n-grid-item>
-      <n-grid-item>
-        <div class="grid_item" @click="jumpHandle('/pages/vite/index')">
-          <n-button type="primary">Vite</n-button>
         </div>
       </n-grid-item>
       <n-grid-item>

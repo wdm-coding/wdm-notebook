@@ -38,7 +38,6 @@ export default defineConfig({
             { text: 'js事件', link: '/pages/web/js-events' },
             { text: 'AJAX', link: '/pages/web/ajax' },
             { text: 'Axios', link: '/pages/web/axios' },
-            { text: 'Webpack', link: '/pages/web/webpack' },
             { text: 'ES新特性', link: '/pages/web/es-new' },
             { text: '其他', link: '/pages/web/other' }
           ]
@@ -70,6 +69,29 @@ export default defineConfig({
             { text: 'React-Zustand', link: '/pages/react/react-zustand' },
             { text: 'React-Vite-Typescript', link: '/pages/react/react-vite-ts' },
             { text: 'AntDesign组件库', link: '/pages/react/react-antd' },
+          ]
+        }
+      ],
+      '/pages/webpack/':[
+        {
+          text: 'Webpack',
+          items: [
+            { text: 'Webpack', link: '/pages/webpack/index' },
+            { text: '入口(Entry)', link: '/pages/webpack/entry' },
+            { text: '出口(Output)', link: '/pages/webpack/output' },
+            { text: 'Loader', link: '/pages/webpack/loader' },
+            { text: '插件(Plugin)', link: '/pages/webpack/plugin' },
+            { text: '优化(optimization)', link: '/pages/webpack/optimization' },
+            {text:'源码分析(Sourcemap)', link: '/pages/webpack/sourcemap'},
+            {text:'开发服务(devServer)', link: '/pages/webpack/devServer'}
+          ]
+        }
+      ],
+      '/pages/vite/':[
+        {
+          text: 'Vite',
+          items: [
+            { text: '基础', link: '/pages/vite/index' },
           ]
         }
       ],
@@ -189,28 +211,6 @@ export default defineConfig({
           text: '前端特殊组件',
           items: [
             { text: '虚拟列表', link: '/pages/uiComponents/virtual-list' }
-          ]
-        }
-      ],
-      '/pages/webpack/':[
-        {
-          text: 'Webpack',
-          items: [
-            { text: '入口(Entry)', link: '/pages/webpack/entry' },
-            { text: '出口(Output)', link: '/pages/webpack/output' },
-            { text: 'Loader', link: '/pages/webpack/loader' },
-            { text: '插件(Plugin)', link: '/pages/webpack/plugin' },
-            { text: '优化(optimization)', link: '/pages/webpack/optimization' },
-            {text:'源码分析(Sourcemap)', link: '/pages/webpack/sourcemap'},
-            {text:'开发服务(devServer)', link: '/pages/webpack/devServer'}
-          ]
-        }
-      ],
-      '/pages/vite/':[
-        {
-          text: 'Vite',
-          items: [
-            { text: '基础', link: '/pages/vite/index' },
           ]
         }
       ],
