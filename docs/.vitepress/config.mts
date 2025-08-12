@@ -50,6 +50,9 @@ export default defineConfig({
           items: [
             { text: 'Vue思维导图', link: '/pages/vue/index' },
             { text: 'Vue3Api', link: '/pages/vue/vue3-api' },
+            { text: 'Vue2面试题', link: '/pages/vue/question-vue2' },
+            { text: 'Vue3面试题', link: '/pages/vue/question-vue3' },
+            { text: 'Vue3技能收集', link: '/pages/vue/vue3-tag' },
           ]
         }
       ],
