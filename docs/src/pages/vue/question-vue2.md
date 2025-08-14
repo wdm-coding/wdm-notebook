@@ -81,12 +81,180 @@ this.obj.count++
  + beforeDestroy 组件销毁前调用，此时仍可正常访问实例
  + desotroyed 组件销毁后调用，所有绑定的事件监听器会被移除
 
- ## 父子组件的生命周期
- 1. 加载过程
- 父 beforeCreate -> 父 created -> 父 beforeMount -> 子 beforeCreate -> 子 created -> 子 beforeMount -> 子 mounted -> 父 mounted
- 2. 更新过程
- 父 beforeUpdate -> 子 beforeUpdate -> 子 updated -> 父 updated
- 3. 销毁过程
- 父 beforeDestroy -> 子 beforeDestroy -> 子 destroyed -> 父 destroyed
+## 父子组件的生命周期
+1. 加载过程
+父 beforeCreate -> 父 created -> 父 beforeMount -> 子 beforeCreate -> 子 created -> 子 beforeMount -> 子 mounted -> 父 mounted
+2. 更新过程
+父 beforeUpdate -> 子 beforeUpdate -> 子 updated -> 父 updated
+3. 销毁过程
+父 beforeDestroy -> 子 beforeDestroy -> 子 destroyed -> 父 destroyed
 
- 15.6-15.7
+## vue 2 高级特性
+1. 自定义v-model
+2. $nextTick
+3. slot
+4. 动态组件、异步组件
+5. keep-alive
+6. 混入mixin
+
+## 自定义v-model
+1. 组件上 v-model 的默认行为是使用 value prop 和 input 事件
+2. 可以通过 model 选项自定义 prop 和 event
+3. 示例：
+```js
+Vue.component('base-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: { checked: Boolean },
+  template: `
+    <input
+      type="checkbox"
+      v-bind:checked="checked"
+      v-on:change="$emit('change', $event.target.checked)"
+    >
+  `
+})
+```
+
+## $nextTick
+
+### 原理：
+1. Vue 在侦听到数据变化时，会开启一个队列
+2. 同一个事件循环中发生的所有数据变更会被批量推入这个队列
+3. 在下一个事件循环的"tick"中，Vue 刷新队列并执行实际（已去重的）DOM 更新
+
+### ‌Vue 异步渲染核心流程
+1. 数据变更触发 setter 通知
+2. Watcher 将更新任务推入队列（queueWatcher）
+3. 事件循环结束，nextTick 清空队列并执行更新
+4. 执行更新，触发渲染函数重新生成虚拟 DOM 并进行 diff 算法
+5. 将虚拟 DOM 转换为真实 DOM 并插入到页面中
+6. 完成更新，触发回调（如果有）
+
+### Vue实现异步渲染的任务类型与优先级
+1. 微任务（Microtask）‌：Promise.then / MutationObserverVue 
+2. 默认优先使用微任务
+3. 执行时机：当前宏任务结束前
+4. 降级方案，兼容性兜底 宏任务（setTimeout/setInterval/setImmediate）
+5. 执行顺序：同步代码 → 微任务队列 → DOM渲染 → 宏任务队列
+
+### 具体到 Vue 的时序
+1. 数据修改（同步）
+2. Watcher 将更新任务推入队列（同步）
+3. nextTick 安排 flush 为微任务
+4. 当前调用栈清空，执行微任务（执行 watcher 队列，计算 VDOM）
+5. 将虚拟 DOM 转换为真实 DOM 并插入到页面中
+6. 完成更新，如有宏任务则执行宏任务
+
+### 作用：
+1. 用于延迟执行代码，直到下次 DOM 更新循环结束之后
+2. 常用于在数据变化后立即操作 DOM 或访问更新的视图元素
+3. 连续多次数据修改只会触发一次渲染。
+4. 在微任务中修改数据仍属同一事件循环
+5. 宏任务中修改数据会开启新的事件循环
+
+## slot
+1. 插槽（slot）是 Vue 组件中的一个重要特性，允许父组件向子组件传递 HTML 或内容。
+2. 默认插槽是最基本的，可以直接在子组件模板中使用 `<slot></slot>` 来定义,`<template v-slot>`来展示。
+3. 具名插槽允许父组件向子组件传递多个内容片段，通过 `name` 属性来区分，`<template v-slot:header>`来展示。
+4. 作用域插槽允许子组件向父组件传递数据，并在父组件中渲染这些数据，`<template v-slot:header="{ item, index }">`来展示。
+5. 子组件只关心数据逻辑，父组件控制渲染样式。
+6. 父组件可直接解构插槽属性，如 v-slot="{ item, index }"
+7. 作用域插槽属性优先级高于父组件自身数据和props。
+```js
+// vue2.x 写法示例：
+<slot :item="item" :index="index"></slot>
+<template slot-scope="props">
+  {{ props.item }}-{{ props.index }}
+</template>
+<template v-slot:default="props">
+  {{ props.item }}-{{ props.index }}
+</template>
+```
+
+## 动态组件
+1. 使用 `<component :is="component-name"></component>` 来动态切换组件。
+2. keep-alive 包裹动态组件，可以保持组件状态。
+3. keep-alive 默认缓存不活动的组件实例，不会销毁它们。
+4. keep-alive 的钩子：activated(调用时机为首次挂载以及每次从缓存中被重新插入时)、deactivated(在从 DOM 上移除、进入缓存,以及组件卸载时调用)
+
+## keep-alive如何缓存组件 
+1. ‌缓存组件实例‌：当组件被切换时，不会销毁，而是保留在内存中。
+2. ‌保留组件状态‌：包括 data、DOM 结构、滚动位置、定时器等，避免重新初始化。
+3. ‌避免重复渲染‌：再次激活时直接复用缓存，跳过 created、mounted 等生命周期钩子。 
+4. 当缓存数量超过 max 限制时，自动移除最久未使用的实例。
+5. 使用 JavaScript 对象（Vue 2）或 Map 对象（Vue 3）存储缓存实例。
+6. 数组记录访问顺序，尾部是最近访问的键，头部是最久未访问的键。
+
+## 异步组件
+1. import() 动态导入组件，实现异步加载。
+2. 按需加载，减少初始包体积。
+```js
+components: {
+  myComponent: () => import('./my-component.vue')
+}
+```
+
+## mixin 抽离公共功能
+1. 多个组件有相同的选项时，可以将这些选项抽取到 mixin 中。
+2. mixin 对象可以包含任何组件选项。
+3. 组件和 mixin 选项合并时，同名钩子函数将混合为一个数组，依次调用。
+4. 优先级：组件 > mixin
+5. mixin变量来源不明确，可读性差，容易冲突。
+
+## Vuex 状态管理
+1. state：存储状态
+2. getters：计算属性
+3. mutations：同步修改状态
+4. actions：异步修改状态
+5. modules：模块化
+6. dispath：触发action
+7. commit：触发mutation
+8. mapState、mapGetters、mapActions、mapMutations：辅助函数
+
+## Vue Router 路由管理
+1. 路由模式
+  + hash 模式（默认） 使用 URL 的 hash 来模拟一个完整的 URL
+  + history 模式 使用 HTML5 History API 来实现无刷新的页面跳转
+2. 动态路由匹配
+  + 动态路径参数 使用冒号（:）标记，如 /user/:id
+  + 可选的动态路径参数 使用问号（?）标记，如 /user/:id?
+  + 星号（*）匹配任意路径，如 /user/*
+  + 捕获所有路由或 404 Not found 匹配 /:catchAll(.*)
+3. 嵌套路由
+  + 在路由配置中，使用 children 数组定义嵌套路径
+  + 嵌套路由的组件需要在父组件中通过 `<router-view></router-view>` 来渲染
+4. 导航守卫
+5. 编程式导航
+  + this.$router.push(location, onComplete?, onAbort?)
+6. 路由懒加载
+  + 使用动态导入语法，如 () => import('./Foo.vue')
+7. 路由别名
+  + 使用 alias 属性，如 { path: '/a', component: A, alias: '/b' }
+8. 滚动行为
+  + 使用 scrollBehavior 函数，控制滚动位置
+9. 路由元信息
+  + 在路由配置中使用 meta 字段，如 { path: '/foo', component: Foo, meta: { requiresAuth: true } }
+```js
+const router = new VueRouter({
+  routes: [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar }
+  ]
+})
+```
+
+## hash模式和history模式的区别
+
+### 表现形式
+1. hash 模式（默认） 使用 URL 的 hash 来模拟一个完整的 URL
+2. history 模式 使用 HTML5 History API 来实现无刷新的页面跳转
+3. hash # 后的部分是前端路由的路径，不会发送到服务器。
+4. history 模式会将路径当作真正的 URL，需要服务器配置支持。
+
+### 实现原理
+1. 哈希模式：依赖 window.location.hash 和 hashchange 事件通过监听 hashchange 事件来实现路由变化。
+2. history 模式：依赖 HTML5 History API（pushState 和 replaceState）和 popstate 事件。通过监听 popstate 事件来实现路由变化。
+3. history 模式需要服务器支持，因为当用户直接访问某个 URL时，服务器需要返回前端应用的入口文件（如 index.html）。

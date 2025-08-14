@@ -269,6 +269,17 @@ event loop,宏任务和微任务,promise,async/await执行顺序 场景题
 
   console.log('script end') // 5
 ```
+## 宏任务和微任务的原理
+宏任务‌和‌微任务‌是两种不同类型的异步任务队列
+### 调度者
+1. 宏任务是 JavaScript 引擎外部的任务，由宿主环境（如浏览器或 Node.js）调度执行。
+2. 微任务是 JavaScript 引擎内部的异步任务，由 JavaScript 运行时环境（如 V8、SpiderMonkey 等）调度执行。
+
+### 常见类型
+1. 宏任务：整体同步代码脚本(首次执行时)，setTimeout,setInterval,ajax,DOM事件，I/O(如文件读写、网络请求)、UI 渲染（浏览器中）。
+2. 微任务：Promise 的回调,process.nextTick(),async/await，MutationObserver‌等。
+
+### 微任务优先执行于下一个宏任务之前
 
 
 
