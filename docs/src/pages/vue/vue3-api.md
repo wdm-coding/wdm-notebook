@@ -1,6 +1,3 @@
----
-outline: deep
----
 # 响应式 API
 
 
@@ -275,4 +272,19 @@ export default {
     return () => h(MyButton, { onClick: () => console.log('clicked') })
   }
 }
+```
+
+## useTemplateRef()
+1. 返回一个浅层 ref，其值将与模板中的具有匹配 ref attribute 的元素或组件同步。
+```html
+<template>
+  <input ref="input" />
+</template>
+<script setup>
+  import { useTemplateRef, onMounted } from 'vue'
+  const inputRef = useTemplateRef('input')
+  onMounted(() => {
+    inputRef.value.focus()
+  })
+</script>
 ```
