@@ -118,7 +118,7 @@ Vue.component('base-checkbox', {
 })
 ```
 
-## $nextTick
+## $nextTick(异步渲染)
 
 ### 原理：
 1. Vue 在侦听到数据变化时，会开启一个队列
@@ -232,7 +232,7 @@ components: {
 6. 路由懒加载
   + 使用动态导入语法，如 () => import('./Foo.vue')
 7. 路由别名
-  + 使用 alias 属性，如 { path: '/a', component: A, alias: '/b' }
+  + 使用 alias 属性，如 `{ path: '/a', component: A, alias: '/b' }`
 8. 滚动行为
   + 使用 scrollBehavior 函数，控制滚动位置
 9. 路由元信息
@@ -258,3 +258,63 @@ const router = new VueRouter({
 1. 哈希模式：依赖 window.location.hash 和 hashchange 事件通过监听 hashchange 事件来实现路由变化。
 2. history 模式：依赖 HTML5 History API（pushState 和 replaceState）和 popstate 事件。通过监听 popstate 事件来实现路由变化。
 3. history 模式需要服务器支持，因为当用户直接访问某个 URL时，服务器需要返回前端应用的入口文件（如 index.html）。
+
+## ajax请求应该放在哪个生命周期？
+1. mounted 生命周期钩子中发起 AJAX 请求是最常见的做法。
+2. 除非有特殊需求，否则通常在 mounted 钩子中发起请求。
+3. 放在mounted之前，会导致数据还未请求到就开始渲染页面。
+
+## 如何将组件所有的 props 传递给内层组件
+1. 父组件中使用 v-bind="$props"
+
+## 如何自己实现v-model
+1. model 选项：prop、event
+2. props: 属性名 是 model 选项的 prop 的值
+3. $emit: 事件名 是 model 选项的 event 的值
+
+## 何时使用异步组件
+1. 大型应用：分割代码，按需加载
+2. 第三方组件：避免初始加载时间过长
+3. 路由懒加载：结合 Vue Router 使用
+
+## 何时使用keep-alive
+1. 动态组件切换：保持状态
+2. 缓存页面：如 Tab 切换
+3. 优化性能：避免重复渲染
+
+## 何时使用beforeDesotry
+1. 清除定时器
+2. 清除自定义事件监听 event.$off
+3. 清除DOM事件监听
+
+## 描述响应式原理
+1. 监听data变化
+2. 组件渲染和更新过程
+
+## 简述diff算法过程
+1. patch(elem,vnode) 首次渲染时，将虚拟DOM挂载到真实DOM容器上。
+2. patch(vnode,newVnode) 数据更新时，通过对比新旧vnode高效更新真实DOM。
+3. patchVnode 当新旧vnode的key和tag相同时，进入patchVnode流程,对比新旧虚拟节点的属性、子节点差异。
+4. addVnodes 将一组新的虚拟节点（vnode）批量插入到真实DOM中指定的父节点下。
+5. removeVnodes 批量移除虚拟节点对应的真实DOM节点。
+6. updateChildren 对比新旧子节点列表，高效更新真实DOM。(通过key标识相同节点，避免不必要的重建,相同节点仅更新属性和子节点)
+
+## vue 为何是异步渲染，$nextTick的作用
+1. 异步渲染：Vue 在数据变化后不会立即更新DOM，而是将更新操作放入一个队列中，提高性能。
+2. $nextTick: 当数据改变时，在下一次 DOM 更新循环结束之后执行延迟回调。
+3. 使用场景：获取最新的DOM状态、在DOM更新完成后进行某些操作等。
+
+## vue常见的性能优化手段
+1. 合理使用v-show和v-if
+2. 合理使用computed
+3. v-for渲染列表时，使用key
+4. 组件卸载时，清除定时器、事件监听等
+5. 合理使用异步组件、keep-alive
+6. data层级不要太深，避免频繁更新深层数据。
+7. 使用vue-loader的做开发环境预编译。
+8. 使用webpack的代码分割，压缩功能，将路由懒加载，tree-shaking去除无用代码。
+9. 使用ssr渲染，服务端渲染。
+
+
+
+
