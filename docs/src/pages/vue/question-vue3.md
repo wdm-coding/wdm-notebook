@@ -193,22 +193,6 @@ function computed(getter) {
 2. 函数命名规范：use开头，驼峰命名。
 3. setup函数中使用自定义hooks。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 为什么vue3中ref变量要用.value访问
 1. Vue 3 使用 Proxy 来实现响应式系统。
 2. Proxy 只能拦截对象属性的读取或赋值操作，而不能直接代理原始数据类型（如字符串、数字等）的属性访问。
@@ -225,7 +209,6 @@ const obj = {
   a:1
 }
 ```
-
 ## computed 为什么也需要.value访问？
 1. computed 返回的是一个ComputedRef 对象‌（继承自 Ref），无论其内部值是基本类型还是对象，都需要通过 .value 访问。这是由 Vue 响应式系统的核心设计决定的，因为它需要保持与原始数据类型的兼容性。
 2. 保持所有 Ref 类型行为一致，简化使用。
@@ -236,6 +219,96 @@ const obj = {
 3. 嵌套对象在访问时才代理。
 5. 代理结果缓存。
 
+## vue3 如何实现双向绑定？
 
+### 1. v-model 语法糖。
+```html
+<input v-model="text" />
+<!-- 等价于 -->
+ <input :value="text" @input="text = $event.target.value">
+```
+
+### 2. 自定义组件中使用 v-model。
+```html
+<custom-input v-model="text" />
+<!-- 等价于 -->
+<custom-input :modelValue="text" @update:modelValue="text = $event">
+<!-- custom-input -->
+<script setup>
+  const props = defineProps(['modelValue'])
+  const emit = defineEmits(['update:modelValue'])
+</script>
+<template>
+  <input
+    :value="props.modelValue"
+    @input="emit('update:modelValue', $event.target.value)"
+  />
+</template>
+```
+
+### 3. defineModel(vue3.5+)实现双向绑定。
+```html
+<!-- MyComponent.vue -->
+<script setup>
+const title = defineModel('title')
+</script>
+
+<template>
+  <input type="text" v-model="title" />
+</template>
+```
+
+## watch 和 watchEffect 的区别？
+1. watch 监听特定的数据源，只在条件满足时触发回调。
+2. watchEffect 无需指定数据源，自动追踪响应式依赖。
+3. watchEffect初始化时会立即执行一次回调，而watch不会，因为需要首次依赖收集。
+
+## setup 中如何获取组件实例？
+1. composition API 中没有this，但可以通过 getCurrentInstance() 组件实例。
+2. 可以通过 getCurrentInstance() 获取组件实例
+```js
+const instance = getCurrentInstance()
+console.log(instance)
+```
+
+## vue3为什么比vue2更快？
+
+### 响应式系统重构：Proxy 替代 Object.defineProperty
+1. 无需递归初始化所有属性（按需响应）
+2. 原生支持数组/Map/Set 等集合类型
+3. 动态检测新增/删除属性（无需 Vue.set/delete）
+
+### 虚拟 DOM 优化（Compiler + Runtime 协同）
+1. 静态节点提升：静态节点在编译阶段被提升到渲染函数外部，避免重复创建。
++ hoistStatic：静态节点的定义，提升到 render 函数外部，缓存起来，多次渲染时复用，空间换时间优化策略。
++ 合并静态节点：多个相同静态节点的渲染函数合并为一个。
+
+2. 补丁标记：为动态节点标记其变化类型（如 class、text、props），diff 时只需检查带标记的节点。
+演示网站：https://vue-next-template-explorer.netlify.app/
++ patchFlag​​：标记节点变化类型，如 TEXT、CLASS、PROPS 等。
+
+3. ​​树结构优化​​：将动态子节点缓存为数组，减少递归深度。
+
+### 事件侦听器缓存 cacheHandler​​
+1. Vue 3 会自动缓存内联事件处理函数（如 @click="handleClick"），避免每次渲染重新创建函数
+
+### 组合式 API 的运行时优化
+1. ​​更高效的逻辑复用​。
+2. 更好的 Tree-shaking​，未使用的 API 会被摇树优化掉。
+
+### 编译器优化
+1. 模块化编译器​
+2. 将模板划分为动态/静态区块，仅编译动态部分。
+
+### SSR 优化
+1. 静态内容在服务端直接以字符串拼接，避免虚拟 DOM 开销。
+2. 客户端仅处理动态内容，减少初始渲染时间。
+
+## vite 开发环境为何启动快？
+1. 基于 ES 模块的按需编译。
+2. 无需打包，直接运行源代码。
+3. 使用 ​​esbuild​​（Go 语言编写）预构建依赖，将多个文件合并为单个模块，减少网络请求
+4. 利用浏览器缓存提速，首次加载后，依赖不再请求服务器
+5. 热更新（HMR）优化，无需重新加载整个页面，利用原生 ESM 的 import.meta.hotAPI，更新速度与项目规模无关。
 
 
