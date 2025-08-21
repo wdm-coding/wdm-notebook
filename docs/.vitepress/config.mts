@@ -52,6 +52,7 @@ export default defineConfig({
             { text: 'Vue3Api', link: '/pages/vue/vue3-api' },
             { text: 'Vue3面试题', link: '/pages/vue/question-vue3' },
             { text: 'Vue3技能收集', link: '/pages/vue/vue3-tag' },
+            { text: 'Vue3常见hooks', link: '/pages/vue/vue3-hooks' },
           ]
         }
       ],

@@ -134,8 +134,64 @@ function computed(getter) {
 }
 ```
 
-17.11-17.12
+## vue3 相比 vue2 升级了哪些功能？
+1. createApp()代替new Vue()。
+2. Composition API。
+3. Teleport。传送门：可以将组件渲染到DOM树之外的任何位置。
+4. Fragments。片段：允许在单个组件中包含多个根节点。
+5. Suspense。挂起：允许组件在等待异步数据时显示占位内容，直到数据加载完成再渲染最终内容。
+6. emits选项代替$emit。
+7. 生命周期钩子名称变化。
+8. 移除.sync修饰符、filter。
+9. 异步组件的语法变化。
 
+## Suspense 组件的使用场景
+1. Suspense 组件可以用于在等待异步数据时显示占位内容，直到数据加载完成再渲染最终内容。
+2. Suspense内部有两个插槽：default 和 #fallback。
+```html
+<!-- 异步组件 -->
+<template>
+  <div class='suspense_test'>
+    <h1>Suspense</h1>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'SuspenseTest',
+    async setup() {
+      await new Promise(resolve => setTimeout(() => resolve(), 3000))
+      return {}
+    }
+  }
+</script>
+```
+```html
+<!-- 父组件使用异步组件 -->
+<template>
+  <Suspense>
+    <SuspenseTest />
+    <template #fallback>等待 {{ time }} 秒后渲染异步组件</template>
+  </Suspense>
+</template>
+<script setup>
+  import SuspenseTest from './suspense-test.vue'
+  const time = ref(3)
+  onMounted(() => {
+    const timer = setInterval(() => {
+      time.value--
+      if (time.value === 0) {
+        clearInterval(timer)
+      }
+    }, 1000)
+  })
+</script>
+```
+
+## Composition API 如何实现逻辑复用？
+1. 封装自定义hooks函数。
+2. 函数命名规范：use开头，驼峰命名。
+3. setup函数中使用自定义hooks。
 
 
 
