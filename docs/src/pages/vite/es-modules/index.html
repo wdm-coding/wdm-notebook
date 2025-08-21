@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Permissions-Policy" content="unload=(self)"/>
+    <title>ES Module demo</title>
+  </head>
+  <body>
+    <div id="app">基本演示</div>
+    <script type="module">
+      import { fun1,fun2 } from './src/main.js';
+      fun1();
+      fun2();
+    </script>
+  </body>
+</html>
