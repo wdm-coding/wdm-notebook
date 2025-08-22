@@ -309,5 +309,20 @@ console.log(instance)
 2. composition API 只调用一次，而 React Hooks 可以在函数式组件中多次调用。
 3. React Hooks 需要保证hooks的调用顺序，而composition API 没有这个限制。
 
+## defineComponent的作用？
+1. defineComponent是Vue 3提供的一个函数，主要用于TypeScript的类型推断。
+2. 参数可以是对象或函数，返回一个组件。
+3. 函数作为参数时，可以接收props和context作为参数。
+4. 第一个参数如何是函数相当于setup函数，第二个参数是对象则为组件的选项。
 
+## defineProps() 和 defineEmits() 的使用？
+1. defineProps() 用于定义组件的 props。
+2. defineEmits() 用于定义组件的自定义事件。
+3. defineProps 和 defineEmits 都是只能在 `<script setup>` 中使用的编译器宏。他们不需要导入，且会随着 `<script setup>` 的处理过程一同被编译掉。
 
+## ​​什么是编译器宏？
+1. 编译器宏是一种​​在代码编译阶段被特殊处理​​的标识符，它们不是普通的 JavaScript 函数或变量，而是​​由 Vue 编译器（如 @vue/compiler-sfc）在编译单文件组件（SFC）时解析并替换的标记​​。
+2. vue 编译器在编译 SFC 时，会识别 defineProps和 defineEmits这两个特殊标识符。
+3. 最终生成的 JavaScript 代码中，这些宏调用会被替换为实际的运行时对象。
+4. 必须直接在 `<script setup>`的顶层作用域使用，不能在函数内。
+5. 无需导入,编译时处理​
