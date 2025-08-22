@@ -34,6 +34,7 @@ export default defineConfig({
           items: [
             { text: 'js基础', link: '/pages/web/js-base' },
             { text: 'js异步', link: '/pages/web/js-async' },
+            { text: 'Event Loop', link: '/pages/web/enent-loop' },
             { text: 'dom-bom', link: '/pages/web/dom-bom' },
             { text: 'js事件', link: '/pages/web/js-events' },
             { text: 'AJAX', link: '/pages/web/ajax' },
@@ -53,6 +54,7 @@ export default defineConfig({
             { text: 'Vue3面试题', link: '/pages/vue/question-vue3' },
             { text: 'Vue3技能收集', link: '/pages/vue/vue3-tag' },
             { text: 'Vue3常见hooks', link: '/pages/vue/vue3-hooks' },
+            { text: 'Vue JSX', link: '/pages/vue/vue-jsx' },
           ]
         }
       ],

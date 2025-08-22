@@ -275,7 +275,7 @@ export default {
 ```
 
 ## useTemplateRef()
-1. 返回一个浅层 ref，其值将与模板中的具有匹配 ref attribute 的元素或组件同步。
+返回一个浅层 ref，其值将与模板中的具有匹配 ref attribute 的元素或组件同步。
 ```html
 <template>
   <input ref="input" />

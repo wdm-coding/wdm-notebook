@@ -304,4 +304,10 @@ console.log(instance)
 1. 静态内容在服务端直接以字符串拼接，避免虚拟 DOM 开销。
 2. 客户端仅处理动态内容，减少初始渲染时间。
 
+## composition API 和 React Hooks 的区别？
+1. composition API 只在 setup() 中使用，而 React Hooks 可以分散在组件的任何位置。
+2. composition API 只调用一次，而 React Hooks 可以在函数式组件中多次调用。
+3. React Hooks 需要保证hooks的调用顺序，而composition API 没有这个限制。
+
+
 
