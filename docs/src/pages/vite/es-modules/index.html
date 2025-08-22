@@ -7,11 +7,24 @@
     <title>ES Module demo</title>
   </head>
   <body>
-    <div id="app">基本演示</div>
+    <!-- <div id="app">基本用法</div>
     <script type="module">
       import { fun1,fun2 } from './src/main.js';
       fun1();
       fun2();
+    </script> -->
+    <div>
+      <p>动态引入</p>
+      <button id="btn">load</button>
+    </div>
+    <script type="module">
+      document.getElementById('btn').addEventListener('click',()=>{
+        import('./src/main.js').then(res=>{
+          console.log('动态加载成功',res)
+          res.fun1();
+          res.fun2();
+        })
+      })
     </script>
   </body>
 </html>
