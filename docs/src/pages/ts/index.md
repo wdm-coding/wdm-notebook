@@ -18,13 +18,31 @@ npx tsc --init
 
 ```bash
 npm i -D typescript nodemon ts-node
-
+# ts-node 直接运行ts文件
 nodemon --exec ts-node src/index.ts
 ```
 
-## 基础类型
+## 类型注解
+为变量指定类型，提高代码的可读性和可维护性。
 
+## 类型推断
+TypeScript会在没有明确的指定变量类型的时候推测出一个类型，即自动判断变量的类型。
+
+## 基础类型
 boolean, number, string,  symbol, null 和undefined
+
+## 交叉类型
+将多个类型合并为一个类型，使用 & 符号连接。 
+
+## 联合类型
+表示取值可以为多种类型中的一种,使用 | 符号连接。
+
+## 字面量数据类型
+```ts
+type num = 1 | 2 | 3;
+let name: num = 1;
+```
+2.8
 
 ```typescript
 // string
@@ -44,12 +62,10 @@ const objS:{name:string,age?:number} = {name:'Jack'};
 const obj:object = {name:'Jack'};
 ```
 
-
-## 对象类型
-
-```typescript
-{} 或者 object,  [] 或者 Array<any>, 还有function, Class类型
-```
+## 字面量 与 构造函数
+1. `{} 或者 object`,  
+2. `[] 或者 Array<any>`, 
+3. 还有function, Class类型
 
 ## 可选属性 ？
 
