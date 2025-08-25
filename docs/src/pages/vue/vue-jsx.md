@@ -24,10 +24,14 @@
 </div>
 ```
 2. 父组件使用插槽
-`<jsxSon onChange={sonChange} id={666}>`
-`  {{`
-   ` default: ()=><div>我是默认slot</div>,`
-   ` footer: () => <div>我是具名slot</div>,`
-   ` header: ({name,age}) => <div>我是作用域slot-{name}-{age}</div>`
-  `}}`
-`</jsxSon>`
+```jsx
+<jsxSon onChange={sonChange} id={666}>
+  {% raw %}
+  {{
+    default: ()=><div>我是默认slot</div>,
+    footer: () => <div>我是具名slot</div>,
+    header: ({name,age}) => <div>我是作用域slot-{name}-{age}</div>
+  }}
+  {% endraw %}
+</jsxSon>
+```
