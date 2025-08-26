@@ -63,19 +63,44 @@ const objS:{name:string,age?:number} = {name:'Jack'};
 2. 当你在 tsconfig.json 的"compilerOptions"里设置了"strictNullChecks": true时，那必须严格对待，undefined 和 null 将只能赋值给它们自身和 void 类
 3. TS 对可选属性和对可选参数的处理一样，会被自动加上 | undefined；
 
-## any 任意类型 
-可以赋值任何类型,可以调用任何属性
+## any 任意类型 和 unknown 未知类型的区别？
+1. any 类型可以赋值给任意类型，任意类型也可以赋值给 any；
+2. unknown 类型只能赋值给任意类型，任意类型不能赋值给 unknown；
+3. ​​any​​：​​关闭​​了 TypeScript 的类型检查。它是一张“免死金牌”，允许你对它进行任何操作，而编译器不会抱怨。​​
+4. unknown​​：​​强制​​你进行类型检查。它是一个类型安全的“盒子”，在你不明确里面是什么东西之前，你不能对它进行任何操作,一般用于函数参数。
+5. any 任意，unknown 不确定的 
+```ts
+let a: any = 'hello'; // 正确
+let b: unknown = 'hello'; // 正确
+let c: any = b; // 正确
+let d:number = b; // 错误
+```
 
 ## void 空类型
 只能赋值undefined,不能赋值其他类型
 
 ## never 永远不会返回的类型
-1. 抛出异常
-2. 无限循环
-3. 使用never避免出现未来扩展新的类型，可以使用never类型来阻止编译器推断出新的类型。
+1. 一个函数如果返回 never，意味着它​​永远不会正常返回​​（即不会执行到函数终点并返回一个值）
+2. 表示不可能存在的空集合
+```ts
+// 情况 1: 抛出错误
+function throwError(message: string): never {
+  throw new Error(message);
+}
 
-## unknow 未知类型
-可以赋值任何类型,但是不能调用任何属性,除非有类型判断
+// 情况 2: 无限循环
+function infiniteLoop(): never {
+  while (true) {
+    // do something...
+  }
+}
+// 情况 3: 表示不可能存在的空集合
+let n: never;
+n = 123; // 错误：Type 'number' is not assignable to type 'never'.
+n = "hello"; // 错误
+n = true; // 错误
+// 任何赋值操作都会失败
+```
 
 ## tuple 元组类型 
 1. 固定类型与长度的数组 
@@ -89,19 +114,40 @@ const objS:{name:string,age?:number} = {name:'Jack'};
 ```
 
 ## enum 枚举类型
+1. 数字枚举
+key 和 value 的双向映射关系
+2. 字符串枚举
+key 和 value 的单向映射关系,类似于对象
+3. 优点：有默认值和自增值，节省编码时间，可读性强
 ```ts
-enum Days {Sun, Mon, Tue, Wed, Thu, Fri, Sat};
-// 使用
-console.log(Days["Sun"] === 0); // true
-console.log(Days["Mon"] === 1); // true
-console.log(Days["Tue"] === 2); // true
-console.log(Days["Sat"] === 6); // true
-console.log(Days[0] === "Sun"); // true
-console.log(Days[1] === "Mon"); // true
-console.log(Days[2] === "Tue"); // true
-console.log(Days[6] === "Sat"); // true
-console.log(Days[Days.Sun] === "Sun"); // true
-console.log(Days[Days.Mon] === "Mon"); // true
-console.log(Days[Days.Tue] === "Tue"); // true
-console.log(Days[Days.Sat] === "Sat"); // true
+// 数字枚举
+enum Direction {
+  Up = 1,
+  Down,
+  Left,
+  Right,
+}
+// 数字枚举的取值默认会被编译成从0开始递增
+Direction.Up; // 1
+Direction.Down; // 2
+Direction['left'] // 3
+Direction[3] // 'Left'
+
+// 字符串枚举
+enum Colors {
+  Red = 'red',
+  Blue = 'blue',
+}
+Colors.Red; // 'red'
+Colors['Red']; // 'red'
+Colors[0]; // error'
+// 常量枚举
+const enum Month {
+    Jan,
+    Feb,
+    Mar,
+}
+Month.Jan; // 0
 ```
+
+## 2.14
