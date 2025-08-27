@@ -33,6 +33,14 @@ this.obj.count++
 2. 性能影响：v-if 在切换时销毁和重建元素，而 v-show 只改变元素的 CSS display 属性。频繁切换使用 v-show 更合适。
 3. 初始渲染：v-if 在条件为假时不进行任何操作，不占用 DOM 资源；而 v-show 会始终渲染元素，只是隐藏。
 
+## display:none 和 visibility:hidden 的区别？
+1. display:none 会让元素完全从渲染树中消失，不占据空间。
+2. visibility:hidden 会让元素隐藏，但仍然占据空间。
+3. 性能影响：display:none 更彻底，但切换时需要重新渲染；visibility:hidden 只需改变 CSS。
+4. display:none：触发重排（reflow）和重绘（repaint），因为需要重新计算布局
+5. visibility:hidden：只触发重绘（repaint），因为元素仍然占据空间，不需要重新计算布局。
+6. display:none 无法通过子元素覆盖父元素，而 visibility:hidden 可以被覆盖。
+
 ## v-for 和 v-if 为什么不能一起使用？
 1. 因为 v-for 比 v-if 优先级高，所以会先执行 v-for 再执行 v-if。
 2. 如果两者一起使用，每次都会重新渲染列表，导致性能问题。
