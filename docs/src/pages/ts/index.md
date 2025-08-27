@@ -48,6 +48,28 @@ let name: num = 1;
 2. `[] 或者 Array<any>`, 
 3. 还有function, Class类型
 
+## 函数类型的rest参数
+1. rest参数会将所有传入的可变数量的参数表示为一个数组。
+2. rest参数只能是最后一个参数。
+```ts
+function fun(data:string,...rest:number[]){
+  console.log(data,rest);
+}
+fun('hello',1,2,3)
+```
+
+## 函数类型
+```ts
+type Fun = (data: string) => string;
+const fun: Fun = (data) => {
+    return data
+}
+
+const fun1:Fun = function(data){
+    return data.toUpperCase();
+}
+```
+
 ## 可选属性`？`
 ```typescript
 const objS:{name:string,age?:number} = {name:'Jack'};
@@ -59,9 +81,18 @@ const objS:{name:string,age?:number} = {name:'Jack'};
 3. { [key: string]: string }是最具体的，它不允许任何原始类型、数组或具有非字符串值的对象被分配到它。
 
 ## undefined 和 null 类型
-1. 默认情况下 undefined 和 null 可以赋值给任意类型的值；
-2. 当你在 tsconfig.json 的"compilerOptions"里设置了"strictNullChecks": true时，那必须严格对待，undefined 和 null 将只能赋值给它们自身和 void 类
-3. TS 对可选属性和对可选参数的处理一样，会被自动加上 | undefined；
+1. undefined 和 null 都是所有类型的子类型。也就是说 undefined 类型的变量，可以赋值给 number 类型的变量；
+2. any,unknown,undefined 类型可以接受 null 和 undefined，但是不能赋值给它们。
+3. 当你在 tsconfig.json 的"compilerOptions"里设置了"strictNullChecks": true时，那必须严格对待，undefined 和 null 将只能赋值给它们自身和 void 类
+4. TS 对可选属性和对可选参数的处理一样，会被自动加上 | undefined；
+```ts
+function fun(data?:string){
+    console.log(data);
+}
+
+fun("hello");
+// fun(undefined) === fun()
+```
 
 ## any 任意类型 和 unknown 未知类型的区别？
 1. any 类型可以赋值给任意类型，任意类型也可以赋值给 any；
@@ -150,4 +181,71 @@ const enum Month {
 Month.Jan; // 0
 ```
 
-## 2.14
+## interface 接口
+1. 接口是对对象的形状（结构）进行描述
+2. 接口是一组命名属性类型，但不包含属性的值或其实现的细节。它只定义了所有类必须遵循的规范。
+3. 接口可以继承其他接口 extends
+4. 一个类可以实现多个接口 implements
+5. 接口可以被扩展和实现
+6. 接口可索引签名 [key: string]: any;
+```ts
+interface Person {
+  name: string;
+  age?: number; // 可选属性
+  eat?(food: string): void; // 可选方法
+}
+interface Man extends Person {
+  sex: string; // 继承接口
+  readonly hobby?: string[]; // 只读属性，可选属性
+}
+
+let man: Man = {
+  name: 'Jack',
+  sex: 'male', // 必须实现接口中的属性
+  hobby: ['football'], // 可选属性可以不实现，但必须有?号
+};
+interface List<T> {
+  add(item: T): void;
+  remove(item: T): void;
+}
+// 实现
+class StringList implements List<string> {
+  private items: string[] = [];
+  add(item: any): void {
+      this.items.push(item);
+  }
+  remove(item: any): void {
+      this.items = this.items.filter(i => i !== item);
+  }
+}
+
+class NumberList implements List<number> {
+  private items: number[] = [];
+  add(item: number): void {
+      this.items.push(item);
+  }
+  remove(item: number): void {
+      this.items = this.items.filter(i => i !== item);
+  }
+}
+```
+
+## 索引访问类型
+索引访问类型允许你通过一个对象类型的已知键来获取其对应的属性值的类型。
+```ts
+const symbolKey = Symbol('product');
+interface Product{
+    [symbolKey]: string;
+    id: number;
+    name: string;
+    price: number;
+}
+type A = Product['name']
+type B = Product['price']
+type C = Product[typeof symbolKey]
+// 联合类型
+type Pkeys = keyof Product // 等同于 "id" | "name" | "price" | typeof symbolKey
+// 提取所有键
+type AllKeys<T> = T extends any ? keyof T : never
+type AKeys = AllKeys<Product> // 等同于 "id" | "name" | "price" | typeof symbolKey
+```
