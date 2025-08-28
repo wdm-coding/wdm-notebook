@@ -144,6 +144,21 @@ n = true; // 错误
   x[1] = 20; // Error
 ```
 
+## 可变元组类型
+1. 使用扩展运算符 ... 来表示数组的长度或类型是可变的
+```ts
+let tuple: [string, ...number[]] = ['hello', 10, 20];
+```
+2. 解构元组
+```ts
+let [a, b,...rest]:[string,number,...any[]] = ['hello', 10,12,3,'dsd'];
+console.log(a,b,rest); // hello 10 [12,3,'dsd']
+```
+3. 元组tag
+```ts
+let t:[a:string,b:number,...rest:any[]] = ['hello', 10,12,3,'dsd'];
+```
+
 ## enum 枚举类型
 1. 数字枚举
 key 和 value 的双向映射关系
@@ -249,3 +264,13 @@ type Pkeys = keyof Product // 等同于 "id" | "name" | "price" | typeof symbolK
 type AllKeys<T> = T extends any ? keyof T : never
 type AKeys = AllKeys<Product> // 等同于 "id" | "name" | "price" | typeof symbolKey
 ```
+
+## interface 和 type 的关联
+1. interface 可以继承type
+2. type 可以是几个interface 的 联合类型
+3. type 可以定于元组类型
+4. interface 定义相同的接口会合并，type 定义相同的类型会报错
+
+## Class 类
+1. 静态属性：使用 static 关键字修饰的属性，属于类本身而不是类的实例
+2. 静态方法：使用 static 关键字修饰的方法，属于类本身而不是类的实例
