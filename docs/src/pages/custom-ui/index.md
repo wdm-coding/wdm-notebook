@@ -19,5 +19,5 @@
 
 ## 3. Icon 图标组件
 1. 封装第三方图标库
-2. 根节点不继承第三方库属性（inheritAttrs:false）
+2. 根节点不继承第三方库(fontAwesome)属性（inheritAttrs:false） 
 3. 扩展第三方图标库的types

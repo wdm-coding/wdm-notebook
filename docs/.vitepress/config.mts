@@ -40,7 +40,8 @@ export default defineConfig({
             { text: 'AJAX', link: '/pages/web/ajax' },
             { text: 'Axios', link: '/pages/web/axios' },
             { text: 'ES新特性', link: '/pages/web/es-new' },
-            { text: '其他', link: '/pages/web/other' }
+            { text: '面试题汇总', link: '/pages/web/question' },
+            { text: 'js 技能收集', link: '/pages/web/blog' }
           ]
         }
       ],
@@ -52,9 +53,11 @@ export default defineConfig({
             { text: 'Vue2面试题', link: '/pages/vue/question-vue2' },
             { text: 'Vue3Api', link: '/pages/vue/vue3-api' },
             { text: 'Vue3面试题', link: '/pages/vue/question-vue3' },
-            { text: 'Vue3技能收集', link: '/pages/vue/vue3-tag' },
+            { text: 'Vue3 10个常见操作', link: '/pages/vue/vue3-tag' },
             { text: 'Vue3常见hooks', link: '/pages/vue/vue3-hooks' },
             { text: 'Vue JSX', link: '/pages/vue/vue-jsx' },
+            { text: 'Vue响应式原理', link: '/pages/vue/proxy' },
+            { text: 'Vue 相关技能收集', link: '/pages/vue/blog' },
           ]
         }
       ],
