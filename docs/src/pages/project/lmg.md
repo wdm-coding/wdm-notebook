@@ -1,75 +1,27 @@
-## 陇明公
+# 陇明公
+
+## 陇明公PC端：
 1. 生产：jscadmin   Find.888
 2. 测试：adminm707efsfLmg   azxc@s145$
 3. 测试省人社 admingsm707efsfLmg iO7zO6jE6yR
 4. 测试兰州市人社 admin999999m707efsfLmg azxc@s145$
 5. 测试城关区人社 admin888888m707efsfLmg azxc@s145$
 
+## 陇明公欠薪小程序微信公众平台
+1.  lmg_complaint@163.com    lmg_compt_silkdo
 
-## 2025-05-01
+### 陇明公欠薪小程序登录流程
+1. 进入index页面 - 根据userLogin接口 - 获取是否已经注册过 存储isLogin
+2. 点击添加投诉线索 - 获取微信头像 - 查看isLogin是否注册
+3. 未注册 - wxLogin - getCode -uni.login(获取code) - getOpenId - 判断cookies和userInfoArr是否存在 - 存在 - 注册登录成功 - 进入home页面(我要反映) / 已注册 - getCode -uni.login(获取code) - getOpenId - 判断cookies和userInfoArr是否存在
+4. getOpenId - 判断cookies和userInfoArr是否存在 - 不存在 - userLogin接口 - 1001(未注册) - login页面 - userLoginH5接口 - 1001(未注册) - 去注册页面 / 已注册 - 进入home页面(我要反映)
+5. getOpenId - 判断cookies和userInfoArr是否存在 - 不存在 - userLogin接口 - 已注册 - 进入home页面(我要反映)
+6. 注册页面 - 输入姓名,身份证号 - 根据code 和 open-type 以及 接口 getPhoneNumber 获取手机号 - 注册接口 - 注册成功
 
-### 是否政府项目改为项目种类
-```html
-<el-select
-  v-model="search.govType"
-  style="width: 10%; margin-right: 10px;line-height: 40px"
-  placeholder="请选择"
->
-  <el-option
-    v-for="item in $govProjectType"
-    :key="item.id"
-    :label="item.value1"
-    :value="item.code"
-    style="width: 100px; margin-right: 10px"
-  />
-</el-select>
-```
-#### 监管端
-1. 监管端项目管理-项目信息-筛选条件/详情页面
-2. 监管端项目管理-灾后重建项目信息-详情页面
-3. 分账制监控-五项制度-筛选条件
-4. 实名制监控-五项制度-筛选条件
-5. 工作事项-审核页面/详情页面(总包注册，项目编辑)
-6. 工作事项-保函事项-电子保函详情查询/电子保函赔付详情
-
-### 项目端
-1. 项目端总包注册
-2. 待办事项-保函审核详情页面
-3. 基础信息-上传认证-项目编辑/全国预警平台上传认证相关页面
-4. 基础信息-项目信息-项目编辑
-5. 工作事项-信息核验-详情页面
-6. 农民工工资保函-相关详情页面
-
-### 地推端
-4. 地推端-项目录入-录入页面/详情页面
-
-## 2025-05-27
-
-### 总包注册填写字段
-测试消息推送
-620555555555555555
-2025-05-01
-测试消息推送的营业地址
-
-ZBM-P-20250527-19024704
-测试消息推送的建设项目名称
-ZBM-P-20250527-19024704
-测试消息推送的工程名称
-
-施工许可证号：123456789
-
-项目经理名称：测试消息推送的项目经理
-项目经理联系电话：17693198620
-
-劳资专员姓名：测试消息推送的劳务专员
-劳资专员手机：17693198620
-劳资专员身份证号：620122199412121212
-
-设置账户：ts_msg
-密码：azxc@s145$
-
-## 2025-07-01
-
-1. 陇明公APP打卡页面结构搭建，考勤统计迁移，底部tabbar开发。
-2. 监管端APP参建单位列表，参建单位详情，项目收藏按钮，指派按钮，分享按钮
-3. 监管端APP项目通知
+### 小程序收集用户手机号违规
+1. 未进入小程序浏览页面 - 用户手机号收集违规
+2. 登录手机号收集违规
+3. 解决方案：
+ + 输入手机号是h5登录页面，小程序已注册可通过获取微信code登录
+ + 小程序未注册仍然通过注册页面
+ + 未登录用户任然可以访问首页无权限信息
