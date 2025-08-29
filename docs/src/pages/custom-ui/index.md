@@ -21,3 +21,18 @@
 1. 封装第三方图标库
 2. 根节点不继承第三方库(fontAwesome)属性（inheritAttrs:false） 
 3. 扩展第三方图标库的types
+
+## Tooltip 浮层组件
+1. 触发区
+  + dom元素
+  + 自定义触发区
+2. 展示区
+  + 字符串
+  + 复杂内容插槽
+3. 触发方式
+  + 鼠标hover
+  + 鼠标点击
+  + 自定义触发
+4. 显示位置
+  + 借助第三方库 popper.js [popper.js官网](https://popper.js.org/) [popper.js文档](https://popper.js.org/docs/v2/)
+  + 安装 `npm i @popperjs/core`
