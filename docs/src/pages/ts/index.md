@@ -271,6 +271,105 @@ type AKeys = AllKeys<Product> // 等同于 "id" | "name" | "price" | typeof symb
 3. type 可以定于元组类型
 4. interface 定义相同的接口会合并，type 定义相同的类型会报错
 
-## Class 类
+## Class 类 静态成员
 1. 静态属性：使用 static 关键字修饰的属性，属于类本身而不是类的实例
 2. 静态方法：使用 static 关键字修饰的方法，属于类本身而不是类的实例
+
+## 实现Class的类方法
+1. 静态方法 static 类调用方法
+2. 单列模式 私有化构造函数 唯一实例调用方法
+
+## 单列模式的实现
+1. 私有化构造函数, 定义一个静态私有变量保存类的唯一实例
+```ts
+class DateUtil {
+  static dateUtil=new DateUtil(); // 静态属性，用于存储类的唯一实例
+  private constructor() {}
+  formatDate(){
+    console.log('格式化日期');
+  }
+}
+const dateUtil1 = DateUtil.dateUtil;
+const dateUtil2 = DateUtil.dateUtil;
+console.log(dateUtil1 === dateUtil2)
+dateUtil1.formatDate();
+```
+2. 定义一个静态公有方法返回类的唯一实例
+```ts
+class Singleton {
+  private static instance: Singleton;
+  public static getInstance(): Singleton {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton();
+    }
+    return Singleton.instance;
+  }
+}
+```
+
+## TS 中 class 类的getter 和 setter的使用和意义？
+```ts
+// 使用getter 和 setter
+class People {
+  name: string;
+  _age: number = 0; // 默认值设置为0
+  address: string;
+  constructor(name: string, address: string) {
+    this.name = name;
+    this.address = address;
+  }
+  get age() {
+    return this._age;
+  }
+  set age(value: number) {
+    if (value < 0) {
+      throw new Error('年龄不能为负数');
+    }
+    if(value > 150) {
+      throw new Error('年龄不能大于150');
+    }
+    this._age = value;
+  }
+}
+
+const person = new People('张三', '北京市');
+
+person.age = 10; // 设置年龄
+
+console.log(person.age); // 获取年龄
+```
+
+## ts 静态成员、方法拦截器的作用
+```ts
+// 方法拦截器
+class People {
+  name: string;
+  address: string;
+  constructor(name: string, address: string) {
+    this.name = name;
+    this.address = address;
+  }
+  doEat(who: string, where: string): void {
+    console.log(`${who}在${where}吃饭`);
+  }
+}
+// Object.getOwnPropertyDescriptor 获取对象自有属性描述符的方法，返回一个包含属性配置信息的对象
+const desc = Object.getOwnPropertyDescriptor(People.prototype, 'doEat')
+const originalDoEat = desc!.value;
+desc!.value = function (...args: any[]) {
+  console.log(`前置拦截`);
+  args = args.map(arg =>{
+    if(typeof arg === 'string'){
+      return arg.replace(/\s+/g, '')
+    }
+    return arg;
+  })
+  originalDoEat.call(this, ...args);
+  console.log(`后置拦截`);
+};
+
+let p1 = new People('张三', '北京');
+// Object.defineProperty() 是 JavaScript 中用于精确添加或修改对象属性的方法，允许开发者完全控制属性的行为
+Object.defineProperty(People.prototype, 'doEat', desc!);
+p1.doEat('张  三  2', '北  京   2');
+```
