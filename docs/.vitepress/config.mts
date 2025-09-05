@@ -59,6 +59,7 @@ export default defineConfig({
             { text: 'Vue响应式原理', link: '/pages/vue/proxy' },
             { text: 'Vue 相关技能收集', link: '/pages/vue/blog' },
             { text: 'Vue 测试用例', link: '/pages/vue/vue-test' },
+            { text: 'Vue 动态路由', link: '/pages/vue/dynamic-routes' },
           ]
         }
       ],
