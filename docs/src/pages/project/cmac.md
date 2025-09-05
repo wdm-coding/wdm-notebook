@@ -49,3 +49,63 @@
 
 ## 城市定位兼容性问题
 1. 替换百度地图定位未知问题。
+```html
+<template>
+  <view>
+    <button @click="getLocation">获取位置</button>
+    <text>{{ locationText }}</text>
+  </view>
+</template>
+<script module="renderjs" lang="renderjs">
+export default {
+  methods: {
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.$ownerInstance.callMethod('onSuccess', {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            })
+          },
+          (error) => {
+            this.$ownerInstance.callMethod('onError', {
+              code: error.code,
+              message: error.message
+            })
+          },
+          { 
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        )
+      } else {
+        this.$ownerInstance.callMethod('onError', {
+          code: -1,
+          message: '浏览器不支持定位功能'
+        })
+      }
+    }
+  }
+}
+</script>
+
+<script>
+export default {
+  data() {
+    return {
+      locationText: ''
+    }
+  },
+  methods: {
+    onSuccess(res) {
+      this.locationText = `纬度：${res.latitude}，经度：${res.longitude}`
+    },
+    onError(err) {
+      this.locationText = `定位失败：${err.message}`
+    }
+  }
+}
+</script>
+```
