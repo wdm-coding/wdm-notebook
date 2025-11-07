@@ -1,5 +1,17 @@
 # npm 相关命令
 
+## 安装包管理器 nvm
+
+```shell
+$ https://github.com/coreybutler/nvm-windows/releases$
+```
+
+## 手动安装node 与 npm固定版本
+```shell
+$ https://npmmirror.com/mirrors/node/v14.21.3/node-v14.21.3-win-x64.zip
+$ https://npmmirror.com/mirrors/npm/v6.14.18/npm-v6.14.18.zip
+```
+
 ## 安装 cnpm
 
 ```shell

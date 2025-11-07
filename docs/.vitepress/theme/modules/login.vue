@@ -36,8 +36,8 @@
   const emit = defineEmits(['loginCallback'])
   const formRef = ref(null)
   const model = reactive({
-    username: '',
-    password: ''
+    username: 'wdmcoding',
+    password: '17693198620@0620'
   })
   const rules = {
     username: [
