@@ -1,4 +1,16 @@
-# 授权运营平台 
+# 公共数据授权运营平台 
+1. 访问门户 ：https://172.19.5.1:8443/ops-portal/home
+2. 代码仓库 ：openplat-ui-devportal
+
+## 代码相关问题
+1. 整体架构
+2. 运行平台与运营后台页面跳转逻辑
+3. nodejs 运行环境
+4. dtd 依赖包
+5. 主要的自定义hooks功能
+6. ui框架
+7. redux 状态管理
+8. 多环境配置(config.ts, proxyConfig.ts)
 
 ## 门户网站
 数据产品开发商-入驻建挡 - 申请数据开发
