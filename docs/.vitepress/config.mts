@@ -77,6 +77,7 @@ export default defineConfig({
             { text: 'React-Zustand', link: '/pages/react/react-zustand' },
             { text: 'React-Vite-Typescript', link: '/pages/react/react-vite-ts' },
             { text: 'AntDesign组件库', link: '/pages/react/react-antd' },
+            { text: 'Umi-Max框架', link: '/pages/react/umi-max' }
           ]
         }
       ],
@@ -164,6 +165,7 @@ export default defineConfig({
         {
           text: '项目',
           items: [
+            { text: '杭州-数据交易平台', link: '/pages/project/shumei' },
             { text: 'project', link: '/pages/project/' },
             { text: '陇明公', link: '/pages/project/lmg.md' },
             { text: '算力调度', link: '/pages/project/computer.md' },

@@ -1,3 +1,37 @@
+# 数美相关
+
+## dodo账号
+  + CSYY018
+  + WDM-shumei0620
+
+## 部署平台
+  1. 构建平台 https://dtp.dtdream.com/dtp/view/index.html#/P20190429206/ci/pipeline
+    + CSYY018 WDM-shumei0620
+  2. https://gs518000.proxy.dtsphere.com
+    + cbbadmin Admin123
+    
+## 一体化数据支撑平台(用户统一登记中心)
+  + https://gs518443.proxy.dtsphere.com  --> 10.10.13.55:8443
+  + dsc  Admin123
+  + admin Admin123
+
+## 数据授权平台
+
+
+## 功能节点平台
+
+
+## 数据登记平台
+
+
+
+
+
+
+
+
+
+
 # 公共数据授权运营平台 
 1. 访问门户 ：https://172.19.5.1:8443/ops-portal/home
 2. 代码仓库 ：openplat-ui-devportal
