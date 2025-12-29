@@ -9,6 +9,18 @@ function  jumpHandle(path) {
 
 <template>
   <div class='home_wrap'>
+    <n-card title="项目">
+      <n-flex>
+        <n-button @click="jumpHandle('/pages/project/shumei')">杭州-数据交易平台</n-button>
+        <n-button>陇明公</n-button>
+      </n-flex>
+    </n-card>
+    <n-card title="React 框架" style="margin: 20px 0;">
+      <n-flex>
+        <n-button @click="jumpHandle('/pages/react/index')">React 基础语法</n-button>
+        <n-button @click="jumpHandle('/pages/react/umi-max')">Umi-Max框架</n-button>
+      </n-flex>
+    </n-card>
     <n-grid cols="2 s:3 m:4 l:5 xl:6 2xl:7" x-gap="40" responsive="screen">
       <n-grid-item>
         <div class="grid_item" @click="jumpHandle('/pages/web/js-base')">
@@ -103,6 +115,12 @@ function  jumpHandle(path) {
 <style lang='scss'>
 .home_wrap{
   width: 100%;
+  padding-top: 50px;
+  .n-card-header__main{
+    font-size: 30px;
+    color: #000;
+    font-weight: 600;
+  }
   .grid_item{
     height: 200px;
     display: flex;

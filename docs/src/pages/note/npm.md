@@ -27,6 +27,8 @@ cnpm install -g nrm
 ## 查看源
 
 ```shell
+npm config get registry
+
 nrm ls
 ```
 ::: tip
@@ -69,3 +71,6 @@ degit username/repo my-project
   1. netstat -ano | findstr 8080
   2. taskkill /pid <PID号> /f
 ### taskkill /f /im node.exe 强制杀死node进程
+
+## 清除缓存
+1. npm cache verify  / npm cache clean --force

@@ -70,9 +70,13 @@
 
   <img src="/assets/react/6.png" style="margin-top:15px">
 
+  
+10. 安装依赖：
+```bash
+  $ npm install react-redux @reduxjs/toolkit
+```
+
 ```js
-  // 安装依赖：
-  // npm install react-redux @reduxjs/toolkit
   // 创建store文件夹，在store文件夹中创建modules文件
   // 在modules文件夹中创建userStore.js文件
   import {createSlice} from "@reduxjs/toolkit";
