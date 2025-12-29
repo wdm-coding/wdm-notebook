@@ -5,19 +5,29 @@
 + 选择 Ant Design Pro
 
 ## app.ts 中的执行顺序
-1. render函数
-2. patchClientRoutes函数：react-router 渲染前执行
-3. getInitialState函数：获取初始状态(自定义全局数据)
-4. onRouteChange函数：路由变化时执行
-5. layout函数：每次路由页面变化时执行
-    render
-    patchClientRoutes
-    rootContainer
-    getInitialState
-    onRouteChange
-    layout
+1. render-应用即将渲染
+2. patchClientRoutes-react-router 即将渲染
+3. rootContainer-更节点即将加载到页面上
+4. getInitialState-初始化全局状态
+5. access-权限数据变更 
+6. onRouteChange-路由变化
+7. layout-页面渲染 
 
-### layout 函数
+## @@InitialState 函数
+1. useModel('@@initialState') 获取全局状态
+2. refresh 刷新全局状态后执行后触发getInitialState函数、access函数
+3. setInitialState 设置全局状态执行后会触发access函数
+
+::: warning InitialState 与 models 的区别
+  1. InitialState 只在初始化时执行一次，或者顺序页面执行，适合存储用户角色信息，是否登录等更新不频繁的数据。
+  2. models 适合存储页面级别的状态，更新频率较高的数据。
+  3. 登录登出时，通过InitialState函数的refresh方法刷新全局状态，更新InitialState中的数据。
+:::
+
+## layout 函数
+1. 每次路由切换都会执行。
+2. InitialState 状态变化时也会执行。
+
 ```ts
 const layoutConfig: RunTimeLayoutConfig = (props) => {
   console.log('layout');
