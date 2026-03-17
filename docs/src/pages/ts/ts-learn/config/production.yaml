@@ -1,3 +1,0 @@
-db:
-  host: "prod"
-  port: 5432
