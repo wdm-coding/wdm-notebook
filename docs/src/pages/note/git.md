@@ -66,3 +66,13 @@ git push origin --delete 分支名 #删除远程分支
 1. git fetch 从远程仓库获取最新的分支和提交信息，但不自动合并到本地分支
 2. git pull 从远程仓库获取最新的更改，并自动合并到当前分支。
 
+## 将本地代码提交到远程仓库
+```bash
+git add .
+git commit -m "项目初始化"
+git remote add origin https://code.silkdo.com/stidep/front/stidep-manage-web.git
+git branch -M master
+git push -u origin master
+```
+
+
