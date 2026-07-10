@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<title>数据产品检索页面</title>
+		<style>
+			.search-wrap {
+				width: 500px;
+				margin: 100px auto;
+			}
+			input[type="search"] {
+				padding: 10px;
+				width: 350px;
+				font-size: 16px;
+			}
+			button {
+				padding: 10px 20px;
+				cursor: pointer;
+				font-size: 16px;
+			}
+		</style>
+	</head>
+	<body>
+		<div
+			class="search-wrap"
+			track-site-search
+			data-search-cat="data-product"
+			search-min-length="1"
+			search-max-length="50"
+			search-result-count="20"
+		>
+			<input type="search" placeholder="请输入关键词" search-keyword />
+			<button search-submit>检索</button>
+		</div>
+
+		<script>
+			;(function (window, document) {
+				// 常量定义
+				const TRACK_API = "/functionnode-portal-api/api/v1/portal/track/matomo" // 埋点上报接口
+				const TRACK_SEARCH_TAG = "[track-site-search]" // 搜索行为埋点标签
+				const SEARCH_INPUT_TAG = "[search-keyword]" // 搜索关键词输入框标签
+
+				// 生成持久访客ID
+				function getVisitorId() {
+					let vid = localStorage.getItem("_matomo_vid")
+					if (!vid) {
+						let arr = []
+						for (let i = 0; i < 16; i++) arr.push(Math.floor(Math.random() * 16).toString(16))
+						vid = arr.join("")
+						localStorage.setItem("_matomo_vid", vid)
+					}
+					return vid
+				}
+
+				// 生成页面PV标识
+				function getPvId() {
+					let arr = []
+					for (let i = 0; i < 6; i++) arr.push(Math.floor(Math.random() * 16).toString(16))
+					return arr.join("")
+				}
+
+				// 上报埋点接口处理
+				function sendTrack(type, searchKeyword = "", searchCat = "", searchCount = 0) {
+					const body = {
+						type: type,
+						idsite: "1",
+						url: window.location.href,
+						action_name: document.title,
+						_id: getVisitorId(),
+						pv_id: getPvId(),
+						ua: navigator.userAgent,
+						screen: `${screen.width}x${screen.height}`,
+						search: searchKeyword,
+						search_cat: searchCat,
+						search_count: searchCount,
+					}
+
+					fetch(TRACK_API, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json;charset=utf-8",
+						},
+						body: JSON.stringify(body),
+						keepalive: true,
+						credentials: "same-origin",
+					}).catch((err) => console.warn("埋点接口调用失败：", err))
+				}
+
+				// 页面PV埋点
+				function trackPageView() {
+					sendTrack("pageview")
+				}
+
+				// 搜索行为埋点
+				function trackSearch(keyword, cat, count) {
+					sendTrack("search", keyword, cat, count)
+				}
+
+				// 绑定搜索DOM
+				function bindSearchElement(el) {
+					if (el._bindFlag) return
+					el._bindFlag = true
+					const cfg = {
+						searchCat: el.getAttribute("data-search-cat") || "",
+						minLen: Number(el.getAttribute("search-min-length")) || 1,
+						maxLen: Number(el.getAttribute("search-max-length")) || 100,
+						defaultCount: Number(el.getAttribute("search-result-count")) || 0,
+					}
+					const input = el.querySelector(SEARCH_INPUT_TAG)
+					BIND_EVENTS.forEach((evt) => {
+						el.addEventListener(evt, function (e) {
+							console.log("搜索埋点触发事件：", evt)
+							let keyword = input.value.trim().slice(0, cfg.maxLen)
+							if (keyword.length >= cfg.minLen) {
+								trackSearch(keyword, cfg.searchCat, cfg.defaultCount)
+							}
+						})
+					})
+				}
+
+				// 扫描页面所有埋点DOM
+				function scanDom() {
+					document.querySelectorAll(TRACK_SEARCH_TAG).forEach((item) => bindSearchElement(item))
+				}
+
+				// 监听动态新增DOM
+				function observeDom() {
+					if (!window.MutationObserver) return
+					const observer = new MutationObserver((muts) => {
+						muts.forEach((mut) => {
+							mut.addedNodes.forEach((node) => {
+								if (node.nodeType === 1) {
+									if (node.matches(TRACK_SEARCH_TAG)) bindSearchElement(node)
+									node.querySelectorAll(TRACK_SEARCH_TAG).forEach((el) => bindSearchElement(el))
+								}
+							})
+						})
+					})
+					observer.observe(document.documentElement, { childList: true, subtree: true })
+				}
+
+				async function getClientIp() {
+					try {
+						const response = await fetch("https://icanhazip.com")
+						const data = await response.text()
+						return data.trim() // 返回客户端公网 IP（如 "123.45.67.89"）
+					} catch (error) {
+						console.error("获取 IP 失败:", error)
+						return null
+					}
+				}
+
+				// 调用示例
+				getClientIp().then((ip) => {
+					console.log("客户端公网 IP:", ip)
+				})
+				// 初始化
+				function init() {
+					scanDom()
+					observeDom()
+					trackPageView()
+				}
+
+				document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init()
+
+				// 暴露全局测试方法
+				window.trackPageView = trackPageView
+				window.trackSearch = trackSearch
+			})(window, document)
+		</script>
+	</body>
+</html>
