@@ -28,6 +28,18 @@ export default defineConfig({
       }
     ],
     sidebar: {
+      '/pages/project':[
+        {
+          text: '项目',
+          items: [
+            { text: '工时统计', link: '/pages/project/work-hour' },
+            { text: '区域功能节点', link: '/pages/project/dcp' },
+            { text: '陇明公', link: '/pages/project/lmg' },
+            { text: '算力调度', link: '/pages/project/computer' },
+            { text: '智领集控运枢平台', link: '/pages/project/edmp' },
+          ]
+        }
+      ],
       '/pages/web/':[
         {
           text: 'WEB',
@@ -114,26 +126,6 @@ export default defineConfig({
           ]
         }
       ],
-      '/pages/dataScreen/':[
-        {
-          text: '数据大屏可视化',
-          items: [
-            { text: '大屏开发', link: '/pages/dataScreen/index' }
-          ]
-        }
-      ],
-      '/pages/echarts/':[
-        {
-          text: 'Echarts图表',
-          items: [
-            { text: 'echarts基础', link: '/pages/echarts/index' },
-            { text: '圆环图', link: '/pages/echarts/ring/' },
-            { text: '折线图', link: '/pages/echarts/line/' },
-            { text: '二维地图', link: '/pages/echarts/map/' },
-            { text: '3D曲面', link: '/pages/echarts/curvedSurface3D/' }
-          ]
-        }
-      ],
       '/pages/note/':[
         {
           text: 'note',
@@ -161,19 +153,6 @@ export default defineConfig({
           ]
         }
       ],
-      '/pages/project':[
-        {
-          text: '项目',
-          items: [
-            { text: '杭州-数据交易平台', link: '/pages/project/shumei' },
-            { text: 'project', link: '/pages/project/' },
-            { text: '陇明公', link: '/pages/project/lmg.md' },
-            { text: '算力调度', link: '/pages/project/computer.md' },
-            { text: '智领集控运枢平台', link: '/pages/project/edmp.md' },
-            { text: '任务统计', link: '/pages/project/work-hour.md' }
-          ]
-        }
-      ],
       '/pages/nestJs/':[
         {
           text: 'NestJs',
@@ -187,48 +166,6 @@ export default defineConfig({
             { text: 'Api开发', link: '/pages/nestJs/nest-api.md' },
             { text: '鉴权认证', link: '/pages/nestJs/nest-auth.md' },
             { text: '权限控制', link: '/pages/nestJs/nest-permissions.md' }
-          ]
-        }
-      ],
-      '/pages/naiveUi/':[
-        {
-          text: 'NaiveUi',
-          items: [
-            { text: '表单配置', link: '/pages/naiveUi/form.md' },
-            { text: '表单相关操作', link: '/pages/naiveUi/formAction.md' },
-          ]
-        }
-      ],
-      '/pages/docker/':[
-        {
-          text: 'Docker',
-          items: [
-            { text: 'Docker基础', link: '/pages/docker/' },
-            { text: 'Mysql镜像', link: '/pages/docker/docker-mysql.md' },
-          ]
-        }
-      ],
-      '/pages/flutter/':[
-        {
-          text: 'Flutter',
-          items: [
-            { text: 'flutter基础', link: '/pages/flutter/' }
-          ]
-        }
-      ],
-      '/pages/uiComponents/':[
-        {
-          text: '前端特殊组件',
-          items: [
-            { text: '虚拟列表', link: '/pages/uiComponents/virtual-list' }
-          ]
-        }
-      ],
-      '/pages/css/':[
-        {
-          text: 'Css',
-          items: [
-            { text: 'css', link: '/pages/css/index' },
           ]
         }
       ],
@@ -257,13 +194,8 @@ export default defineConfig({
   assetsDir: 'assets',
   appearance:'dark',
   vite: {
-    ssr: {
-      // 强制将 echarts-gl 包含在客户端构建中
-      noExternal: ['naive-ui', 'date-fns', 'vueuc','echarts-gl','zrender','echarts','claygl']
-    },
-    define: {
-      'window.self': '{}' // 绕过 SSR 中的 self 未定义错误
-    }
+    ssr: {},
+    define: {}
   },
   postRender(context) {
     const styleRegex = /<css-render-style>((.|\s)+)<\/css-render-style>/

@@ -3,7 +3,6 @@ import Login from './modules//login.vue'
 import DefaultTheme from 'vitepress/theme'
 import CustomLayout from './CustomLayout.vue'
 import NavLogo from './modules/nav-logo.vue'
-import NaiveUiPackage from '../../NaiveUiPackage/index.js'
 import { setup } from '@css-render/vue3-ssr'
 import './style.scss'
 const allowPage = ['/wdm-notebook/']
@@ -71,9 +70,6 @@ export default{
       app.use(naive)
       app.component('Login', Login)
       app.component('NavLogo', NavLogo)
-      for (const name in NaiveUiPackage) {
-        app.component(name, NaiveUiPackage[name])
-      }
     }else{
       const { collect } = setup(app)
       app.provide('css-render-collect', collect)

@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter,withBase,useData   } from 'vitepress'
+import { useRouter,withBase   } from 'vitepress'
 const router = useRouter()
 function  jumpHandle(path) {
   router.go(withBase(path)) 
